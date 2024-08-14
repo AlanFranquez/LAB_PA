@@ -1,14 +1,14 @@
 package serverCentral;
 
 public class Proveedor extends Usuario {
-    private List<Producto> listaProductos;  
+    private Map<Integer, Producto> listaProductos;  
     private String compania, link;
     // Constructr
     public Proveedor(String nom, String ni, String ape, String cor, Date naci, String comp, String lin) {
         super(nom, ni, ape, cor, naci);
         this.compania = comp;
         this.link = lin;
-        this.listaProductos = new ArrayList<>();
+        this.listaProductos = new HashMap<>();
     }
     // Gets sets
     public String getCompania() {
@@ -27,7 +27,7 @@ public class Proveedor extends Usuario {
         this.link = lin;
     }
 
-    public List<Producto> getProductos() {
+    public Map<Integer, Producto> getProductos() {
         return listaProductos;
     }
 
