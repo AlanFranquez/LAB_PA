@@ -1,5 +1,6 @@
 package serverCentral;
 
-public class ISistema {
-
+//CREO QUE ES ASI
+public interface ISistema {
+    // Avatrasctios
 }
