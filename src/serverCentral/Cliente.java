@@ -1,28 +1,32 @@
 package serverCentral;
 
 public class Cliente extends Usuario {
-    private List<OrdenDeCompra> listaCompras;
-    private List<Comentario> listaComentarios;
+    private Map<Integer, OrdenDeCompra> listaCompras;
+    private Map<Integer, Comentario> listaComentarios;
     // Constructor
     public Cliente(String Nom, String Ni, String Ape, String Cor, Date Naci) {
         super(Nom, Ni, Ape, Cor, Naci); // constructor de Usuario
-        this.listaCompras = new ArrayList<>();
-        this.listaComentarios = new ArrayList<>();
+        this.listaCompras = new HashMap<>();
+        this.listaComentarios = new HashMap<>();
     }
     // gets, sets
-    public List<OrdenDeCompra> getCompras() {
+    public Map<Integer, OrdenDeCompra> getCompras() {
         return listaCompras;
     }
 
-    public List<Comentario> getComentarios() {
+    public Map<Integer, Comentario> getComentarios() {
         return listaComentarios;
     }
     //opers
     public Set<Integer> getAllOrdenes() {
-        Set<Integer> RES = new HashSet<>();
-        for (OrdenDeCompra ordenActual : listaCompras) {
-            RES.add(ordenActual.getId());
+        Set<Integer> res = new HashSet<>();
+        for (OrdenDeCompra ordenActual : listaCompras.values()) {
+            res.add(ordenActual.getId());
         }
-        return RES;
+        return res;
+    }
+    
+    public dtCliente crearDt() {
+        return new dtCliente(getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen());
     }
 }
