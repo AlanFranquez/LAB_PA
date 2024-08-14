@@ -27,7 +27,7 @@ public class Proveedor extends Usuario {
         this.link = lin;
     }
 
-    public List<OrdenDeCompra> getProductos() {
+    public List<Producto> getProductos() {
         return listaProductos;
     }
 
