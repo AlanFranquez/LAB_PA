@@ -27,6 +27,6 @@ public class Cliente extends Usuario {
     }
     
     public dtCliente crearDt() {
-        return new dtCliente(getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen());
+        return new dtCliente(getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompras());
     }
 }
