@@ -3,6 +3,7 @@ package serverCentral;
 public class Usuario {
     private String Nombre, Nick, Apellido, Correo;
     private Date Nacimiento;
+    private File imagen;
     // Constructor
     public Usuario(String Nombre, String Nick, String Apellido, String Correo, Date Nacimiento) {
         this.Nombre = Nombre;
@@ -10,35 +11,45 @@ public class Usuario {
         this.Apellido = Apellido;
         this.Correo = Correo;
         this.Nacimiento = Nacimiento;
+        this.imagen = null;
     }
     // gets, sets
-    public String getNombre()
+    public String getNombre(){
         return Nombre;
-
-    public String getNick()
+    }
+    public String getNick(){
         return Nick;
-
-    public String getApellido()
+    }
+    public String getApellido(){
         return Apellido;
-
-    public String getCorreo()
+    }
+    public String getCorreo(){
         return Correo;
-
-    public Date getNacimiento()
+    }
+    public Date getNacimiento(){
         return Nacimiento;
-
-    public void setNombre(String Nombre)
+    }
+    public File getImagen() {
+        return imagen;
+    }
+    
+    public void setNombre(String Nombre){
         this.Nombre = Nombre;
-
-    public void setNick(String Nick)
+    }
+    public void setNick(String Nick){
         this.Nick = Nick;
-
-    public void setApellido(String Apellido)
+    }
+    public void setApellido(String Apellido){
         this.Apellido = Apellido;
-
-    public void setCorreo(String Correo)
+    }
+    public void setCorreo(String Correo){
         this.Correo = Correo;
-
-    public void setNacimiento(Date Nacimiento)
+    }
+    public void setNacimiento(Date Nacimiento){
         this.Nacimiento = Nacimiento;
+    }
+    public void setImagen(File imagen) {
+        this.imagen = imagen;
+    }
 }
+
