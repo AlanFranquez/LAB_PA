@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Cat_Producto extends Categoria{
-private Map<String, Producto> productos;
+private Map<Integer, Producto> productos;
 	
 	// Constructor:
 	public Cat_Producto(String nombre) {
