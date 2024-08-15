@@ -28,7 +28,22 @@ public class Proveedor extends Usuario {
     }
 
     public Map<Integer, Producto> getProductos() {
-        return listaProductos;
+        return listaProductos;//??????'
+    }
+    public void agregarProd(int id, Producto prod) {
+        listaProductos.put(id, prod);
+    }
+    public Producto obtenerProd(int id) {
+        return listaProductos.get(id);
+    }
+    public void eliminarProd(int id) {
+        listaProductos.remove(id);
+    }
+    public boolean existeProd(int id) {
+        return listaProductos.containsKey(id);
+    }
+    public int cantProd() {
+        return listaProductos.size();
     }
 
-  
+}
