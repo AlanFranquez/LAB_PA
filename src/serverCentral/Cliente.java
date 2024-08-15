@@ -17,6 +17,23 @@ public class Cliente extends Usuario {
     public Map<Integer, Comentario> getComentarios() {
         return listaComentarios;
     }
+    //cosas OrdenCompra
+    public void agregarCompra(int num, OrdenDeCompra Orden) {
+        listaCompras.put(num, Orden);
+    }
+    public OrdenDeCompra obtenerOrden(int num) {
+        return listaCompras.get(num);
+    }
+    public void eliminarOrden(int num) {
+        listaCompras.remove(num);
+    }
+    public boolean existeOrden(int num) {
+        return listaCompras.containsKey(num);
+    }
+    public int cantCompras() {
+        return listaCompras.size();
+    }
+
     //opers
     public Set<Integer> getAllOrdenes() {
         Set<Integer> res = new HashSet<>();
