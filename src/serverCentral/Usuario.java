@@ -12,16 +12,18 @@ public class Usuario {
     private String nombre, nick, apellido, correo, tipo;
     private DTFecha nacimiento;
     private ImageIcon imagen;
-    // Constructor
+    // Constructor, usuario sin imagen
     public Usuario(String nombre, String nick, String apellido, String correo, DTFecha nacimiento,String tipo) {
         this.nombre = nombre;
         this.nick = nick;
         this.apellido = apellido;
         this.correo = correo;
         this.nacimiento = nacimiento;
-        this.imagen = imagen;
         this.tipo = tipo;
     }
+    
+    // Constructor, usuario
+    
     // gets, sets
     public String getNombre(){
         return nombre;

@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.plaf.FileChooserUI;
 
 import serverCentral.*;
 
@@ -19,6 +20,7 @@ public class Presentacion {
     private JFrame frame;
     private JDesktopPane desktopPane;
     private static ISistema s = Factory.getSistema();
+    private JFileChooser fileChooser;
 
     /**
      * Launch the application.
@@ -56,6 +58,7 @@ public class Presentacion {
      * Create the application.
      */
     public Presentacion() {
+    	fileChooser = new JFileChooser();
         initialize();
     }
 
@@ -81,19 +84,163 @@ public class Presentacion {
         // Crear menú "Casos de Uso"
         JMenu mnCasosDeUso = new JMenu("Casos de Uso");
         menuBar.add(mnCasosDeUso);
+        
+        
 
         // Crear opción "Registrar Usuario"
         JMenuItem mntmRegistrarUsuario = new JMenuItem("Registrar Usuario");
         mntmRegistrarUsuario.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Crear e inicializar la ventana secundaria (JInternalFrame)
+            	// Crear e inicializar la ventana secundaria (JInternalFrame)
                 JInternalFrame ventanaSecundaria = new JInternalFrame("Registrar Usuario", true, true, true, true);
-                ventanaSecundaria.setSize(400, 300);
+                ventanaSecundaria.setSize(400, 500); // Ajustar el tamaño
+                ventanaSecundaria.setTitle("Alta al usuario");
                 ventanaSecundaria.setVisible(true);
 
-                // Agregar la ventana secundaria al JDesktopPane
-                desktopPane.add(ventanaSecundaria);
+                // Panel del formulario
+                JPanel panel = new JPanel();
+                panel.setLayout(null); // Usar el layout null para posicionar componentes manualmente
+
+                // Crear y agregar componentes al panel
+                JLabel nicknameLabel = new JLabel("Nickname:");
+                nicknameLabel.setBounds(20, 20, 80, 25);
+                panel.add(nicknameLabel);
+
+                JTextField nicknameField = new JTextField(15);
+                nicknameField.setBounds(100, 20, 160, 25);
+                panel.add(nicknameField);
+
+                JLabel correoLabel = new JLabel("Correo:");
+                correoLabel.setBounds(20, 60, 80, 25);
+                panel.add(correoLabel);
+
+                JTextField correoField = new JTextField(15);
+                correoField.setBounds(100, 60, 160, 25);
+                panel.add(correoField);
+
+                JLabel nombreLabel = new JLabel("Nombre:");
+                nombreLabel.setBounds(20, 100, 80, 25);
+                panel.add(nombreLabel);
+
+                JTextField nombreField = new JTextField(15);
+                nombreField.setBounds(100, 100, 160, 25);
+                panel.add(nombreField);
+
+                JLabel apellidoLabel = new JLabel("Apellido:");
+                apellidoLabel.setBounds(20, 140, 80, 25);
+                panel.add(apellidoLabel);
+
+                JTextField apellidoField = new JTextField(15);
+                apellidoField.setBounds(100, 140, 160, 25);
+                panel.add(apellidoField);
+
+                // Radio buttons para tipo de usuario
+                JRadioButton clienteRadioButton = new JRadioButton("Cliente");
+                clienteRadioButton.setBounds(100, 180, 80, 25);
+                clienteRadioButton.setSelected(true); 
+                panel.add(clienteRadioButton);
+
+                JRadioButton proveedorRadioButton = new JRadioButton("Proveedor");
+                proveedorRadioButton.setBounds(180, 180, 100, 25);
+                panel.add(proveedorRadioButton);
+
+                ButtonGroup tipoUsuarioGroup = new ButtonGroup();
+                tipoUsuarioGroup.add(clienteRadioButton);
+                tipoUsuarioGroup.add(proveedorRadioButton);
+
+                JLabel companiaLabel = new JLabel("Compañía:");
+                companiaLabel.setBounds(20, 220, 80, 25);
+                panel.add(companiaLabel);
+
+                JTextField companiaField = new JTextField(20);
+                companiaField.setBounds(100, 220, 160, 25);
+                companiaField.setEnabled(false); 
+                panel.add(companiaField);
+
+                JLabel webLabel = new JLabel("Sitio Web:");
+                webLabel.setBounds(20, 260, 80, 25);
+                panel.add(webLabel);
+
+                JTextField webField = new JTextField(20);
+                webField.setBounds(100, 260, 160, 25);
+                webField.setEnabled(false); // Deshabilitar por defecto
+                panel.add(webField);
+
+                JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
+                seleccionarImagenButton.setBounds(20, 300, 240, 25);
+                panel.add(seleccionarImagenButton);
+
+                JLabel imagenLabel = new JLabel("No se ha seleccionado ninguna imagen");
+                imagenLabel.setBounds(20, 340, 240, 25);
+                panel.add(imagenLabel);
+
+                JButton registrarButton = new JButton("Registrar");
+                registrarButton.setBounds(20, 380, 240, 25);
+                panel.add(registrarButton);
                 
+                
+                seleccionarImagenButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e1) {
+                        int returnValue = fileChooser.showOpenDialog(null);
+                        if (returnValue == JFileChooser.APPROVE_OPTION) {
+                            File imagenSeleccionada = fileChooser.getSelectedFile();
+                            imagenLabel.setText(imagenSeleccionada.getName());
+                        }
+                    }
+                });
+
+                // Acción para habilitar o deshabilitar campos según tipo de usuario
+                proveedorRadioButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e1) {
+                        companiaField.setEnabled(true);
+                        webField.setEnabled(true);
+                    }
+                });
+
+                clienteRadioButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e1) {
+                        companiaField.setEnabled(false);
+                        webField.setEnabled(false);
+                    }
+                });
+                
+                
+             // Acción del botón de registro
+                registrarButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e1) {
+                        String nickname = nicknameField.getText();
+                        String correo = correoField.getText();
+                        String nombre = nombreField.getText();
+                        String apellido = apellidoField.getText();
+                        boolean esProveedor = proveedorRadioButton.isSelected();
+                        String compania = companiaField.getText();
+                        String web = webField.getText();
+                        
+                        if(nickname.isEmpty() || correo.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
+                        	JOptionPane.showMessageDialog(null, "Hay campos vacios.");
+                        	return;
+                        	
+                        } else if(esProveedor && (compania.isEmpty() || web.isEmpty())) {
+                        	JOptionPane.showMessageDialog(null, "Hay campos vacios.");
+                        	return;
+                        }
+                        
+                        
+
+                        // Sin completar
+                        
+                        JOptionPane.showMessageDialog(null, "Usuario registrado con éxito.");
+                    }
+                });
+
+                // Añadir el panel a la ventana secundaria
+                ventanaSecundaria.getContentPane().add(panel);
+                desktopPane.add(ventanaSecundaria);
+
                 // Opcional: Centrar la ventana secundaria
                 ventanaSecundaria.setLocation(100, 100);
             }
