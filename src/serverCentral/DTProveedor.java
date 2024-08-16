@@ -1,16 +1,25 @@
 package serverCentral;
-import java.util.Map;
-import java.util.HashMap;
 
-public class Proveedor extends Usuario {
-    private Map<Integer, Producto> listaProductos;  
-    private String compania, link;
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
+public class DTProveedor {
+	private Map<Integer, Producto> listaProductos;  
+    private String compania, link, nombre, nick, apellido, correo;
+    private DTFecha nacimiento;
+    private File imagen;
     // Constructr
-    public Proveedor(String nom, String ni, String ape, String cor, DTFecha nacimiento, String comp, String lin) {
-        super(nom, ni, ape, cor, nacimiento, "proveedor");
-        this.compania = comp;
-        this.link = lin;
-        this.listaProductos = new HashMap<>();
+    public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, File imagen, String compania, String link) {
+    	   this.nombre = nombre;
+           this.nick = nick;
+           this.apellido = apellido;
+           this.correo = correo;
+           this.nacimiento = nacimiento;
+           this.imagen = imagen;
+           this.compania = compania;
+           this.link = link;
+           this.listaProductos = new HashMap<>();
     }
     // Gets sets
     public String getCompania() {
@@ -47,9 +56,4 @@ public class Proveedor extends Usuario {
     public int cantProd() {
         return listaProductos.size();
     }
-    
-    public DTProveedor crearDt() {
-        return new DTProveedor(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompania(), getLink());
-    }
-
 }

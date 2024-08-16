@@ -1,13 +1,14 @@
 package serverCentral;
 import java.util.Map;
+import java.io.File;
 import java.util.HashMap;
 
 public class Cliente extends Usuario {
     private Map<Integer, OrdenDeCompra> listaCompras;
     private Map<Integer, Comentario> listaComentarios;
     // Constructor
-    public Cliente(String Nom, String Ni, String Ape, String Cor, DTFecha fecha) {
-        super(Nom, Ni, Ape, Cor, fecha); // constructor de Usuario
+    public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) {
+        super(nombre, nick, apellido, correo, fecha, "cliente"); // constructor de Usuario
         this.listaCompras = new HashMap<>();
         this.listaComentarios = new HashMap<>();
     }
@@ -46,6 +47,6 @@ public class Cliente extends Usuario {
     }*/
     
     public DTCliente crearDt() {
-        return new DTCliente(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagenes(), getCompras());
+        return new DTCliente(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompras());
     }
 }
