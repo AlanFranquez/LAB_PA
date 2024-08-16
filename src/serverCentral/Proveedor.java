@@ -1,11 +1,13 @@
 package serverCentral;
+import java.util.Map;
+import java.util.HashMap;
 
 public class Proveedor extends Usuario {
     private Map<Integer, Producto> listaProductos;  
     private String compania, link;
     // Constructr
-    public Proveedor(String nom, String ni, String ape, String cor, Date naci, String comp, String lin) {
-        super(nom, ni, ape, cor, naci);
+    public Proveedor(String nom, String ni, String ape, String cor, DTFecha nacimiento, String comp, String lin) {
+        super(nom, ni, ape, cor, nacimiento);
         this.compania = comp;
         this.link = lin;
         this.listaProductos = new HashMap<>();

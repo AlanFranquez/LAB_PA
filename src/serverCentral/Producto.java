@@ -24,7 +24,7 @@ public class Producto {
 		imagenes[imagenes.length] = img;
 	}
 	public void agregarCategorias(Categoria cat) {
-		categorias.put(cat.getNombre(), cat)
+		categorias.put(cat.getNombre(), cat);
 	}
 	public void eliminarCategorias() {
 		categorias.clear();

@@ -1,55 +1,60 @@
 package serverCentral;
 
+import java.io.File;
+import java.util.List;
+import java.util.ArrayList;
+
 public class Usuario {
-    private String Nombre, Nick, Apellido, Correo;
-    private Date Nacimiento;
-    private File imagen;
+    private String nombre, nick, apellido, correo;
+    private DTFecha nacimiento;
+    private List<File> imagenes;
     // Constructor
-    public Usuario(String Nombre, String Nick, String Apellido, String Correo, Date Nacimiento) {
-        this.Nombre = Nombre;
-        this.Nick = Nick;
-        this.Apellido = Apellido;
-        this.Correo = Correo;
-        this.Nacimiento = Nacimiento;
-        this.imagen = null;
+    public Usuario(String nombre, String nick, String apellido, String correo, DTFecha nacimiento) {
+        this.nombre = nombre;
+        this.nick = nick;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.nacimiento = nacimiento;
+        this.imagenes = new ArrayList<>();
     }
     // gets, sets
     public String getNombre(){
-        return Nombre;
+        return nombre;
     }
     public String getNick(){
-        return Nick;
+        return nick;
     }
     public String getApellido(){
-        return Apellido;
+        return apellido;
     }
     public String getCorreo(){
-        return Correo;
+        return correo;
     }
-    public Date getNacimiento(){
-        return Nacimiento;
+    public DTFecha getNacimiento(){
+        return nacimiento;
     }
-    public File getImagen() {
-        return imagen;
+    public List<File> getImagenes() {
+        return imagenes;
     }
     
     public void setNombre(String Nombre){
-        this.Nombre = Nombre;
+        this.nombre = Nombre;
     }
     public void setNick(String Nick){
-        this.Nick = Nick;
+        this.nick = Nick;
     }
     public void setApellido(String Apellido){
-        this.Apellido = Apellido;
+        this.apellido = Apellido;
     }
     public void setCorreo(String Correo){
-        this.Correo = Correo;
+        this.correo = Correo;
     }
-    public void setNacimiento(Date Nacimiento){
-        this.Nacimiento = Nacimiento;
+    public void setNacimiento(DTFecha nacimiento){
+        this.nacimiento = nacimiento;
     }
-    public void setImagen(File imagen) {
-        this.imagen = imagen;
+    
+    public void setImagenes(List<File> imagenes) {
+        this.imagenes = imagenes;
     }
 }
 

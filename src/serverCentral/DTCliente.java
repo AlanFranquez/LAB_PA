@@ -1,16 +1,21 @@
-public class dtCliente {
+package serverCentral;
+import java.io.File;
+import java.util.List;
+import java.util.Map;
+
+public class DTCliente {
     private String nombre, nick, apellido, correo;
-    private Date nacimiento;
-    private File imagen;
+    private DTFecha nacimiento;
     private Map<Integer, OrdenDeCompra> ordenes;
+	private List<File> imagenes;
     
-    public dtCliente(String nombre, String nick, String apellido, String correo, Date nacimiento, File imagen, Map<Integer, OrdenDeCompra> ordenes) {
+    public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, List<File> imagenes, Map<Integer, OrdenDeCompra> ordenes) {
         this.nombre = nombre;
         this.nick = nick;
         this.apellido = apellido;
         this.correo = correo;
         this.nacimiento = nacimiento;
-        this.imagen = imagen;
+        this.imagenes = imagenes;
         this.ordenes = ordenes;
     }
     // Gets
@@ -26,11 +31,11 @@ public class dtCliente {
     public String getCorreo() {
         return correo;
     }
-    public Date getNacimiento() {
+    public DTFecha getNacimiento() {
         return nacimiento;
     }
-    public File getImagen() {
-        return imagen;
+    public List<File> getImagenes() {
+        return imagenes;
     }
     public Map<Integer, OrdenDeCompra> getOrdenes() {
         return ordenes;
