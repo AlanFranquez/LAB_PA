@@ -37,6 +37,10 @@ public class Usuario {
         return imagenes;
     }
     
+    String funcionPrueba() {
+    	return "Me tire un pedo";
+    }
+    
     public void setNombre(String Nombre){
         this.nombre = Nombre;
     }

@@ -34,7 +34,7 @@ public class Sistema implements ISistema {
     }
     
  // Validar correo electrónico
-    private boolean validarCorreo(String correo) {
+    public boolean validarCorreo(String correo) {
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(correo);
