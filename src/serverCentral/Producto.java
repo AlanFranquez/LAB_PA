@@ -1,5 +1,6 @@
 package serverCentral;
 
+import java.io.File;
 import java.util.Map;
 
 public class Producto {
@@ -8,7 +9,7 @@ public class Producto {
 	private float precio;
 	private Integer numRef;
 	private String[] especificaciones;
-	private String[] imagenes; // Chequear esto
+	private File imagenes; // Chequear esto----Carlos:Agregue un tipo file, no se como funciona para guardarlo pero creo que es el tipo de variable correcto
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String[] especificaciones) {
@@ -17,11 +18,10 @@ public class Producto {
 		this.precio = precio;
 		this.numRef = numRef;
 		this.especificaciones = especificaciones;
-		imagenes = new String[10];
 	}
 
-	public void agregarImagen(String img) {
-		imagenes[imagenes.length] = img;
+	public void agregarImagen(File img) {
+		imagenes = img;
 	}
 	public void agregarCategorias(Categoria cat) {
 		categorias.put(cat.getNombre(), cat);

@@ -1,6 +1,7 @@
 package serverCentral;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -83,4 +84,104 @@ public class Sistema implements ISistema {
 
         return listaClientes;
     }
+    
+    
+    
+  //Agregar un producto
+    
+    //Listar Proveedores
+    public List<DTProveedor> listarProveedores(){
+    	List<DTProveedor> listaProveedor = new ArrayList<>();
+    	for(Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+    		Usuario usuario = entry.getValue();
+    		if(usuario.getTipo().equals("proveedor")) {
+    			Proveedor usuarioProveedor = (Proveedor) usuario;
+    			listaProveedor.add(usuarioProveedor.crearDt());
+    		}
+    	}
+    	return listaProveedor;
+    }
+    
+    //Verificar si existe el proveedor
+    public boolean verificarUsuario(Usuario Proveedor) {
+    	Map<String, Usuario> usuarios = this.usuarios;
+    	for(Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+    		Usuario u = entry.getValue();
+    		if(u.equals(Proveedor)) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    //Verificar Nombre
+    
+    public boolean verificarNombre(String nombre) {
+    	Map<String, Categoria> categorias = this.categorias;
+    	Cat_Producto ejemplo = null;
+    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    		Categoria categ = entry.getValue();
+    		if(categ.getClass().equals(ejemplo)) {
+    			Cat_Producto pcast = (Cat_Producto) categ;
+    			Map<Integer, Producto> productos = pcast.darProductos();
+    			for(Map.Entry<Integer, Producto> entry : productos.entrySet()) {
+    	    		Producto prod = entry.getValue();
+    	    		if(prod.getNombre().equals(nombre)){
+    	    			return true;
+    	    		}
+    	    	}
+    		}
+    	}
+    	return false;
+    }
+    
+    //ListarCategorias
+    public void listarCategoria(){
+    	List<Categoria> listaCategoria = this.categorias;
+    	Cat_Padre ejemplo = null;
+    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    		Categoria cat = entry.getValue();
+    		if(cat.getClass().equals(ejemplo)) {
+    			//Listar recursivo - no lo hice por la interfaz
+    			
+    			
+    		}
+    	}
+    	
+    }
+    
+    
+    //Crear Producto
+    
+    public void agregarProducto(String titulo, Integer numRef, String Descripcion, String[] Especificaciones, Float precio, Usuario Proveedor) {
+    	if(!verificarUsuario(Proveedor)) {
+    		//No existe el Proveedor
+    		return;
+    	}
+    	
+    	if(verificarNombre(titulo)) {
+    		//Existe un nombre igual
+    		return;
+    	}
+    	
+    	while(true) {
+    		listarCategoria();
+    		
+    	}
+    	
+    	
+    	Producto p = new Producto(titulo, Descripcion, precio, numRef, Especificaciones);
+    	
+    }
+   
 }
+
+
+
+
+
+
+
+
+
+

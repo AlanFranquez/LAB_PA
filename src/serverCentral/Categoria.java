@@ -1,11 +1,19 @@
 package serverCentral;
 
+import java.util.Map;
+
 public class Categoria {
 	private String nombre;
 	private String tipo;
 	
+	
 	// Constructor:
 	public Categoria(String nombre, String tipo) {
+		this.nombre = nombre;
+		this.tipo = tipo;
+	}
+	
+	public Categoria(String nombre, String tipo, Categoria cat) {
 		this.nombre = nombre;
 		this.tipo = tipo;
 	}

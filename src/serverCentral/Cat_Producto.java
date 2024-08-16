@@ -28,6 +28,10 @@ private Map<Integer, Producto> productos;
 	        return lista;
 	    }
 	}
+	
+	public Map<Integer, Producto> darProductos(){
+		return this.productos;
+	}
 
 
 	public void agregarProducto(Producto prod) {
