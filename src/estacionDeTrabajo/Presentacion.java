@@ -28,9 +28,9 @@ public class Presentacion {
                     DTFecha fecha1 = new DTFecha(1, 1, 1990);
                     DTFecha fecha2 = new DTFecha(15, 6, 1985);
 
-                    s.agregarCliente("juanito", "juanito@mail.com", "Juan", "Perez", fecha1);
-                    s.agregarCliente("maria", "maria@mail.com", "Maria", "Gomez", fecha2);
-                    s.agregarCliente("carlos", "carlos@mail.com", "Carlos", "Lopez", fecha1);
+                    s.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1);
+                    s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha1);
+                    s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1);
 
 
                     Presentacion window = new Presentacion();
@@ -54,14 +54,14 @@ public class Presentacion {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 800, 600);
+        frame.setBounds(100, 100, 1100, 900);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         centerFrame(frame);
 
         // Crear el JDesktopPane
         desktopPane = new JDesktopPane();
-        desktopPane.setBounds(0, 0, 800, 600);
+        desktopPane.setBounds(0, 0, 1100, 900);
         frame.getContentPane().add(desktopPane);
 
         // Crear la barra de menú
@@ -102,52 +102,101 @@ public class Presentacion {
     }
 
     private void mostrarClientes() {
-    	// Crear e inicializar la ventana interna (JInternalFrame)
+        // Crear e inicializar la ventana interna (JInternalFrame)
         JInternalFrame ventanaClientes = new JInternalFrame("Lista de Clientes", true, true, true, true);
-        ventanaClientes.setSize(400, 200);
-
+        ventanaClientes.setSize(500, 300);
         ventanaClientes.setLayout(new BorderLayout());
-        
+
         // Recuperar la lista de clientes
         List<DTCliente> clientes = s.listarClientes();
-        
-        // Crear un JPanel para contener los datos
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        
-        // Agregar cada cliente al JPanel
-        for (DTCliente cliente : clientes) {
-            JPanel clientePanel = new JPanel();
-            
-            // Crear un JTextArea para mostrar la información del cliente
-            JTextArea textArea = new JTextArea(cliente.toString());
-            textArea.setEditable(false);
-            textArea.setLineWrap(false);
-            textArea.setWrapStyleWord(true);
-            
-           
-            // Agregar JTextArea y JLabel al panel del cliente
-            clientePanel.add(textArea, BorderLayout.NORTH);
-            
-            // Agregar el panel del cliente al panel principal
-            panel.add(clientePanel);
+
+        // Definir las columnas de la tabla
+        String[] columnNames = {"Nick", "Correo", "Nombre Completo"};
+
+        // Crear datos para la tabla
+        Object[][] data = new Object[clientes.size()][3];
+        for (int i = 0; i < clientes.size(); i++) {
+            DTCliente cliente = clientes.get(i);
+            data[i][0] = cliente.getNick();
+            data[i][1] = cliente.getCorreo();
         }
-        
-        // Agregar el panel al JScrollPane
-        JScrollPane scrollPane = new JScrollPane(panel);
-        
-        // Agregar el JScrollPane a la ventana interna
+
+        // Crear la tabla
+        JTable table = new JTable(data, columnNames);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Agregar un listener para manejar clics en la tabla
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = table.rowAtPoint(evt.getPoint());
+                if (row >= 0) {
+                    DTCliente cliente = clientes.get(row);
+                    mostrarDetallesCliente(cliente);
+                }
+            }
+        });
+
+        // Agregar la tabla al JScrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
         ventanaClientes.getContentPane().add(scrollPane, BorderLayout.CENTER);
-        
+
         // Mostrar la ventana interna
         ventanaClientes.setVisible(true);
-        
+
         // Agregar la ventana interna al JDesktopPane
         desktopPane.add(ventanaClientes);
-        
+
         // Opcional: Centrar la ventana interna
         ventanaClientes.setLocation(100, 100);
     }
+    
+    private void mostrarDetallesCliente(DTCliente cliente) {
+        // Crear e inicializar la ventana interna (JInternalFrame) para detalles
+        JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
+        ventanaDetalles.setSize(400, 300);
+        ventanaDetalles.setLayout(new BorderLayout());
+
+        // Crear un JPanel para contener la información del cliente
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Agregar la información del cliente al panel
+        panel.add(new JLabel("Mail: " + cliente.getCorreo()));
+        panel.add(new JLabel("Nick: " + cliente.getNick()));
+        panel.add(new JLabel("Nombre Completo: " + cliente.getNombre() + " " + cliente.getApellido()));
+        panel.add(new JLabel("Fecha de Nacimiento: " + cliente.getNacimiento().getDia() + " - " + cliente.getNacimiento().getMes() + " - " + cliente.getNacimiento().getAnio()));
+        panel.add(Box.createVerticalStrut(5));
+       
+        panel.add(new JLabel("Ordenes: "));
+        if(cliente.getOrdenes().isEmpty()) {
+        	panel.add(new JLabel("   Todavia no existen ordenes"));
+        }
+        // Agregar el panel al JScrollPane
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        // Agregar el JScrollPane a la ventana interna
+        ventanaDetalles.getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+        // Mostrar la ventana interna
+        ventanaDetalles.setVisible(true);
+
+        // Agregar la ventana interna al JDesktopPane
+        desktopPane.add(ventanaDetalles);
+
+        // Asegurar que la ventana de detalles esté al frente
+        try {
+            ventanaDetalles.setSelected(true);
+            ventanaDetalles.toFront();
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+        }
+
+        // Opcional: Centrar la ventana interna
+        ventanaDetalles.setLocation(150, 150);
+    }
+
+
 
     // Método para centrar el JFrame en la pantalla
     private static void centerFrame(JFrame frame) {
