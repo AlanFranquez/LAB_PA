@@ -1,7 +1,10 @@
 package serverCentral;
 
+import java.awt.Image;
 import java.io.File;
 import java.util.List;
+
+import javax.swing.ImageIcon;
 
 //CREO QUE ES ASI
 public interface ISistema {
@@ -17,7 +20,7 @@ public interface ISistema {
     
     public abstract void agregarCliente(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento) throws UsuarioRepetidoException;
     
-    public abstract void agregarImagenes(String nick, File imagen);
+    public abstract void agregarImagenes(String nick, ImageIcon imageIcon);
     
     public abstract List<DTCliente> listarClientes();
 }

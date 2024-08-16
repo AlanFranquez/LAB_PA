@@ -3,6 +3,10 @@ package serverCentral;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.ImageIcon;
+
+import java.awt.Image;
 import java.io.File;
 
 public class Sistema implements ISistema {
@@ -55,7 +59,7 @@ public class Sistema implements ISistema {
         usuarios.put(nick, nuevoCliente);
     }
 
-    public void agregarImagenes(String nick, File imagen) {
+    public void agregarImagenes(String nick, ImageIcon imagen) {
         Usuario usuarioBuscado = this.usuarios.get(nick);
         if (usuarioBuscado == null) {
             System.out.println("Usuario con nick: " + nick + " no encontrado.");

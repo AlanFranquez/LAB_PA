@@ -1,6 +1,5 @@
 package serverCentral;
 import java.util.Map;
-import java.io.File;
 import java.util.HashMap;
 
 public class Cliente extends Usuario {

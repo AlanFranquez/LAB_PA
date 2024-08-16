@@ -1,15 +1,18 @@
 package serverCentral;
+import java.awt.Image;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.ImageIcon;
 
 public class DTCliente {
     private String nombre, nick, apellido, correo;
     private DTFecha nacimiento;
     private Map<Integer, OrdenDeCompra> ordenes;
-	private File imagen;
+	private ImageIcon imagen;
     
-    public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, File imagen, Map<Integer, OrdenDeCompra> ordenes) {
+    public DTCliente(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, ImageIcon imagen, Map<Integer, OrdenDeCompra> ordenes) {
         this.nombre = nombre;
         this.nick = nick;
         this.apellido = apellido;
@@ -52,7 +55,7 @@ public class DTCliente {
     public DTFecha getNacimiento() {
         return nacimiento;
     }
-    public File getImagenes() {
+    public ImageIcon getImagenes() {
         return imagen;
     }
     public Map<Integer, OrdenDeCompra> getOrdenes() {

@@ -1,16 +1,19 @@
 package serverCentral;
 
+import java.awt.Image;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.ImageIcon;
 
 public class DTProveedor {
 	private Map<Integer, Producto> listaProductos;  
     private String compania, link, nombre, nick, apellido, correo;
     private DTFecha nacimiento;
-    private File imagen;
+    private ImageIcon imagen;
     // Constructr
-    public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, File imagen, String compania, String link) {
+    public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, ImageIcon imagen, String compania, String link) {
     	   this.nombre = nombre;
            this.nick = nick;
            this.apellido = apellido;

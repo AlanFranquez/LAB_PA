@@ -1,6 +1,8 @@
 package estacionDeTrabajo;
 
 import java.awt.EventQueue;
+import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,6 +26,12 @@ public class Presentacion {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
+            	
+        
+           
+
+  
+            	
                 try {
                     DTFecha fecha1 = new DTFecha(1, 1, 1990);
                     DTFecha fecha2 = new DTFecha(15, 6, 1985);
@@ -32,7 +40,9 @@ public class Presentacion {
                     s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha1);
                     s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1);
 
-
+                    s.agregarImagenes("Juan123", new ImageIcon("./imagenes/p1.jpg"));
+                    s.agregarImagenes("albert1341", new ImageIcon("./imagenes/p2.jpg"));
+                    s.agregarImagenes("agusmari", new ImageIcon("./imagenes/p3.jpg"));
                     Presentacion window = new Presentacion();
                     window.frame.setVisible(true);
                 } catch (Exception e) {
@@ -88,6 +98,8 @@ public class Presentacion {
                 ventanaSecundaria.setLocation(100, 100);
             }
         });
+        
+        
 
         // Crear opción "Mostrar Clientes"
         JMenuItem mntmMostrarClientes = new JMenuItem("Mostrar clientes");
@@ -152,16 +164,30 @@ public class Presentacion {
     }
     
     private void mostrarDetallesCliente(DTCliente cliente) {
-        // Crear e inicializar la ventana interna (JInternalFrame) para detalles
         JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
         ventanaDetalles.setSize(400, 300);
         ventanaDetalles.setLayout(new BorderLayout());
 
-        // Crear un JPanel para contener la información del cliente
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Agregar la información del cliente al panel
+        ImageIcon imagenIcon = cliente.getImagenes();
+        
+        
+        
+        if (imagenIcon != null) {
+        	Image imagen = imagenIcon.getImage();
+            Image imagenRedimensionada = imagen.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            
+            imagenIcon = new ImageIcon(imagenRedimensionada);
+            // Crear nuevo ImageIcon con la imagen redimensionada
+            JLabel imagenLabel = new JLabel(imagenIcon);
+            
+            panel.add(imagenLabel);
+        } else {
+            panel.add(new JLabel("No hay imagen disponible"));
+        }
         panel.add(new JLabel("Mail: " + cliente.getCorreo()));
         panel.add(new JLabel("Nick: " + cliente.getNick()));
         panel.add(new JLabel("Nombre Completo: " + cliente.getNombre() + " " + cliente.getApellido()));
@@ -172,19 +198,21 @@ public class Presentacion {
         if(cliente.getOrdenes().isEmpty()) {
         	panel.add(new JLabel("   Todavia no existen ordenes"));
         }
-        // Agregar el panel al JScrollPane
+        
+        // Falta agregar las ordenes y que al seleccionar una se muestren
+    
         JScrollPane scrollPane = new JScrollPane(panel);
 
-        // Agregar el JScrollPane a la ventana interna
+        
         ventanaDetalles.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        // Mostrar la ventana interna
+    
         ventanaDetalles.setVisible(true);
 
-        // Agregar la ventana interna al JDesktopPane
+     
         desktopPane.add(ventanaDetalles);
 
-        // Asegurar que la ventana de detalles esté al frente
+        
         try {
             ventanaDetalles.setSelected(true);
             ventanaDetalles.toFront();
