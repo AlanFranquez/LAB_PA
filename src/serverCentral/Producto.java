@@ -20,6 +20,11 @@ public class Producto {
 		this.especificaciones = especificaciones;
 	}
 
+	public Producto(String titulo, Integer numRef2, String descripcion2, String[] especificacionesArray, Float precio2,
+			Usuario proveedor) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void agregarImagen(File img) {
 		imagenes = img;
 	}

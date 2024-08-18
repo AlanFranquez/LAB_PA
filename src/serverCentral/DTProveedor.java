@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
+
+
 public class DTProveedor {
 	private Map<Integer, Producto> listaProductos;  
     private String compania, link, nombre, nick, apellido, correo;
@@ -59,4 +61,7 @@ public class DTProveedor {
     public int cantProd() {
         return listaProductos.size();
     }
+	public String getNombre() {
+		return this.nombre;
+	}
 }

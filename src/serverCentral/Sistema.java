@@ -135,43 +135,72 @@ public class Sistema implements ISistema {
     	return false;
     }
     
-    //ListarCategorias
-    public void listarCategoria(){
-    	List<Categoria> listaCategoria = this.categorias;
-    	Cat_Padre ejemplo = null;
-    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
-    		if(cat.getClass().equals(ejemplo)) {
-    			//Listar recursivo - no lo hice por la interfaz
-    			
-    			
-    		}
-    	}
-    	
+    
+    // ListarCategorias
+    public List<String> listarCategoria() {
+        Map<String, Categoria> listaCategoria = this.categorias; // Suponiendo que tienes un atributo `categorias` en la clase
+        List<String> nombresCat = new ArrayList<>(); // Inicializar la lista
+
+        for (Map.Entry<String, Categoria> entry : listaCategoria.entrySet()) {
+            Categoria cat = entry.getValue();
+            if (cat instanceof Cat_Padre) {
+                // Recorrer la categoría y sus hijos para obtener todos los nombres
+                cat.recorrerCategorias(cat, nombresCat);
+            }
+        }
+        return nombresCat;
     }
     
+    //vincular CatProd auxiliar
     
-    //Crear Producto
+    private void vincularProductoACategoria(Categoria cat, Producto p, String nombreCat) {
+        if (cat.getNombre().equals(nombreCat)) {
+            if (cat instanceof Cat_Producto) {
+                ((Cat_Producto) cat).agregarProducto(p);
+            }
+        } else if (cat instanceof Cat_Padre) {
+            for (Categoria hijo : ((Cat_Padre) cat).getHijos().values()) {
+                vincularProductoACategoria(hijo, p, nombreCat);
+            }
+        }
+    }
     
-    public void agregarProducto(String titulo, Integer numRef, String Descripcion, String[] Especificaciones, Float precio, Usuario Proveedor) {
-    	if(!verificarUsuario(Proveedor)) {
-    		//No existe el Proveedor
-    		return;
-    	}
-    	
-    	if(verificarNombre(titulo)) {
-    		//Existe un nombre igual
-    		return;
-    	}
-    	
-    	while(true) {
-    		listarCategoria();
-    		
-    	}
-    	
-    	
-    	Producto p = new Producto(titulo, Descripcion, precio, numRef, Especificaciones);
-    	
+  //vincular CatProd
+    public void vincularCatProd(Producto p, String nombre) {
+    	for (Categoria cat : this.categorias.values()) {
+    		vincularProductoACategoria(cat, p, nombre);
+        }
+    }
+
+    
+    
+    // Crear Producto
+    public void agregarProducto(String titulo, Integer numRef, String descripcion, String[] especificaciones, Float precio, Usuario proveedor) {
+        if (!verificarUsuario(proveedor)) {
+            // No existe el Proveedor
+            return;
+        }
+
+        if (verificarNombre(titulo)) {
+            // Existe un nombre igual
+            return;
+        }
+
+        Producto p = new Producto(titulo, descripcion, precio, numRef, especificaciones);
+        //Lista de strings para el tree en swing
+        List<String> nombresCat = listarCategoria();
+        
+        //Agregar logica swing para seleccionar categorias
+        while(true) {
+        	String im = "";
+        	vincularCatProd(p, im);
+        }
+        
+        while(true) {
+        	//Agregar imagen de swing
+        	File img = null;
+        	p.agregarImagen(img);
+        }
     }
    
 }

@@ -33,8 +33,9 @@ private Map<Integer, Producto> productos;
 		return this.productos;
 	}
 
-
 	public void agregarProducto(Producto prod) {
 		productos.put(prod.getNumRef(), prod);
 	}
+	
+	
 }
