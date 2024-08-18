@@ -1,6 +1,7 @@
 package serverCentral;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Producto {
@@ -18,6 +19,7 @@ public class Producto {
 		this.precio = precio;
 		this.numRef = numRef;
 		this.especificaciones = especificaciones;
+		this.categorias = new HashMap<>();
 	}
 
 	public Producto(String titulo, Integer numRef2, String descripcion2, String[] especificacionesArray, Float precio2,

@@ -8,6 +8,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -16,15 +18,20 @@ import javax.swing.*;
 import javax.swing.plaf.FileChooserUI;
 
 import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
 
 import serverCentral.*;
 
 public class Presentacion {
 
     private JFrame frame;
+    private File imagenSeleccionada;
+    private ImageIcon imagenSelecc;
     private JDesktopPane desktopPane;
     private static ISistema s = Factory.getSistema();
     private JFileChooser fileChooser;
+    private Date fechaSeleccionada;
+    Calendar calendar = Calendar.getInstance();
 
     /**
      * Launch the application.
@@ -32,7 +39,6 @@ public class Presentacion {
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
-            	
   
                 try {
                     DTFecha fecha1 = new DTFecha(1, 1, 1990);
@@ -58,7 +64,11 @@ public class Presentacion {
      * Create the application.
      */
     public Presentacion() {
+    	//
+    	
+    	
     	fileChooser = new JFileChooser();
+    	calendar = Calendar.getInstance();
         initialize();
     }
 
@@ -168,13 +178,34 @@ public class Presentacion {
                 panel.add(webField);
                 
              // JCalendar
-                JLabel fechaLabel = new JLabel("Fecha:");
-                fechaLabel.setBounds(20, 300, 80, 25);
-                panel.add(fechaLabel);
+               
 
-                JCalendar fechaField = new JCalendar();
-                fechaField.setBounds(100, 300, 200, 150);
-                panel.add(fechaField);
+ 
+                
+                JDateChooser chooser = new JDateChooser();
+                chooser.setBounds(20, 300, 80, 25);
+                panel.add(new JLabel("Fecha nacimiento: "));
+                panel.add(chooser);
+                
+                
+             // Escuchar cambios en la fecha seleccionada
+                chooser.addPropertyChangeListener(new PropertyChangeListener() {
+                    @Override
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if ("date".equals(evt.getPropertyName())) {
+                            Date selectedDate = (Date) evt.getNewValue();
+                            if (selectedDate != null) {
+                                calendar = Calendar.getInstance();
+                                calendar.setTime(selectedDate);
+
+
+                            } else {
+                            	calendar = null;
+                            }
+                        }
+                    }
+                });
+                
 
                 JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
                 seleccionarImagenButton.setBounds(20, 470, 240, 25);
@@ -191,19 +222,30 @@ public class Presentacion {
                 registrarButton.setBounds(20, 540, 240, 25);
                 panel.add(registrarButton);
                 
-           
-                
-                
-                
-                
-                
+             // Inicializar JFileChooser
+                fileChooser = new JFileChooser();
+
+                // Acción del botón de seleccionar imagen
                 seleccionarImagenButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e1) {
                         int returnValue = fileChooser.showOpenDialog(null);
                         if (returnValue == JFileChooser.APPROVE_OPTION) {
-                            File imagenSeleccionada = fileChooser.getSelectedFile();
-                            imagenLabel.setText(imagenSeleccionada.getName());
+                            imagenSeleccionada = fileChooser.getSelectedFile();
+                            // Verificar que imagenSeleccionada no sea null
+                            if (imagenSeleccionada != null) {
+                                String nombreArchivo = imagenSeleccionada.getName().toLowerCase();
+                                if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
+                                    imagenLabel.setText(imagenSeleccionada.getName());
+                                    imagenSelecc = new ImageIcon(imagenSeleccionada.getAbsolutePath());
+                                } else {
+                                    // Mostrar mensaje de error si el archivo no es válido
+                                    JOptionPane.showMessageDialog(null, "Por favor, selecciona un archivo con extensión .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+                                }
+                            } else {
+                                // Mensaje si no se selecciona un archivo
+                                JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo", "Error", JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                     }
                 });
@@ -236,14 +278,18 @@ public class Presentacion {
                         boolean esProveedor = tipoUsuarioComboBox.getSelectedItem().equals("Proveedor");
                         String compania = companiaField.getText();
                         String web = webField.getText();
-                        Date fechaSelec = fechaField.getDate();
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(fechaSelec);
                         
-                        int dia = cal.get(java.util.Calendar.DAY_OF_MONTH);
-                        int mes = cal.get(java.util.Calendar.MONTH) + 1;
-                        int anio = cal.get(java.util.Calendar.YEAR);
                         
+                       int dia, mes, anio;
+                        if(calendar.getTime() != null) {
+                        	mes = calendar.get(Calendar.MONTH);
+                        	dia = calendar.get(Calendar.DAY_OF_MONTH) + 1;
+                        	anio = calendar.get(Calendar.YEAR);
+                        } else {
+                        	JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha");
+                        	return;
+                        }
+                         
                         
                         
                         if(nickname.isEmpty() || correo.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
@@ -266,19 +312,29 @@ public class Presentacion {
                         
                         if(esProveedor) {
                         	try {
-								s.agregarProveedor(nickname, correo, nombre, apellido, fechaNacimiento, compania, web);
+								s.agregarProveedor(nombre, nickname, apellido, correo, fechaNacimiento, compania, web);
 								
 							} catch (UsuarioRepetidoException e) {
 								JOptionPane.showMessageDialog(null,e.getMessage());
 							}
                         	Usuario u = s.getUsuario(nickname);
+                        	
+                        	System.out.println("Imagen seleccionada: " + (imagenSelecc != null));
+                        	if(imagenSelecc != null) {
+                        		u.setImagen(imagenSelecc);
+                        	}
+                        	
+                        	
                         } else {
                         	try {
-								s.agregarCliente(nickname, correo, nombre, apellido, fechaNacimiento);
-								
+								s.agregarCliente(nombre, nickname, apellido, correo, fechaNacimiento);
+							
 							} catch (UsuarioRepetidoException e) {
 								JOptionPane.showMessageDialog(null,e.getMessage());
 							}
+                        	
+                        	Usuario u = s.getUsuario(nickname);
+                        	u.setImagen(imagenSelecc);
                         	
                         }
                         
@@ -291,7 +347,7 @@ public class Presentacion {
                         tipoUsuarioComboBox.setSelectedIndex(0);
                         companiaField.setText("");
                         webField.setText("");
-                        fechaField.setCalendar(null);
+                        chooser.setCalendar(null);
                   
                     }
                 });

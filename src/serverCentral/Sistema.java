@@ -51,7 +51,7 @@ public class Sistema implements ISistema {
             throw new UsuarioRepetidoException("El usuario con el nick: " + nick + " ya existe");
         }
 
-        Proveedor nuevoProveedor = new Proveedor(nick, correo, nombre, apellido, fechaNacimiento, compania, link);
+        Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link);
         usuarios.put(nick, nuevoProveedor);
     }
 
