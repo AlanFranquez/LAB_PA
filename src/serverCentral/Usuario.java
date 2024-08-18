@@ -43,6 +43,7 @@ public class Usuario {
     public DTFecha getNacimiento(){
         return nacimiento;
     }
+   
     public ImageIcon getImagen() {
         return imagen;
     }

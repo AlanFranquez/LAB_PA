@@ -9,9 +9,13 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.plaf.FileChooserUI;
+
+import com.toedter.calendar.JCalendar;
 
 import serverCentral.*;
 
@@ -29,17 +33,13 @@ public class Presentacion {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
             	
-        
-           
-
   
-            	
                 try {
                     DTFecha fecha1 = new DTFecha(1, 1, 1990);
                     DTFecha fecha2 = new DTFecha(15, 6, 1985);
 
                     s.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1);
-                    s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha1);
+                    s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2);
                     s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1);
 
                     s.agregarImagenes("Juan123", new ImageIcon("./imagenes/p1.jpg"));
@@ -67,14 +67,15 @@ public class Presentacion {
      */
     private void initialize() {
         frame = new JFrame();
-        frame.setBounds(100, 100, 1100, 900);
+        frame.setBounds(100, 100, 900, 700);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.getContentPane().setLayout(null);
+        /*frame.getContentPane().setLayout(null);*/
+        frame.getContentPane().setLayout(new BorderLayout());
         centerFrame(frame);
 
         // Crear el JDesktopPane
         desktopPane = new JDesktopPane();
-        desktopPane.setBounds(0, 0, 1100, 900);
+        desktopPane.setBounds(0, 0, 900, 700);
         frame.getContentPane().add(desktopPane);
 
         // Crear la barra de menú
@@ -93,13 +94,15 @@ public class Presentacion {
             public void actionPerformed(ActionEvent e) {
             	// Crear e inicializar la ventana secundaria (JInternalFrame)
                 JInternalFrame ventanaSecundaria = new JInternalFrame("Registrar Usuario", true, true, true, true);
-                ventanaSecundaria.setSize(400, 500); // Ajustar el tamaño
+                ventanaSecundaria.setSize(400, 600); // Ajustar el tamaño
                 ventanaSecundaria.setTitle("Alta al usuario");
                 ventanaSecundaria.setVisible(true);
+                
 
                 // Panel del formulario
                 JPanel panel = new JPanel();
-                panel.setLayout(null); // Usar el layout null para posicionar componentes manualmente
+                panel.setLayout(null); 
+                
 
                 // Crear y agregar componentes al panel
                 JLabel nicknameLabel = new JLabel("Nickname:");
@@ -133,20 +136,18 @@ public class Presentacion {
                 JTextField apellidoField = new JTextField(15);
                 apellidoField.setBounds(100, 140, 160, 25);
                 panel.add(apellidoField);
+                
+                
 
-                // Radio buttons para tipo de usuario
-                JRadioButton clienteRadioButton = new JRadioButton("Cliente");
-                clienteRadioButton.setBounds(100, 180, 80, 25);
-                clienteRadioButton.setSelected(true); 
-                panel.add(clienteRadioButton);
+                // ComboBox
+                JLabel tipoUsuarioLabel = new JLabel("Usuario: ");
+                tipoUsuarioLabel.setBounds(20, 180, 100, 25);
+                panel.add(tipoUsuarioLabel);
 
-                JRadioButton proveedorRadioButton = new JRadioButton("Proveedor");
-                proveedorRadioButton.setBounds(180, 180, 100, 25);
-                panel.add(proveedorRadioButton);
+                JComboBox<String> tipoUsuarioComboBox = new JComboBox<>(new String[]{"Cliente", "Proveedor"});
+                tipoUsuarioComboBox.setBounds(100, 180, 160, 25);
+                panel.add(tipoUsuarioComboBox);
 
-                ButtonGroup tipoUsuarioGroup = new ButtonGroup();
-                tipoUsuarioGroup.add(clienteRadioButton);
-                tipoUsuarioGroup.add(proveedorRadioButton);
 
                 JLabel companiaLabel = new JLabel("Compañía:");
                 companiaLabel.setBounds(20, 220, 80, 25);
@@ -163,20 +164,37 @@ public class Presentacion {
 
                 JTextField webField = new JTextField(20);
                 webField.setBounds(100, 260, 160, 25);
-                webField.setEnabled(false); // Deshabilitar por defecto
+                webField.setEnabled(false);
                 panel.add(webField);
+                
+             // JCalendar
+                JLabel fechaLabel = new JLabel("Fecha:");
+                fechaLabel.setBounds(20, 300, 80, 25);
+                panel.add(fechaLabel);
+
+                JCalendar fechaField = new JCalendar();
+                fechaField.setBounds(100, 300, 200, 150);
+                panel.add(fechaField);
 
                 JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
-                seleccionarImagenButton.setBounds(20, 300, 240, 25);
+                seleccionarImagenButton.setBounds(20, 470, 240, 25);
                 panel.add(seleccionarImagenButton);
-
+                
+               
                 JLabel imagenLabel = new JLabel("No se ha seleccionado ninguna imagen");
-                imagenLabel.setBounds(20, 340, 240, 25);
+                imagenLabel.setBounds(20, 500, 240, 25);
                 panel.add(imagenLabel);
+                
+                
 
                 JButton registrarButton = new JButton("Registrar");
-                registrarButton.setBounds(20, 380, 240, 25);
+                registrarButton.setBounds(20, 540, 240, 25);
                 panel.add(registrarButton);
+                
+           
+                
+                
+                
                 
                 
                 seleccionarImagenButton.addActionListener(new ActionListener() {
@@ -190,35 +208,43 @@ public class Presentacion {
                     }
                 });
 
-                // Acción para habilitar o deshabilitar campos según tipo de usuario
-                proveedorRadioButton.addActionListener(new ActionListener() {
+                
+                
+                tipoUsuarioComboBox.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e1) {
-                        companiaField.setEnabled(true);
-                        webField.setEnabled(true);
+                        boolean esProveedor = tipoUsuarioComboBox.getSelectedItem().equals("Proveedor");
+                        
+                        if(esProveedor) {
+                        	webField.setEnabled(true);
+                        	companiaField.setEnabled(true);
+                        } else {
+                        	webField.setEnabled(false);
+                        	companiaField.setEnabled(false);
+                        }
                     }
                 });
 
-                clienteRadioButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e1) {
-                        companiaField.setEnabled(false);
-                        webField.setEnabled(false);
-                    }
-                });
-                
-                
-             // Acción del botón de registro
+               
                 registrarButton.addActionListener(new ActionListener() {
-                    @Override
+					@Override
                     public void actionPerformed(ActionEvent e1) {
                         String nickname = nicknameField.getText();
                         String correo = correoField.getText();
                         String nombre = nombreField.getText();
                         String apellido = apellidoField.getText();
-                        boolean esProveedor = proveedorRadioButton.isSelected();
+                        boolean esProveedor = tipoUsuarioComboBox.getSelectedItem().equals("Proveedor");
                         String compania = companiaField.getText();
                         String web = webField.getText();
+                        Date fechaSelec = fechaField.getDate();
+                        Calendar cal = Calendar.getInstance();
+                        cal.setTime(fechaSelec);
+                        
+                        int dia = cal.get(java.util.Calendar.DAY_OF_MONTH);
+                        int mes = cal.get(java.util.Calendar.MONTH) + 1;
+                        int anio = cal.get(java.util.Calendar.YEAR);
+                        
+                        
                         
                         if(nickname.isEmpty() || correo.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
                         	JOptionPane.showMessageDialog(null, "Hay campos vacios.");
@@ -229,11 +255,44 @@ public class Presentacion {
                         	return;
                         }
                         
+                        if(!s.validarCorreo(correo)) {
+                        	JOptionPane.showMessageDialog(null, "Mal formato de correo");
+                        	return;
+                        }
+                        
                         
 
-                        // Sin completar
+                        DTFecha fechaNacimiento = new DTFecha(dia, mes, anio);
                         
+                        if(esProveedor) {
+                        	try {
+								s.agregarProveedor(nickname, correo, nombre, apellido, fechaNacimiento, compania, web);
+								
+							} catch (UsuarioRepetidoException e) {
+								JOptionPane.showMessageDialog(null,e.getMessage());
+							}
+                        	Usuario u = s.getUsuario(nickname);
+                        } else {
+                        	try {
+								s.agregarCliente(nickname, correo, nombre, apellido, fechaNacimiento);
+								
+							} catch (UsuarioRepetidoException e) {
+								JOptionPane.showMessageDialog(null,e.getMessage());
+							}
+                        	
+                        }
+                        
+                        // Limpiar inputs
                         JOptionPane.showMessageDialog(null, "Usuario registrado con éxito.");
+                        nicknameField.setText("");
+                        correoField.setText("");
+                        nombreField.setText("");
+                        apellidoField.setText("");
+                        tipoUsuarioComboBox.setSelectedIndex(0);
+                        companiaField.setText("");
+                        webField.setText("");
+                        fechaField.setCalendar(null);
+                  
                     }
                 });
 
@@ -261,7 +320,6 @@ public class Presentacion {
     }
 
     private void mostrarClientes() {
-        // Crear e inicializar la ventana interna (JInternalFrame)
         JInternalFrame ventanaClientes = new JInternalFrame("Lista de Clientes", true, true, true, true);
         ventanaClientes.setSize(500, 300);
         ventanaClientes.setLayout(new BorderLayout());
@@ -335,6 +393,7 @@ public class Presentacion {
         } else {
             panel.add(new JLabel("No hay imagen disponible"));
         }
+        panel.add(new JLabel("Tipo de Usuario: " + cliente.getTipo()));
         panel.add(new JLabel("Mail: " + cliente.getCorreo()));
         panel.add(new JLabel("Nick: " + cliente.getNick()));
         panel.add(new JLabel("Nombre Completo: " + cliente.getNombre() + " " + cliente.getApellido()));

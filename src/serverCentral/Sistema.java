@@ -32,6 +32,10 @@ public class Sistema implements ISistema {
     public boolean verificarUnicidad(String nick, String correo) {
         return !this.usuarios.containsKey(nick) && !this.usuarios.containsValue(correo);
     }
+    
+    public Usuario getUsuario(String nickname) {
+    	return this.usuarios.get(nickname);
+    }
 
     // Validar correo electrónico
     public boolean validarCorreo(String correo) {

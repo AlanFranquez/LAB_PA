@@ -23,4 +23,6 @@ public interface ISistema {
     public abstract void agregarImagenes(String nick, ImageIcon imageIcon);
     
     public abstract List<DTCliente> listarClientes();
+    
+    public Usuario getUsuario(String nickname);
 }

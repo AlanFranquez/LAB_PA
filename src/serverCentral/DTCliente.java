@@ -7,8 +7,9 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 
 public class DTCliente {
-    private String nombre, nick, apellido, correo;
+    private String nombre, nick, apellido, correo, tipo;
     private DTFecha nacimiento;
+    
     private Map<Integer, OrdenDeCompra> ordenes;
 	private ImageIcon imagen;
     
@@ -20,6 +21,7 @@ public class DTCliente {
         this.nacimiento = nacimiento;
         this.imagen = imagen;
         this.ordenes = ordenes;
+        this.tipo = "Cliente";
     }
     // Gets
     public String getNombre() {
@@ -54,6 +56,9 @@ public class DTCliente {
     }
     public DTFecha getNacimiento() {
         return nacimiento;
+    }
+    public String getTipo() {
+    	return tipo;
     }
     public ImageIcon getImagenes() {
         return imagen;
