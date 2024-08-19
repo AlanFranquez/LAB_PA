@@ -21,4 +21,5 @@ public class Cat_Padre extends Categoria{
 	public void agregarHijo(Categoria cat) {
 		hijos.put(cat.getNombre(), cat);
 	}
+
 }

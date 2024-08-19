@@ -372,13 +372,70 @@ public class Presentacion {
         });
 
         mnCasosDeUso.add(mntmMostrarClientes);
+        
+        
+        // Alta Categoria
+        JMenuItem mntmAltaCategoria = new JMenuItem("Alta Categoria");
+        mntmAltaCategoria.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		// Crear e inicializar la ventana secundaria (JInternalFrame)
+                JInternalFrame ventanaSecundaria = new JInternalFrame("Registrar Usuario", true, true, true, true);
+                ventanaSecundaria.setSize(400, 600); // Ajustar el tamaño
+                ventanaSecundaria.setTitle("Alta de Categorias");
+                ventanaSecundaria.setVisible(true);
+                
+
+                // Panel del formulario
+                JPanel panel = new JPanel();
+                panel.setLayout(null); 
+                
+
+                
+                JLabel labelNombre = new JLabel("Nombre:");
+                labelNombre.setBounds(20, 20, 80, 25);
+                panel.add(labelNombre);
+
+                JTextField categoriaField = new JTextField(15);
+                categoriaField.setBounds(100, 20, 100, 25);
+                panel.add(categoriaField);
+
+                JLabel hijosLabel = new JLabel("Hijos: ");
+                hijosLabel.setBounds(20, 60, 80, 25);
+                panel.add(hijosLabel);
+                
+
+                JRadioButton hijosSI = new JRadioButton("SI");
+                hijosSI.setBounds(60, 80, 180, 25);
+
+                JRadioButton hijosNO = new JRadioButton("NO");
+                hijosNO.setBounds(60, 100, 180, 25);
+                
+                ButtonGroup botonGrupal = new ButtonGroup();
+                botonGrupal.add(hijosSI);
+                botonGrupal.add(hijosNO);
+             // Add radio buttons to the panel
+                panel.add(hijosSI);
+                panel.add(hijosNO);
+
+
+                // Mostrar la ventana interna
+                ventanaSecundaria.getContentPane().add(panel);
+                ventanaSecundaria.setVisible(true);
+
+                // Agregar la ventana interna al JDesktopPane
+                desktopPane.add(ventanaSecundaria);
+                // Opcional: Centrar la ventana interna
+                ventanaSecundaria.setLocation(0, 0);
+        	}
+        });
+        mnCasosDeUso.add(mntmAltaCategoria);
         mnCasosDeUso.add(mntmRegistrarUsuario);
     }
 
     private void mostrarClientes() {
         JInternalFrame ventanaClientes = new JInternalFrame("Lista de Clientes", true, true, true, true);
         ventanaClientes.setSize(500, 300);
-        ventanaClientes.setLayout(new BorderLayout());
+        ventanaClientes.getContentPane().setLayout(new BorderLayout());
 
         // Recuperar la lista de clientes
         List<DTCliente> clientes = s.listarClientes();
@@ -427,7 +484,7 @@ public class Presentacion {
     private void mostrarDetallesCliente(DTCliente cliente) {
         JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
         ventanaDetalles.setSize(400, 300);
-        ventanaDetalles.setLayout(new BorderLayout());
+        ventanaDetalles.getContentPane().setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
