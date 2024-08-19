@@ -35,17 +35,17 @@ public class Cliente extends Usuario {
     public int cantCompras() {
         return listaCompras.size();
     }
-
     //opers
-    /*public Set<Integer> getAllOrdenes() {
+    public Set<Integer> getAllOrdenes() {
         Set<Integer> res = new HashSet<>();
         for (OrdenDeCompra ordenActual : listaCompras.values()) {
             res.add(ordenActual.getId());
         }
         return res;
-    }*/
+    }
     
     public DTCliente crearDt() {
-        return new DTCliente(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompras());
+        return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
     }
 }
+
