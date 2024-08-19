@@ -45,7 +45,7 @@ public class Cliente extends Usuario {
     }
     
     public DTCliente crearDt() {
-        return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
+        return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras(), this.getTipo());
     }
 }
 
