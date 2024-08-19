@@ -1,14 +1,17 @@
 package serverCentral;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Item {
     private int cant;
     private float subTotal;
-    private Map<int, Producto> productos;
+    private Map<Integer, Producto> productos;
 
   public Item(int cant) {
         this.cant = cant;
         this.productos = new HashMap<>();
-        this.subTotal = 0.0;
+        this.subTotal = 0;
     }
     //getts y setts
     public int getCant() {
@@ -21,10 +24,10 @@ public class Item {
     public float getSubTotal() {
         return subTotal;
     }
-    public Map<int, Producto> getProductos() {
+    public Map<Integer, Producto> getProductos() {
         return productos;
     }
-    public void setProductos(Map<int, Producto> productos) {
+    public void setProductos(Map<Integer, Producto> productos) {
         this.productos = productos;
     }
 
@@ -34,7 +37,7 @@ public class Item {
     }
     // Método para actualizar el subtotal
     private void updateSubTotal() {
-        subTotal = 0.0;
+        subTotal = 0;
         for (Producto producto : productos.values())
             subTotal += producto.getPrecio() * cant;
     }

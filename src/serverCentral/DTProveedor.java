@@ -1,7 +1,5 @@
 package serverCentral;
 
-import java.awt.Image;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +12,7 @@ public class DTProveedor {
     private String compania, link, nombre, nick, apellido, correo;
     private DTFecha nacimiento;
     private ImageIcon imagen;
-    // Constructr
+    // Constructor:
     public DTProveedor(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, ImageIcon imagen, String compania, String link) {
     	   this.nombre = nombre;
            this.nick = nick;
@@ -63,5 +61,44 @@ public class DTProveedor {
     }
 	public String getNombre() {
 		return this.nombre;
+	}
+	public Map<Integer, Producto> getListaProductos() {
+		return listaProductos;
+	}
+	public void setListaProductos(Map<Integer, Producto> listaProductos) {
+		this.listaProductos = listaProductos;
+	}
+	public String getNick() {
+		return nick;
+	}
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
+	public String getApellido() {
+		return apellido;
+	}
+	public void setApellido(String apellido) {
+		this.apellido = apellido;
+	}
+	public String getCorreo() {
+		return correo;
+	}
+	public void setCorreo(String correo) {
+		this.correo = correo;
+	}
+	public DTFecha getNacimiento() {
+		return nacimiento;
+	}
+	public void setNacimiento(DTFecha nacimiento) {
+		this.nacimiento = nacimiento;
+	}
+	public ImageIcon getImagen() {
+		return imagen;
+	}
+	public void setImagen(ImageIcon imagen) {
+		this.imagen = imagen;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
 	}
 }

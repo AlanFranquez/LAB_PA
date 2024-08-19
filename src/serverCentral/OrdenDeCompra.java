@@ -1,15 +1,18 @@
 package serverCentral;
 
-public class OrdenCompra {
+import java.util.HashMap;
+import java.util.Map;
+
+public class OrdenDeCompra {
     private int numero;
     private DTFecha fecha;
     private float precioTotal;
-    private Map<int, Item> MapItems;
+    private Map<Integer, Item> items;
 
-    public OrdenCompra(int numero, DTFecha fecha) {
+    public OrdenDeCompra(int numero, DTFecha fecha) {
         this.numero = numero;
         this.fecha = fecha;
-        this.precioTotal = 0.0;
+        this.precioTotal = 0;
         this.items = new HashMap<>();
     }
     //gets setts
@@ -28,11 +31,11 @@ public class OrdenCompra {
     public float getPrecioTotal() {
         return precioTotal;
     }
-    public Map<int, Item> getItems() {
+    public Map<Integer, Item> getItems() {
         return items;
     }
-    public void setPrecioTotal(Map<Int, Item> mapItems) {
-        float total = 0.0;
+    public void setPrecioTotal(Map<Integer, Item> mapItems) {
+        float total = 0;
         for (Item item : mapItems.values()) {
             total += item.getSubTotal();
         }

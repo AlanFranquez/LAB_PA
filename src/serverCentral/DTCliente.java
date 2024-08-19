@@ -1,7 +1,4 @@
 package serverCentral;
-import java.awt.Image;
-import java.io.File;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.ImageIcon;

@@ -200,11 +200,11 @@ public class Sistema implements ISistema {
         	vincularCatProd(p, im);
         }
         
-        while(true) {
-        	//Agregar imagen de swing
-        	File img = null;
-        	p.agregarImagen(img);
-        }
+//        while(true) {
+//        	//Agregar imagen de swing
+//        	File img = null;
+//        	p.agregarImagen(img);
+//        }
     }
    
 }

@@ -1,7 +1,12 @@
 package serverCentral;
 
 public class UsuarioRepetidoException extends Exception {
-    public UsuarioRepetidoException(String mensaje) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public UsuarioRepetidoException(String mensaje) {
         super(mensaje);
     }
 }
