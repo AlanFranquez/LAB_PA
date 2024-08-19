@@ -6,7 +6,7 @@ public class OrdenCompra {
     private float precioTotal;
     private Map<int, Item> MapItems;
 
-    public OrdenCompra(int numero, DTFecha fecha, float precioTotal) {
+    public OrdenCompra(int numero, DTFecha fecha) {
         this.numero = numero;
         this.fecha = fecha;
         this.precioTotal = 0.0;
