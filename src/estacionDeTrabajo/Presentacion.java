@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,6 +37,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
+import com.toedter.calendar.JCalendar;
+import com.toedter.calendar.JDateChooser;
+
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
 import serverCentral.Factory;
@@ -56,6 +61,8 @@ public class Presentacion {
     /**
      * Launch the application.
      */
+    
+ 
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -210,7 +217,7 @@ public class Presentacion {
                
 //JCalendar tiene problemas por la ruta del archivo, habría que investigarlo mejor o encontrar otra alternativa
  
-                /*
+               
                 JDateChooser chooser = new JDateChooser();
                 chooser.setBounds(20, 300, 80, 25);
                 panel.add(new JLabel("Fecha nacimiento: "));
@@ -234,7 +241,7 @@ public class Presentacion {
                         }
                     }
                 });
-                */
+            
 
                 JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
                 seleccionarImagenButton.setBounds(20, 470, 240, 25);
