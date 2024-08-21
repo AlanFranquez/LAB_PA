@@ -1,13 +1,16 @@
 package serverCentral;
 import java.util.Map;
+import java.util.Set;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class Cliente extends Usuario {
     private Map<Integer, OrdenDeCompra> listaCompras;
     private Map<Integer, Comentario> listaComentarios;
+    
     // Constructor
     public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) {
-        super(nombre, nick, apellido, correo, fecha, "cliente"); // constructor de Usuario
+        super(nombre, nick, apellido, correo, fecha, "cliente");
         this.listaCompras = new HashMap<>();
         this.listaComentarios = new HashMap<>();
     }
@@ -19,9 +22,9 @@ public class Cliente extends Usuario {
     public Map<Integer, Comentario> getComentarios() {
         return listaComentarios;
     }
-    //cosas OrdenCompra
-    public void agregarCompra(int num, OrdenDeCompra Orden) {
-        listaCompras.put(num, Orden);
+
+    public void agregarCompra(OrdenDeCompra orden) {
+        listaCompras.put(orden.getNumero(), orden);
     }
     public OrdenDeCompra obtenerOrden(int num) {
         return listaCompras.get(num);
@@ -35,17 +38,18 @@ public class Cliente extends Usuario {
     public int cantCompras() {
         return listaCompras.size();
     }
-    //opers
+   
+    // Mas que un set de integers creo que debería de ser un arreglo de dtOrdenCompra
     public Set<Integer> getAllOrdenes() {
         Set<Integer> res = new HashSet<>();
         for (OrdenDeCompra ordenActual : listaCompras.values()) {
-            res.add(ordenActual.getId());
+            res.add(ordenActual.getNumero());
         }
         return res;
     }
     
     public DTCliente crearDt() {
-        return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras(), this.getTipo());
+        return new DTCliente(this.getNombre(), this.getNick(), this.getApellido(), this.getCorreo(), this.getNacimiento(), this.getImagen(), this.getCompras());
     }
 }
 
