@@ -5,11 +5,11 @@ import java.util.HashMap;
 public class Proveedor extends Usuario {
     private Map<Integer, Producto> listaProductos;  
     private String compania, link;
-    // Constructr
-    public Proveedor(String nom, String ni, String ape, String cor, DTFecha nacimiento, String comp, String lin) {
-        super(nom, ni, ape, cor, nacimiento, "proveedor");
+    // Constructor:
+    public Proveedor(String nom, String nick, String ape, String correo, DTFecha nacimiento, String comp, String link) {
+        super(nom, nick, ape, correo, nacimiento, "proveedor");
         this.compania = comp;
-        this.link = lin;
+        this.link = link;
         this.listaProductos = new HashMap<>();
     }
     // Gets sets
@@ -29,20 +29,17 @@ public class Proveedor extends Usuario {
         this.link = lin;
     }
 
-    public Map<Integer, Producto> getProductos() {
-        return listaProductos;//??????'
+    public void agregarProd(Producto prod) {
+        listaProductos.put(prod.getNumRef(), prod);
     }
-    public void agregarProd(int id, Producto prod) {
-        listaProductos.put(id, prod);
+    public Producto obtenerProd(int numRef) {
+        return listaProductos.get(numRef);
     }
-    public Producto obtenerProd(int id) {
-        return listaProductos.get(id);
+    public void eliminarProd(int numRef) {
+        listaProductos.remove(numRef);
     }
-    public void eliminarProd(int id) {
-        listaProductos.remove(id);
-    }
-    public boolean existeProd(int id) {
-        return listaProductos.containsKey(id);
+    public boolean existeProd(int numRef) {
+        return listaProductos.containsKey(numRef);
     }
     public int cantProd() {
         return listaProductos.size();

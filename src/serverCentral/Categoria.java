@@ -13,11 +13,6 @@ public class Categoria {
 		this.nombre = nombre;
 		this.tipo = tipo;
 	}
-	
-	public Categoria(String nombre, String tipo, Categoria cat) {
-		this.nombre = nombre;
-		this.tipo = tipo;
-	}
 
 	// Getters y Setters:
 	public String getNombre() {
@@ -33,15 +28,17 @@ public class Categoria {
 		this.tipo = tipo;
 	}
 	
-	public void recorrerCategorias(Categoria cat, List<String> nombres) {
-
+	
+	
+	/* 
+	 Mal implementado, hacer un recorer vacío y después actuar de forma diferente en 
+	 cat_padre y cat_hijo
+	 */
+	public void recorrerCategorias(Categoria cat, List<String> nombres) { 
         nombres.add(cat.getNombre());
-
-
         if (cat instanceof Cat_Padre) {
             Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
             for (Categoria hijo : hijos.values()) {
-
                 recorrerCategorias(hijo, nombres);
             }
         }
