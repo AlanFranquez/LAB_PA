@@ -117,6 +117,18 @@ public class Sistema implements ISistema {
     	}
     	return false;
     }
+    //Devolver informacion del proveedor
+    public DTProveedor infoProveedor(string nick) {
+    	Usuario usuario = usuarios.get(nick);
+    	
+    	if (usuario == null || !usuario.getTipo().equals("proveedor")) {
+            System.out.println("Proveedor con nick: " + nick + " no encontrado.");
+            return null;
+        }
+    	
+    	Proveedor proveedor = (Proveedor) usuario;
+    	return proveedor.crearDt();
+        }
     
     //Verificar Nombre
     
