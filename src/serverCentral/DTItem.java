@@ -1,11 +1,11 @@
 package serverCentral;
 
-public class Item {
-    private int cant;
+public class DTItem {
+	private int cant;
     private float subTotal;
     private Producto producto;
 
-    public Item(int cant, Producto prod) {
+    public DTItem(int cant, Producto prod) {
         this.cant = cant;
         this.producto = prod;
         this.subTotal = prod.getPrecio() * cant;
@@ -30,7 +30,4 @@ public class Item {
     }
     
     
-    public DTItem crearDT() {
-    	return new DTItem(this.getCant(), this.getProducto());
-    }
 }

@@ -14,11 +14,13 @@ public class Sistema implements ISistema {
     private static Sistema instance = null;
     private Map<String, Usuario> usuarios;
     private Map<String, Categoria> categorias;
+    private Map<Integer, OrdenDeCompra> ordenes;
 
     private Sistema() {
         // Inicialización de colecciones
         this.usuarios = new HashMap<>();
         this.categorias = new HashMap<>();
+        this.ordenes = new HashMap<>();
     }
 
     public static synchronized Sistema getInstance() {
@@ -190,9 +192,9 @@ public class Sistema implements ISistema {
 	   }
 	   
 	   // Esto tira error
-	   if((cat.obtenerPadre() != null)) {
+	   /*if((cat.obtenerPadre() != null)) {
 		   throw new CategoriaException("Esta categoria ya es su padre");
-	   }
+	   }*/
 	   cat.setPadre(catPadre);
    }
     public void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException {
@@ -273,9 +275,28 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
+    public List<DTOrdenDeCompra> listarOrdenes() {
+    	List<DTOrdenDeCompra> lista = new ArrayList<>();
+    	
+    	for(Map.Entry<Integer, OrdenDeCompra> entry : this.ordenes.entrySet()) {
+    		OrdenDeCompra o = entry.getValue();
+    		
+    		lista.add(o.crearDT());
+    	}
+    	
+    	return lista;
+    }
     
-    
-    
+    public DTOrdenDeCompra elegirOrden(int clave) throws OrdenDeCompraException{
+    	if(this.ordenes.get(clave) == null) {
+    		throw new OrdenDeCompraException("No existe esta orden de compra");
+
+    	}
+    	
+    	OrdenDeCompra or = this.ordenes.get(clave);
+    	return or.crearDT();
+    	
+    }
     
     
     

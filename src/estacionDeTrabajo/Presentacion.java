@@ -84,6 +84,8 @@ public class Presentacion {
                     
                     
                     
+                    
+                    
                     s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
                     s.agregarImagenUsuario("albert1341", new ImageIcon("./imagenes/p2.jpg"));
                     s.agregarImagenUsuario("agusmari", new ImageIcon("./imagenes/p3.jpg"));

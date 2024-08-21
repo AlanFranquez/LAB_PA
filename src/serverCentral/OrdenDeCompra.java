@@ -55,4 +55,10 @@ public class OrdenDeCompra {
         items.remove(codigo);
         setPrecioTotal();
     }
+    
+    public DTOrdenDeCompra crearDT() {
+    	return new DTOrdenDeCompra(numero, getItems(), getPrecioTotal());
+    }
+    
+    
 }
