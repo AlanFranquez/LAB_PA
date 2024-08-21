@@ -64,7 +64,7 @@ public class Sistema implements ISistema {
         usuarios.put(nick, nuevoCliente);
     }
 
-    public void agregarImagenes(String nick, ImageIcon imagen) {
+    public void agregarImagenUsuario(String nick, ImageIcon imagen) {
         Usuario usuarioBuscado = this.usuarios.get(nick);
         if (usuarioBuscado == null) {
             System.out.println("Usuario con nick: " + nick + " no encontrado.");
@@ -293,9 +293,9 @@ public class Sistema implements ISistema {
 	   }
 	   
 	   // Esto tira error
-	   /*if((cat.obtenerPadre() != null)) {
+	   if((cat.obtenerPadre() != null)) {
 		   throw new CategoriaException("Esta categoria ya es su padre");
-	   }*/
+	   }
 	   cat.setPadre(catPadre);
 	   
    }
@@ -320,6 +320,9 @@ public class Sistema implements ISistema {
 	   cat.setPadre(catPadre);;
 	   
    }
+
+
+
    
    
 }

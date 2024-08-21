@@ -18,7 +18,7 @@ public interface ISistema {
     
     public abstract void agregarCliente(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento) throws UsuarioRepetidoException;
     
-    public abstract void agregarImagenes(String nick, ImageIcon imageIcon);
+    public abstract void agregarImagenUsuario(String nick, ImageIcon imageIcon);
     
     public abstract List<DTCliente> listarClientes();
     

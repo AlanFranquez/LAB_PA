@@ -1,6 +1,6 @@
 package serverCentral;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Proveedor extends Usuario {
     private Map<Integer, Producto> listaProductos;  
