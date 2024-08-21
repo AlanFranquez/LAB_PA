@@ -70,6 +70,9 @@ public class Producto {
 		this.numRef = numRef;
 	}
 	
-
+	public DtProducto crearDT() {
+		return new DtProducto(this.getNombre(), getDescripcion(), getPrecio(), getNumRef())
+	}
+	
 
 }
