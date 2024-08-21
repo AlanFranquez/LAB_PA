@@ -79,61 +79,7 @@ public class Sistema implements ISistema {
 
     
     
-    @Override
-    public List<DTCliente> listarClientes() {
-        List<DTCliente> listaClientes = new ArrayList<>();
-
-        for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
-            Usuario usuario = entry.getValue();
-            if (usuario.getTipo().equals("cliente")) {
-                Cliente usuarioCliente = (Cliente) usuario;
-                listaClientes.add(usuarioCliente.crearDt());
-            }
-        }
-
-        return listaClientes;
-    }
-    
-    
-    // Listar solo categorias padres
-    public List <DTCat_Padre> listarSoloPadres() {
-    	List <DTCat_Padre> listarPadres = new ArrayList<>();
-    	
-    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
-    		
-    		if(cat.getTipo() == "Padre") {
-    			
-    			Cat_Padre catPadre = (Cat_Padre) cat;
-    			listarPadres.add(catPadre.crearDT());
-    		}
-    	}
-    	
-    	return listarPadres;
-    }
-    
- // Listar solo categorias padres
-    public List <String> listarSoloNombresPadresCat() {
-    	List <String> listarPadres = new ArrayList<>();
-    	
-    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
-    		
-    		if(cat.getTipo() == "Padre") {
-    			
-    			Cat_Padre catPadre = (Cat_Padre) cat;
-    			listarPadres.add(catPadre.getNombre());
-    		}
-    	}
-    	
-    	return listarPadres;
-    }
-
-    
-    
-  //Agregar un producto
-    
-    //Listar Proveedores
+    // CASO DE USO 2: REGISTRAR PRODUCTO
     public List<DTProveedor> listarProveedores(){
     	List<DTProveedor> listaProveedor = new ArrayList<>();
     	for(Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
@@ -145,8 +91,46 @@ public class Sistema implements ISistema {
     	}
     	return listaProveedor;
     }
+    public void agregarProducto(String titulo, Integer numRef, String descripcion, String[] especificaciones, Float precio, Usuario proveedor) {
+        if (!verificarUsuario(proveedor)) {
+            // No existe el Proveedor
+            return;
+        }
+
+        if (verificarNombre(titulo)) {
+            // Existe un nombre igual
+            return;
+        }
+
+        Producto p = new Producto(titulo, descripcion, precio, numRef, especificaciones);
+    }
+    public List<String> listarCategoria() {
+        Map<String, Categoria> listaCategoria = this.categorias; // Suponiendo que tienes un atributo `categorias` en la clase
+        List<String> nombresCat = new ArrayList<>(); // Inicializar la lista
+
+        for (Map.Entry<String, Categoria> entry : listaCategoria.entrySet()) {
+            Categoria cat = entry.getValue();
+            if (cat instanceof Cat_Padre) {
+                // Recorrer la categoría y sus hijos para obtener todos los nombres
+                cat.recorrerCategorias(cat, nombresCat);
+            }
+        }
+        return nombresCat;
+    }
+    private void vincularProductoACategoria(Categoria cat, Producto p, String nombreCat) {
+        if (cat.getNombre().equals(nombreCat)) {
+            if (cat instanceof Cat_Producto) {
+                ((Cat_Producto) cat).agregarProducto(p);
+            }
+        } else if (cat instanceof Cat_Padre) {
+            for (Categoria hijo : ((Cat_Padre) cat).getHijos().values()) {
+                vincularProductoACategoria(hijo, p, nombreCat);
+            }
+        }
+    }
+    // public void agregarImagenProducto(...){}
     
-    //Verificar si existe el proveedor
+    //CASO DE USO 2: FUNCIONES AUXILIARES
     public boolean verificarUsuario(Usuario Proveedor) {
     	Map<String, Usuario> usuarios = this.usuarios;
     	for(Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
@@ -157,23 +141,6 @@ public class Sistema implements ISistema {
     	}
     	return false;
     }
-    //Devolver informacion del proveedor
-    public DTProveedor infoProveedor(String nick) {
-    	Usuario usuario = usuarios.get(nick);
-    	
-    	if (usuario == null || !usuario.getTipo().equals("proveedor")) {
-            System.out.println("Proveedor con nick: " + nick + " no encontrado.");
-            return null;
-        }
-    	
-    	Proveedor proveedor = (Proveedor) usuario;
-    	return proveedor.crearDt();
-        }
-    
-    public boolean existeCategoria(String nombre) {
-        return this.categorias.containsKey(nombre);
-    }
-    
     public boolean verificarNombre(String nombre) {
         Map<String, Categoria> categorias = this.categorias;
         for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
@@ -191,107 +158,32 @@ public class Sistema implements ISistema {
         }
         return false;
     }
-
-    
-    
-    // ListarCategorias
-    public List<String> listarCategoria() {
-        Map<String, Categoria> listaCategoria = this.categorias; // Suponiendo que tienes un atributo `categorias` en la clase
-        List<String> nombresCat = new ArrayList<>(); // Inicializar la lista
-
-        for (Map.Entry<String, Categoria> entry : listaCategoria.entrySet()) {
-            Categoria cat = entry.getValue();
-            if (cat instanceof Cat_Padre) {
-                // Recorrer la categoría y sus hijos para obtener todos los nombres
-                cat.recorrerCategorias(cat, nombresCat);
-            }
-        }
-        return nombresCat;
-    }
-    
-    //vincular CatProd auxiliar
-    
-    private void vincularProductoACategoria(Categoria cat, Producto p, String nombreCat) {
-        if (cat.getNombre().equals(nombreCat)) {
-            if (cat instanceof Cat_Producto) {
-                ((Cat_Producto) cat).agregarProducto(p);
-            }
-        } else if (cat instanceof Cat_Padre) {
-            for (Categoria hijo : ((Cat_Padre) cat).getHijos().values()) {
-                vincularProductoACategoria(hijo, p, nombreCat);
-            }
-        }
-    }
-    
-  //vincular CatProd
     public void vincularCatProd(Producto p, String nombre) {
     	for (Categoria cat : this.categorias.values()) {
     		vincularProductoACategoria(cat, p, nombre);
         }
     }
-
     
     
-    // Crear Producto
-    public void agregarProducto(String titulo, Integer numRef, String descripcion, String[] especificaciones, Float precio, Usuario proveedor) {
-        if (!verificarUsuario(proveedor)) {
-            // No existe el Proveedor
-            return;
-        }
-
-        if (verificarNombre(titulo)) {
-            // Existe un nombre igual
-            return;
-        }
-
-        Producto p = new Producto(titulo, descripcion, precio, numRef, especificaciones);
-        //Lista de strings para el tree en swing
-        List<String> nombresCat = listarCategoria();
-        
-        //Agregar logica swing para seleccionar categorias
-        while(true) {
-        	String im = "";
-        	vincularCatProd(p, im);
-        }
-        
-//        while(true) {
-//        	//Agregar imagen de swing
-//        	File img = null;
-//        	p.agregarImagen(img);
-//        }
-    }
     
-    // Agregar categoria sin padres (las de primer nivel)
-    
-    
-   public void agregarCategoria(String nombre) throws CategoriaException {
-	   if(this.existeCategoria(nombre)) {
+    // CASO DE USO 3: ALTA DE CATEGORIA
+    public void agregarCategoria(String nombre) throws CategoriaException {
+	   if(existeCategoria(nombre)) {
 		   throw new CategoriaException("El nombre de la categoria ya existe");
-
 	   }
-	   
 	   Cat_Padre nuevaCategoria = new Cat_Padre(nombre);
 	   this.categorias.put(nombre, nuevaCategoria);
    }
-   
-   // Agregar Categorias con productos
-   
-   public void agregarCategoriaConProductos(String nombre) throws CategoriaException{
-	   if(this.existeCategoria(nombre)) {
+    public void agregarCategoriaConProductos(String nombre) throws CategoriaException{
+	   if(existeCategoria(nombre)) {
 		   throw new CategoriaException("Esta categoria ya existe");
 	   }
-	   
 	   Cat_Producto nuevaCategoria = new Cat_Producto(nombre);
 	   this.categorias.put(nombre, nuevaCategoria);
    }
-   
-   public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
-	   
-	   
-	   
+    public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
 	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
 	   Cat_Padre cat = (Cat_Padre) this.categorias.get(nombre);
-	   
 	   
 	   if(catPadre.verificarSiYaEsHijo(nombre)) {
 		   throw new CategoriaException("Esta categoria ya es su hijo");
@@ -302,42 +194,123 @@ public class Sistema implements ISistema {
 		   throw new CategoriaException("Esta categoria ya es su padre");
 	   }
 	   cat.setPadre(catPadre);
-	   
    }
-   
-
-   public void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException {
-	   
-	   
-	   
+    public void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException {
 	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
 	   Cat_Producto cat = (Cat_Producto) this.categorias.get(nombre);
-	   
 	   
 	   if(catPadre.verificarSiYaEsHijo(nombre)) {
 		   throw new CategoriaException("Esta categoria ya es su hijo");
 	   }
-	   
-	   
 	   if(cat.obtenerPadre() == nombrePadre) {
 		   throw new CategoriaException("Esta categoria ya es su padre");
 	   }
 	   cat.setPadre(catPadre);;
-	   
    }
+   
+    // CASO DE USO 3: FUNCIONES AUXILIARES
+    public List <String> listarSoloNombresPadresCat() {
+    	List <String> listarPadres = new ArrayList<>();
+    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    		Categoria cat = entry.getValue();
+    		if(cat.getTipo() == "Padre") {
+    			Cat_Padre catPadre = (Cat_Padre) cat;
+    			listarPadres.add(catPadre.getNombre());
+    		}
+    	}
+    	return listarPadres;
+    }
+    public boolean existeCategoria(String nombre) {
+        return this.categorias.containsKey(nombre);
+    }
+    
+    
+    
+    // CASO DE USO 4: GENERAR ORDEN DE COMPRA
+    
+    
+    
+    // CASO DE USO 5: VER INFORMACION DE CLIENTE 
+    @Override
+    public List<DTCliente> listarClientes() {
+        List<DTCliente> listaClientes = new ArrayList<>();
+        for (Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
+            Usuario usuario = entry.getValue();
+            if (usuario.getTipo().equals("cliente")) {
+                Cliente usuarioCliente = (Cliente) usuario;
+                listaClientes.add(usuarioCliente.crearDt());
+            }
+        }
+        return listaClientes;
+    }
+    
+    
+    
+    // CASO DE USO 6: VER INFORMACION DE PROVEEDOR
+    // Reutilización de la función listarProveedores del caso de uso 2
+    public DTProveedor infoProveedor(String nick) {
+    	Usuario usuario = usuarios.get(nick);
+    	if (usuario == null || !usuario.getTipo().equals("proveedor")) {
+            System.out.println("Proveedor con nick: " + nick + " no encontrado.");
+            return null;
+        }
+    	
+    	Proveedor proveedor = (Proveedor) usuario;
+    	return proveedor.crearDt();
+        }
+    
+    
+    // CASO DE USO 7: CANCELAR ORDEN DE COMPRA
+    
+    
+    
+    // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
+    
+    
+    
+    // CASO DE USO 9: VER INFORMACION DE PRODUCTO
+    
+    
+    
+    // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
+    
+    
+    
+    
+    
+    
+    // NO SE DÓNDE SE USARÍAN:
+    
+    // Listar solo categorias padres
+    public List <DTCat_Padre> listarSoloPadres() {
+    	List <DTCat_Padre> listarPadres = new ArrayList<>();
+    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    		Categoria cat = entry.getValue();
+    		
+    		if(cat.getTipo() == "Padre") {
+    			Cat_Padre catPadre = (Cat_Padre) cat;
+    			listarPadres.add(catPadre.crearDT());
+    		}
+    	}
+    	return listarPadres;
+    }
+    
+   
+
+    
+   
+
+    
+    
 
 
+    
+    
+    
+   
 
+
+   
    
    
 }
-
-
-
-
-
-
-
-
-
-
