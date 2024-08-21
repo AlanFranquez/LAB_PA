@@ -1,26 +1,45 @@
 package estacionDeTrabajo;
 
-import java.awt.EventQueue;
-import java.awt.Image;
-import java.awt.MediaTracker;
-import java.awt.Toolkit;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.plaf.FileChooserUI;
 
-import com.toedter.calendar.JCalendar;
-import com.toedter.calendar.JDateChooser;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JDesktopPane;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 
-import serverCentral.*;
+import serverCentral.DTCliente;
+import serverCentral.DTFecha;
+import serverCentral.Factory;
+import serverCentral.ISistema;
+import serverCentral.Usuario;
+import serverCentral.UsuarioRepetidoException;
 
 public class Presentacion {
 
@@ -48,9 +67,9 @@ public class Presentacion {
                     s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2);
                     s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1);
 
-                    s.agregarImagenes("Juan123", new ImageIcon("./imagenes/p1.jpg"));
-                    s.agregarImagenes("albert1341", new ImageIcon("./imagenes/p2.jpg"));
-                    s.agregarImagenes("agusmari", new ImageIcon("./imagenes/p3.jpg"));
+                    s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
+                    s.agregarImagenUsuario("albert1341", new ImageIcon("./imagenes/p2.jpg"));
+                    s.agregarImagenUsuario("agusmari", new ImageIcon("./imagenes/p3.jpg"));
                     Presentacion window = new Presentacion();
                     window.frame.setVisible(true);
                 } catch (Exception e) {
@@ -179,9 +198,9 @@ public class Presentacion {
                 
              // JCalendar
                
-
+//JCalendar tiene problemas por la ruta del archivo, habría que investigarlo mejor o encontrar otra alternativa
  
-                
+                /*
                 JDateChooser chooser = new JDateChooser();
                 chooser.setBounds(20, 300, 80, 25);
                 panel.add(new JLabel("Fecha nacimiento: "));
@@ -205,7 +224,7 @@ public class Presentacion {
                         }
                     }
                 });
-                
+                */
 
                 JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
                 seleccionarImagenButton.setBounds(20, 470, 240, 25);
@@ -347,7 +366,7 @@ public class Presentacion {
                         tipoUsuarioComboBox.setSelectedIndex(0);
                         companiaField.setText("");
                         webField.setText("");
-                        chooser.setCalendar(null);
+              //          chooser.setCalendar(null);
                   
                     }
                 });

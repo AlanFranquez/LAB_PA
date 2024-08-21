@@ -1,24 +1,24 @@
 package serverCentral;
 
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
 
-import java.awt.Image;
-import java.io.File;
-
 public class Sistema implements ISistema {
     private static Sistema instance = null;
     private Map<String, Usuario> usuarios;
     private Map<String, Categoria> categorias;
+    // private Map<Integer, OrdenDeCompra> compras;
 
     private Sistema() {
-        // Inicialización de colecciones
         this.usuarios = new HashMap<>();
         this.categorias = new HashMap<>();
+        // this.compras = new HashMap<>();
     }
 
     public static synchronized Sistema getInstance() {
@@ -27,17 +27,50 @@ public class Sistema implements ISistema {
         }
         return instance;
     }
-
-    // Verificar si el usuario está o no agregado al sistema
+    
+    
+    // CASO DE USO 1: REGISTRAR USUARIO
     public boolean verificarUnicidad(String nick, String correo) {
-        return !this.usuarios.containsKey(nick) && !this.usuarios.containsValue(correo);
+    	if(!this.usuarios.containsKey(nick)) {
+    		for (Usuario usuario : usuarios.values()) {
+                if(usuario.getCorreo() == correo) {
+                	return false;
+                }
+            }
+    		return true;
+    	}
+    	return false;
+    }
+    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException {
+    	if (!verificarUnicidad(nick, correo)) {
+    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
+    	}
+    	
+    	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link);
+    	usuarios.put(nick, nuevoProveedor);
+    }
+    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) throws UsuarioRepetidoException {
+    	if (!verificarUnicidad(nick, correo)) {
+    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
+    	}
+    	
+    	Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha);
+    	usuarios.put(nick, nuevoCliente);
+    }
+    public void agregarImagenUsuario(String nick, ImageIcon imagen) {
+    	Usuario usuarioBuscado = this.usuarios.get(nick);
+    	if (usuarioBuscado == null) {
+    		System.out.println("Usuario con nick: " + nick + " no encontrado.");
+    		return;
+    	}
+    	usuarioBuscado.setImagen(imagen);
     }
     
+    
+    // CASO DE USO 1: FUNCIONES AUXILIARES
     public Usuario getUsuario(String nickname) {
     	return this.usuarios.get(nickname);
     }
-
-    // Validar correo electrónico
     public boolean validarCorreo(String correo) {
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
         Pattern pattern = Pattern.compile(regex);
@@ -45,35 +78,8 @@ public class Sistema implements ISistema {
         return matcher.matches();
     }
 
-    // Agregar usuario a la colección
-    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException {
-        if (!verificarUnicidad(nick, correo)) {
-            throw new UsuarioRepetidoException("El usuario con el nick: " + nick + " ya existe");
-        }
-
-        Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link);
-        usuarios.put(nick, nuevoProveedor);
-    }
-
-    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) throws UsuarioRepetidoException {
-        if (!verificarUnicidad(nick, correo)) {
-            throw new UsuarioRepetidoException("El usuario con el nick: " + nick + " ya existe");
-        }
-
-        Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha);
-        usuarios.put(nick, nuevoCliente);
-    }
-
-    public void agregarImagenes(String nick, ImageIcon imagen) {
-        Usuario usuarioBuscado = this.usuarios.get(nick);
-        if (usuarioBuscado == null) {
-            System.out.println("Usuario con nick: " + nick + " no encontrado.");
-            return;
-        }
-
-        usuarioBuscado.setImagen(imagen);
-    }
-
+    // LISTAR USUARIOS
+    // --Fabricio: no entendí para que es le override en esta función
     @Override
     public List<DTCliente> listarClientes() {
         List<DTCliente> listaClientes = new ArrayList<>();
@@ -85,7 +91,6 @@ public class Sistema implements ISistema {
                 listaClientes.add(usuarioCliente.crearDt());
             }
         }
-
         return listaClientes;
     }
     
@@ -118,7 +123,7 @@ public class Sistema implements ISistema {
     	return false;
     }
     //Devolver informacion del proveedor
-    public DTProveedor infoProveedor(string nick) {
+    public DTProveedor infoProveedor(String nick) {
     	Usuario usuario = usuarios.get(nick);
     	
     	if (usuario == null || !usuario.getTipo().equals("proveedor")) {
@@ -131,8 +136,8 @@ public class Sistema implements ISistema {
         }
     
     //Verificar Nombre
-    
     public boolean verificarNombre(String nombre) {
+    	/*
     	Map<String, Categoria> categorias = this.categorias;
     	Cat_Producto ejemplo = null;
     	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
@@ -148,6 +153,7 @@ public class Sistema implements ISistema {
     	    	}
     		}
     	}
+    	*/
     	return false;
     }
     
@@ -220,13 +226,3 @@ public class Sistema implements ISistema {
     }
    
 }
-
-
-
-
-
-
-
-
-
-
