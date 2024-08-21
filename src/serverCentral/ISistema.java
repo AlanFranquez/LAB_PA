@@ -23,4 +23,16 @@ public interface ISistema {
     public abstract List<DTCliente> listarClientes();
     
     public Usuario getUsuario(String nickname);
+    
+    public boolean existeCategoria(String nombre) throws CategoriaException;
+    
+    public List <DTCat_Padre> listarSoloPadres();
+    
+    public List <String> listarSoloNombresPadresCat();
+    
+    public void agregarCategoria(String nombre) throws CategoriaException;
+    
+    public void agregarCategoriaConProductos(String nombre) throws CategoriaException;
+    
+    public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException;
 }

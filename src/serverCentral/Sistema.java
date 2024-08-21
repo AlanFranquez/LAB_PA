@@ -90,6 +90,41 @@ public class Sistema implements ISistema {
     }
     
     
+    // Listar solo categorias padres
+    public List <DTCat_Padre> listarSoloPadres() {
+    	List <DTCat_Padre> listarPadres = new ArrayList<>();
+    	
+    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    		Categoria cat = entry.getValue();
+    		
+    		if(cat.getTipo() == "Padre") {
+    			
+    			Cat_Padre catPadre = (Cat_Padre) cat;
+    			listarPadres.add(catPadre.crearDT());
+    		}
+    	}
+    	
+    	return listarPadres;
+    }
+    
+ // Listar solo categorias padres
+    public List <String> listarSoloNombresPadresCat() {
+    	List <String> listarPadres = new ArrayList<>();
+    	
+    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    		Categoria cat = entry.getValue();
+    		
+    		if(cat.getTipo() == "Padre") {
+    			
+    			Cat_Padre catPadre = (Cat_Padre) cat;
+    			listarPadres.add(catPadre.getNombre());
+    		}
+    	}
+    	
+    	return listarPadres;
+    }
+
+    
     
   //Agregar un producto
     
@@ -118,7 +153,7 @@ public class Sistema implements ISistema {
     	return false;
     }
     //Devolver informacion del proveedor
-    public DTProveedor infoProveedor(string nick) {
+    public DTProveedor infoProveedor(String nick) {
     	Usuario usuario = usuarios.get(nick);
     	
     	if (usuario == null || !usuario.getTipo().equals("proveedor")) {
@@ -130,26 +165,28 @@ public class Sistema implements ISistema {
     	return proveedor.crearDt();
         }
     
-    //Verificar Nombre
+    public boolean existeCategoria(String nombre) {
+        return this.categorias.containsKey(nombre);
+    }
     
     public boolean verificarNombre(String nombre) {
-    	Map<String, Categoria> categorias = this.categorias;
-    	Cat_Producto ejemplo = null;
-    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria categ = entry.getValue();
-    		if(categ.getClass().equals(ejemplo)) {
-    			Cat_Producto pcast = (Cat_Producto) categ;
-    			Map<Integer, Producto> productos = pcast.darProductos();
-    			for(Map.Entry<Integer, Producto> entry : productos.entrySet()) {
-    	    		Producto prod = entry.getValue();
-    	    		if(prod.getNombre().equals(nombre)){
-    	    			return true;
-    	    		}
-    	    	}
-    		}
-    	}
-    	return false;
+        Map<String, Categoria> categorias = this.categorias;
+        for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+            Categoria categ = entry.getValue();
+            if (categ instanceof Cat_Producto) {
+                Cat_Producto pcast = (Cat_Producto) categ;
+                Map<Integer, Producto> productos = pcast.darProductos();
+                for (Map.Entry<Integer, Producto> entry2 : productos.entrySet()) {
+                    Producto prod = entry2.getValue();
+                    if (prod.getNombre().equals(nombre)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
+
     
     
     // ListarCategorias
@@ -218,6 +255,72 @@ public class Sistema implements ISistema {
 //        	p.agregarImagen(img);
 //        }
     }
+    
+    // Agregar categoria sin padres (las de primer nivel)
+    
+    
+   public void agregarCategoria(String nombre) throws CategoriaException {
+	   if(this.existeCategoria(nombre)) {
+		   throw new CategoriaException("El nombre de la categoria ya existe");
+
+	   }
+	   
+	   Cat_Padre nuevaCategoria = new Cat_Padre(nombre);
+	   this.categorias.put(nombre, nuevaCategoria);
+   }
+   
+   // Agregar Categorias con productos
+   
+   public void agregarCategoriaConProductos(String nombre) throws CategoriaException{
+	   if(this.existeCategoria(nombre)) {
+		   throw new CategoriaException("Esta categoria ya existe");
+	   }
+	   
+	   Cat_Producto nuevaCategoria = new Cat_Producto(nombre);
+	   this.categorias.put(nombre, nuevaCategoria);
+   }
+   
+   public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
+	   
+	   
+	   
+	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
+	   Cat_Padre cat = (Cat_Padre) this.categorias.get(nombre);
+	   
+	   
+	   if(catPadre.verificarSiYaEsHijo(nombre)) {
+		   throw new CategoriaException("Esta categoria ya es su hijo");
+	   }
+	   
+	   // Esto tira error
+	   /*if((cat.obtenerPadre() != null)) {
+		   throw new CategoriaException("Esta categoria ya es su padre");
+	   }*/
+	   cat.setPadre(catPadre);
+	   
+   }
+   
+
+   public void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException {
+	   
+	   
+	   
+	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
+	   Cat_Producto cat = (Cat_Producto) this.categorias.get(nombre);
+	   
+	   
+	   if(catPadre.verificarSiYaEsHijo(nombre)) {
+		   throw new CategoriaException("Esta categoria ya es su hijo");
+	   }
+	   
+	   
+	   if(cat.obtenerPadre() == nombrePadre) {
+		   throw new CategoriaException("Esta categoria ya es su padre");
+	   }
+	   cat.setPadre(catPadre);;
+	   
+   }
+   
    
 }
 

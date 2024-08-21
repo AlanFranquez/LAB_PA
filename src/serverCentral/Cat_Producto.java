@@ -6,10 +6,12 @@ import java.util.Map;
 
 public class Cat_Producto extends Categoria{
 private Map<Integer, Producto> productos;
+Cat_Padre padre;
 	
 	// Constructor:
 	public Cat_Producto(String nombre) {
 		super(nombre, "Producto");
+		padre = null;
 		productos = new HashMap<Integer, Producto>();
 	}
 	
@@ -27,6 +29,16 @@ private Map<Integer, Producto> productos;
 	        }
 	        return lista;
 	    }
+	}
+	
+	
+	
+	public String obtenerPadre() {
+		return this.padre.getNombre();
+	}
+	
+	public void setPadre(Cat_Padre cat) {
+		this.padre = cat;
 	}
 	
 	

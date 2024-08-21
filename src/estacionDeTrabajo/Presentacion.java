@@ -51,6 +51,12 @@ public class Presentacion {
                     s.agregarImagenes("Juan123", new ImageIcon("./imagenes/p1.jpg"));
                     s.agregarImagenes("albert1341", new ImageIcon("./imagenes/p2.jpg"));
                     s.agregarImagenes("agusmari", new ImageIcon("./imagenes/p3.jpg"));
+                    
+                    s.agregarCategoria("Living");
+                    s.agregarCategoria("Tecnología");
+                    
+                    
+                    
                     Presentacion window = new Presentacion();
                     window.frame.setVisible(true);
                 } catch (Exception e) {
@@ -380,7 +386,7 @@ public class Presentacion {
         	public void actionPerformed(ActionEvent e) {
         		// Crear e inicializar la ventana secundaria (JInternalFrame)
                 JInternalFrame ventanaSecundaria = new JInternalFrame("Registrar Usuario", true, true, true, true);
-                ventanaSecundaria.setSize(400, 600); // Ajustar el tamaño
+                ventanaSecundaria.setSize(400, 300); // Ajustar el tamaño
                 ventanaSecundaria.setTitle("Alta de Categorias");
                 ventanaSecundaria.setVisible(true);
                 
@@ -398,24 +404,141 @@ public class Presentacion {
                 JTextField categoriaField = new JTextField(15);
                 categoriaField.setBounds(100, 20, 100, 25);
                 panel.add(categoriaField);
-
-                JLabel hijosLabel = new JLabel("Hijos: ");
-                hijosLabel.setBounds(20, 60, 80, 25);
-                panel.add(hijosLabel);
+                
+                JLabel prods = new JLabel("Tiene prods: ");
+                prods.setBounds(20, 60, 100, 25);
+                panel.add(prods);
                 
 
-                JRadioButton hijosSI = new JRadioButton("SI");
-                hijosSI.setBounds(60, 80, 180, 25);
+                JRadioButton prodsSI = new JRadioButton("SI");
+                prodsSI.setBounds(120, 60, 60, 25);
 
-                JRadioButton hijosNO = new JRadioButton("NO");
-                hijosNO.setBounds(60, 100, 180, 25);
+                JRadioButton prodsNO = new JRadioButton("NO");
+                prodsNO.setBounds(180, 60, 60, 25);
+                
+                ButtonGroup botonGrupal1 = new ButtonGroup();
+                botonGrupal1.add(prodsSI);
+                botonGrupal1.add(prodsNO);
+                panel.add(prodsSI);
+                panel.add(prodsNO);
+
+                JLabel padreLabel = new JLabel("Tiene padre: ");
+                padreLabel.setBounds(20, 100, 100, 25);
+                panel.add(padreLabel);
+                
+
+                JRadioButton padreSI = new JRadioButton("SI");
+                padreSI.setBounds(120, 100, 60, 25);
+
+                JRadioButton padreNO = new JRadioButton("NO");
+                padreNO.setBounds(180, 100, 60, 25);
                 
                 ButtonGroup botonGrupal = new ButtonGroup();
-                botonGrupal.add(hijosSI);
-                botonGrupal.add(hijosNO);
-             // Add radio buttons to the panel
-                panel.add(hijosSI);
-                panel.add(hijosNO);
+                botonGrupal.add(padreSI);
+                botonGrupal.add(padreNO);
+                panel.add(padreSI);
+                panel.add(padreNO);
+                
+             // ComboBox
+                JLabel CategoriasPadreLbael = new JLabel("Padres: ");
+                CategoriasPadreLbael.setBounds(20, 140, 100, 25);
+                panel.add(CategoriasPadreLbael);
+
+                
+                DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(s.listarSoloNombresPadresCat().toArray(new String[0]));
+                JComboBox<String> padresCategorias = new JComboBox<>(comboBoxModel);
+                padresCategorias.setBounds(100, 140, 160, 25);
+                padresCategorias.setEnabled(false);
+                panel.add(padresCategorias);
+                
+                
+                
+                padreSI.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e1) {
+                        boolean tienePadre = padreSI.isSelected();
+                        
+                        if(tienePadre) {
+                        	padresCategorias.setEnabled(true);
+                        } else {
+                        	padresCategorias.setEnabled(false);
+                        }
+                    }
+                });
+                
+                JButton registrarButton = new JButton("Registrar");
+                registrarButton.setBounds(20, 200, 240, 25);
+                panel.add(registrarButton);
+                
+                
+                registrarButton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String textCat = categoriaField.getText();
+						boolean tieneProds = prodsSI.isSelected();
+						boolean tienePadre = padreSI.isSelected();
+						String nombreCatPadre = padresCategorias.getSelectedItem().toString();
+						
+						if(textCat.isEmpty()) {
+							JOptionPane.showMessageDialog(null, "El campo de nombre está vacio");
+							return;
+						}
+						
+						try {
+							s.existeCategoria(textCat);
+							
+						} catch(Exception e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage());
+							return;
+						}
+						
+						try {
+							if(tieneProds) {
+								s.agregarCategoriaConProductos(textCat);
+								
+								
+							} else {
+								s.agregarCategoria(textCat);
+								
+								try {
+									if(tienePadre) {
+										s.asignarlePadreCategoria(nombreCatPadre, textCat);
+									}
+								} catch(Exception e1) {
+									JOptionPane.showMessageDialog(null, e1.getMessage());
+									return;
+								}
+							}
+							
+							
+							
+						}	catch(Exception e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage());
+							return;
+						}
+						
+						
+						
+						
+						JOptionPane.showMessageDialog(null, "Categoria agregada con exito");
+						// Actualizar campos
+						categoriaField.setText("");
+						botonGrupal.clearSelection();
+						botonGrupal1.clearSelection();
+						padresCategorias.setEnabled(false);
+						
+						// Actualizar ComboBox
+                        List<String> nuevosPadres = s.listarSoloNombresPadresCat();
+                        comboBoxModel.removeAllElements();
+                        for (String padre : nuevosPadres) {
+                            comboBoxModel.addElement(padre);
+                        }
+						
+						
+						
+					}
+				} );
 
 
                 // Mostrar la ventana interna
