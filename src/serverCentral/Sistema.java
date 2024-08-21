@@ -28,16 +28,48 @@ public class Sistema implements ISistema {
         return instance;
     }
 
-    // Verificar si el usuario está o no agregado al sistema
+    // CASO DE USO 1: REGISTRAR USUARIO
     public boolean verificarUnicidad(String nick, String correo) {
-        return !this.usuarios.containsKey(nick) && !this.usuarios.containsValue(correo);
+    	if(!this.usuarios.containsKey(nick)) {
+    		for (Usuario usuario : usuarios.values()) {
+                if(usuario.getCorreo() == correo) {
+                	return false;
+                }
+            }
+    		return true;
+    	}
+    	return false;
     }
-    
+    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException {
+    	if (!verificarUnicidad(nick, correo)) {
+    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
+    	}
+
+    	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link);
+    	usuarios.put(nick, nuevoProveedor);
+    }
+    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) throws UsuarioRepetidoException {
+    	if (!verificarUnicidad(nick, correo)) {
+    		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
+    	}
+
+    	Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha);
+    	usuarios.put(nick, nuevoCliente);
+    }
+    public void agregarImagenUsuario(String nick, ImageIcon imagen) {
+    	Usuario usuarioBuscado = this.usuarios.get(nick);
+    	if (usuarioBuscado == null) {
+    		System.out.println("Usuario con nick: " + nick + " no encontrado.");
+    		return;
+    	}
+    	usuarioBuscado.setImagen(imagen);
+    }
+
+
+    // CASO DE USO 1: FUNCIONES AUXILIARES
     public Usuario getUsuario(String nickname) {
     	return this.usuarios.get(nickname);
     }
-
-    // Validar correo electrónico
     public boolean validarCorreo(String correo) {
         String regex = "^[A-Za-z0-9+_.-]+@(.+)$";
         Pattern pattern = Pattern.compile(regex);
@@ -45,35 +77,8 @@ public class Sistema implements ISistema {
         return matcher.matches();
     }
 
-    // Agregar usuario a la colección
-    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException {
-        if (!verificarUnicidad(nick, correo)) {
-            throw new UsuarioRepetidoException("El usuario con el nick: " + nick + " ya existe");
-        }
-
-        Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link);
-        usuarios.put(nick, nuevoProveedor);
-    }
-
-    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) throws UsuarioRepetidoException {
-        if (!verificarUnicidad(nick, correo)) {
-            throw new UsuarioRepetidoException("El usuario con el nick: " + nick + " ya existe");
-        }
-
-        Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha);
-        usuarios.put(nick, nuevoCliente);
-    }
-
-    public void agregarImagenUsuario(String nick, ImageIcon imagen) {
-        Usuario usuarioBuscado = this.usuarios.get(nick);
-        if (usuarioBuscado == null) {
-            System.out.println("Usuario con nick: " + nick + " no encontrado.");
-            return;
-        }
-
-        usuarioBuscado.setImagen(imagen);
-    }
-
+    
+    
     @Override
     public List<DTCliente> listarClientes() {
         List<DTCliente> listaClientes = new ArrayList<>();
