@@ -296,6 +296,7 @@ public class Sistema implements ISistema {
 	cliente.eliminarOrden(numeroOrden);
 	Map<Integer, Item> items = orden.getItems();
         items.clear();
+	this.ordenes.remove(numeroOrden);
     }
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
     
