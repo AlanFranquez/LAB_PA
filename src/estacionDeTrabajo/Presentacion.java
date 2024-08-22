@@ -744,6 +744,7 @@ public class Presentacion {
             DTCliente cliente = clientes.get(i);
             data[i][0] = cliente.getNick();
             data[i][1] = cliente.getCorreo();
+            data[i][2] = cliente.getNombre() + ' ' + cliente.getApellido();
         }
 
         // Crear la tabla
