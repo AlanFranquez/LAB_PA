@@ -275,6 +275,11 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
+    
+    public boolean existenOrdenesParaListar() {
+        return !this.ordenes.isEmpty();
+    }
+    
     public List<DTOrdenDeCompra> listarOrdenes() {
     	List<DTOrdenDeCompra> lista = new ArrayList<>();
     	

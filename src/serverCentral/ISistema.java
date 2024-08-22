@@ -35,4 +35,8 @@ public interface ISistema {
     public void agregarCategoriaConProductos(String nombre) throws CategoriaException;
     
     public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException;
+    
+    public List<DTOrdenDeCompra> listarOrdenes();
+    
+    public boolean existenOrdenesParaListar() ;
 }

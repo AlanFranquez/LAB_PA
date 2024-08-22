@@ -42,8 +42,12 @@ import com.toedter.calendar.JDateChooser;
 
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
+import serverCentral.DTOrdenDeCompra;
 import serverCentral.Factory;
 import serverCentral.ISistema;
+import serverCentral.Item;
+import serverCentral.OrdenDeCompra;
+import serverCentral.Producto;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
 
@@ -82,8 +86,14 @@ public class Presentacion {
                     s.agregarCategoria("Living");
                     s.agregarCategoria("Tecnología");
                     
+                    // SOlo una prueba
+                    String[] arr = {"Genial", "Increible"};
+                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,  arr);
+                    Item i1 = new Item(3, p1);
                     
-                    
+                    /* OrdenDeCompra o1 = new OrdenDeCompra(1);
+                    o1.addItem(i1);
+                    */
                     
                     
                     s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
@@ -585,7 +595,132 @@ public class Presentacion {
         });
         mnCasosDeUso.add(mntmAltaCategoria);
         mnCasosDeUso.add(mntmRegistrarUsuario);
+        
+        JMenuItem mntmMostrarOrden = new JMenuItem("Mostrar Orden");
+        mntmMostrarOrden.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		System.out.println("Existen órdenes para listar: " + s.existenOrdenesParaListar());
+        		if(!s.existenOrdenesParaListar()) {
+    	        	JOptionPane.showMessageDialog(null, "Todavia no hay ordenes para listar");
+    	        	return;
+    	        }
+        		
+        		 JInternalFrame ventanaOrdenes = new JInternalFrame("Lista de Ordenes", true, true, true, true);
+        	        ventanaOrdenes.setSize(500, 300);
+        	        ventanaOrdenes.getContentPane().setLayout(new BorderLayout());
+
+        	        
+        	        List<DTOrdenDeCompra> ordenes = s.listarOrdenes();
+
+        	        // Definir las columnas de la tabla
+        	        String[] columnNames = {"Numero de Orden", "Fecha"};
+
+        	        // Crear datos para la tabla
+        	        Object[][] data = new Object[ordenes.size()][3];
+        	        for (int i = 0; i < ordenes.size(); i++) {
+        	            DTOrdenDeCompra o = ordenes.get(i);
+        	            data[i][0] = o.getNumero();
+        	            data[i][1] = o.getFecha();
+        	        }
+
+        	        // Crear la tabla
+        	        JTable table = new JTable(data, columnNames);
+        	        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        	        // Agregar un listener para manejar clics en la tabla
+        	        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        	            @Override
+        	            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        	                int row = table.rowAtPoint(evt.getPoint());
+        	                if (row >= 0) {
+        	                    DTOrdenDeCompra o = ordenes.get(row);
+        	                    mostrarDetallesOrden(o);
+        	                }
+        	            }
+        	        });
+
+        	        // Agregar la tabla al JScrollPane
+        	        JScrollPane scrollPane = new JScrollPane(table);
+        	        ventanaOrdenes.getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+        	        // Mostrar la ventana interna
+        	        ventanaOrdenes.setVisible(true);
+
+        	        // Agregar la ventana interna al JDesktopPane
+        	        desktopPane.add(ventanaOrdenes);
+
+        	        // Opcional: Centrar la ventana interna
+        	        ventanaOrdenes.setLocation(100, 100);
+        	}
+        });
+        mnCasosDeUso.add(mntmMostrarOrden);
     }
+    
+    private void mostrarDetallesOrden(DTOrdenDeCompra orden) {
+        JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
+        ventanaDetalles.setSize(400, 300);
+        ventanaDetalles.getContentPane().setLayout(new BorderLayout());
+
+        /*
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Agregar la información del cliente al panel
+        ImageIcon imagenIcon = cliente.getImagenes();
+        
+        
+        
+        if (imagenIcon != null) {
+        	Image imagen = imagenIcon.getImage();
+            Image imagenRedimensionada = imagen.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            
+            imagenIcon = new ImageIcon(imagenRedimensionada);
+            // Crear nuevo ImageIcon con la imagen redimensionada
+            JLabel imagenLabel = new JLabel(imagenIcon);
+            
+            panel.add(imagenLabel);
+        } else {
+            panel.add(new JLabel("No hay imagen disponible"));
+        }
+        panel.add(new JLabel("Tipo de Usuario: " + cliente.getTipo()));
+        panel.add(new JLabel("Mail: " + cliente.getCorreo()));
+        panel.add(new JLabel("Nick: " + cliente.getNick()));
+        panel.add(new JLabel("Nombre Completo: " + cliente.getNombre() + " " + cliente.getApellido()));
+        panel.add(new JLabel("Fecha de Nacimiento: " + cliente.getNacimiento().getDia() + " - " + cliente.getNacimiento().getMes() + " - " + cliente.getNacimiento().getAnio()));
+        panel.add(Box.createVerticalStrut(5));
+       
+        panel.add(new JLabel("Ordenes: "));
+        if(cliente.getOrdenes().isEmpty()) {
+        	panel.add(new JLabel("   Todavia no existen ordenes"));
+        }
+        
+        // Falta agregar las ordenes y que al seleccionar una se muestren
+    
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        
+        ventanaDetalles.getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+    
+        ventanaDetalles.setVisible(true);
+
+     
+        desktopPane.add(ventanaDetalles);
+
+        
+        try {
+            ventanaDetalles.setSelected(true);
+            ventanaDetalles.toFront();
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+        }
+
+		*/
+        // Opcional: Centrar la ventana interna
+        ventanaDetalles.setLocation(150, 150);
+    }
+
+  
 
     private void mostrarClientes() {
         JInternalFrame ventanaClientes = new JInternalFrame("Lista de Clientes", true, true, true, true);
