@@ -263,9 +263,40 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 7: CANCELAR ORDEN DE COMPRA
-    
-    
-    
+    public Set<Integer> getOrdenes() {
+        Set<Integer> res = new HashSet<>();
+        for (OrdenDeCompra ordenActual : ordenes.values()) {
+            res.add(ordenActual.getNumero());
+        }
+        return res;
+    }    
+    /*public List<DTOrdenDeCompra> listarOrdenes() {
+        List<DTOrdenDeCompra> listaOrdenes = new ArrayList<>();
+        for (Map.Entry<Integer, OrdenDeCompra> entry : ordenes.entrySet()) {
+            OrdenDeCompra orden = entry.getValue();
+            listaOrdenes.add(orden.crearDT());
+        }
+        return listaOrdenes;
+    }*/
+    public Cliente getClienteDeOrden(OrdenDeCompra orden) {
+    	for (Usuario usuario : usuarios.values()) {
+            if (usuario instanceof Cliente) {
+                Cliente cliente = (Cliente) usuario;
+                if (cliente.existeOrden(orden.getNumero()))
+                    return cliente;
+            }
+        }
+        return null; // Si no se encuentra el cliente
+    }
+
+    public void eliminarOrdenDeCompra(int numero){
+	OrdenDeCompra orden = this.ordenes.get(numeroOrden);
+	Cliente cliente = getClienteDeOrden(orden);
+	//Falta mostra info y todo eso creo, y exepciones 
+	cliente.eliminarOrden(numeroOrden);
+	Map<Integer, Item> items = orden.getItems();
+        items.clear();
+    }
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
     
     
