@@ -95,6 +95,9 @@ public class Presentacion {
                     s.agregarCategoria("Tecnología");
                     s.agregarCategoria("Estanterias");
                     
+                    s.agregarCategoriaConProductos("Tecno");
+                    s.asignarlePadreACategoriaProds("Living", "Tecno");
+                    
                     
                     // SOlo una prueba
                     Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,"Lalala");
@@ -635,7 +638,7 @@ public class Presentacion {
         	        for (int i = 0; i < ordenes.size(); i++) {
         	            DTOrdenDeCompra o = ordenes.get(i);
         	            data[i][0] = o.getNumero();
-        	            data[i][1] = o.getFecha();
+        	            /*data[i][1] = o.getFecha();*/
         	        }
 
         	        // Crear la tabla

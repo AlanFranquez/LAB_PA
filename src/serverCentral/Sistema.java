@@ -206,10 +206,15 @@ public class Sistema implements ISistema {
 	   if(catPadre.verificarSiYaEsHijo(nombre)) {
 		   throw new CategoriaException("Esta categoria ya es su hijo");
 	   }
-	   if(cat.obtenerPadre() == nombrePadre) {
-		   throw new CategoriaException("Esta categoria ya es su padre");
+	   
+	   if(cat.obtenerPadre() == null) {
+		   cat.setPadre(catPadre);
+		   return;
+	   } else {
+		   throw new CategoriaException("Ya posee un padre");
 	   }
-	   cat.setPadre(catPadre);;
+	  
+	 
    }
    
     // CASO DE USO 3: FUNCIONES AUXILIARES

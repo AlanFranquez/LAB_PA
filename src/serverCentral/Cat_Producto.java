@@ -34,6 +34,9 @@ Cat_Padre padre;
 	
 	
 	public String obtenerPadre() {
+		if(this.padre == null) {
+			return null;
+		}
 		return this.padre.getNombre();
 	}
 	
