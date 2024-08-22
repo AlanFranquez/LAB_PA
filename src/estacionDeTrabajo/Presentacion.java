@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -333,6 +334,10 @@ public class Presentacion {
                         	mes = calendar.get(Calendar.MONTH);
                         	dia = calendar.get(Calendar.DAY_OF_MONTH) + 1;
                         	anio = calendar.get(Calendar.YEAR);
+                        	if(anio == LocalDateTime.now().getYear() && mes == LocalDateTime.now().getMonthValue() - 1) {
+                        		JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha");
+                            	return;
+                        	}
                         } else {
                         	JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha");
                         	return;
