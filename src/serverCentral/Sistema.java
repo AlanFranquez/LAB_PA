@@ -290,10 +290,10 @@ public class Sistema implements ISistema {
     }
 
     public void eliminarOrdenDeCompra(int numero){
-	OrdenDeCompra orden = this.ordenes.get(numeroOrden);
+	OrdenDeCompra orden = this.ordenes.get(numero);
 	Cliente cliente = getClienteDeOrden(orden);
 	//Falta mostra info y todo eso creo, y exepciones 
-	cliente.eliminarOrden(numeroOrden);
+	cliente.eliminarOrden(numero);
 	Map<Integer, Item> items = orden.getItems();
         items.clear();
     }
