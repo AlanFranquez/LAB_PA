@@ -93,19 +93,21 @@ public class Sistema implements ISistema {
     	}
     	return listaProveedor;
     }
-    public void agregarProducto(String titulo, Integer numRef, String descripcion, String[] especificaciones, Float precio, Usuario proveedor) {
-        if (!verificarUsuario(proveedor)) {
+    public boolean agregarProducto(String titulo, Integer numRef, String descripcion, String especificaciones, Float precio, Proveedor p) {
+        if (!verificarUsuario(p)) {
             // No existe el Proveedor
-            return;
+            return false;
         }
 
         if (verificarNombre(titulo)) {
             // Existe un nombre igual
-            return;
+            return false;
         }
 
-        Producto p = new Producto(titulo, descripcion, precio, numRef, especificaciones);
+        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones);
+        return true;
     }
+    
     public List<String> listarCategoria() {
         Map<String, Categoria> listaCategoria = this.categorias; // Suponiendo que tienes un atributo `categorias` en la clase
         List<String> nombresCat = new ArrayList<>(); // Inicializar la lista
@@ -352,6 +354,8 @@ public class Sistema implements ISistema {
     	}
     	return listarPadres;
     }
+
+	
     
    
 

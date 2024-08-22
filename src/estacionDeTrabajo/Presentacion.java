@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,8 +34,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeSelectionModel;
 
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
@@ -49,6 +53,8 @@ import serverCentral.ISistema;
 import serverCentral.Item;
 import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
+import serverCentral.Proveedor;
+import serverCentral.Sistema;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
 
@@ -62,7 +68,7 @@ public class Presentacion {
     private JFileChooser fileChooser;
     private Date fechaSeleccionada;
     Calendar calendar = Calendar.getInstance();
-
+    
     /**
      * Launch the application.
      */
@@ -75,6 +81,7 @@ public class Presentacion {
                 try {
                     DTFecha fecha1 = new DTFecha(1, 1, 1990);
                     DTFecha fecha2 = new DTFecha(15, 6, 1985);
+                    DTFecha fecha3 = new DTFecha(5, 6, 1990);
 
                     s.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1);
                     s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2);
@@ -86,16 +93,20 @@ public class Presentacion {
                     
                     s.agregarCategoria("Living");
                     s.agregarCategoria("Tecnología");
+                    s.agregarCategoria("Estanterias");
+                    
                     
                     // SOlo una prueba
-                    String[] arr = {"Genial", "Increible"};
-                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,  arr);
+                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,"Lalala");
                     Item i1 = new Item(3, p1);
                     
                     /* OrdenDeCompra o1 = new OrdenDeCompra(1);
                     o1.addItem(i1);
                     */
                     
+                    
+                    s.agregarProveedor("Bellzzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
+                    s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
                     
                     s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
                     s.agregarImagenUsuario("albert1341", new ImageIcon("./imagenes/p2.jpg"));
@@ -334,10 +345,6 @@ public class Presentacion {
                         	mes = calendar.get(Calendar.MONTH);
                         	dia = calendar.get(Calendar.DAY_OF_MONTH) + 1;
                         	anio = calendar.get(Calendar.YEAR);
-                        	if(anio == LocalDateTime.now().getYear() && mes == LocalDateTime.now().getMonthValue() - 1) {
-                        		JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha");
-                            	return;
-                        	}
                         } else {
                         	JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha");
                         	return;
@@ -423,6 +430,8 @@ public class Presentacion {
                 mostrarClientes();
             }
         });
+        
+        
 
         mnCasosDeUso.add(mntmMostrarClientes);
         
@@ -601,6 +610,7 @@ public class Presentacion {
         mnCasosDeUso.add(mntmAltaCategoria);
         mnCasosDeUso.add(mntmRegistrarUsuario);
         
+        
         JMenuItem mntmMostrarOrden = new JMenuItem("Mostrar Orden");
         mntmMostrarOrden.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -658,8 +668,207 @@ public class Presentacion {
         	        ventanaOrdenes.setLocation(100, 100);
         	}
         });
-        mnCasosDeUso.add(mntmMostrarOrden);
+        JMenuItem mntmRegistrarProducto = new JMenuItem("Registrar Producto");
+        mntmRegistrarProducto.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	JInternalFrame ventanaSecundaria = new JInternalFrame("Registrar Producto", true, true, true, true);
+                ventanaSecundaria.setSize(600, 700);
+
+                JPanel panel = new JPanel();
+                panel.setLayout(null);
+
+                JLabel tituloLabel = new JLabel("Título:");
+                tituloLabel.setBounds(20, 20, 80, 25);
+                panel.add(tituloLabel);
+
+                JTextField tituloField = new JTextField(20);
+                tituloField.setBounds(100, 20, 200, 25);
+                panel.add(tituloField);
+
+                JLabel referenciaLabel = new JLabel("Número de referencia:");
+                referenciaLabel.setBounds(20, 60, 150, 25);
+                panel.add(referenciaLabel);
+
+                JTextField referenciaField = new JTextField(20);
+                referenciaField.setBounds(180, 60, 200, 25);
+                panel.add(referenciaField);
+
+                JLabel descripcionLabel = new JLabel("Descripción:");
+                descripcionLabel.setBounds(20, 100, 100, 25);
+                panel.add(descripcionLabel);
+
+                JTextField descripcionField = new JTextField(20);
+                descripcionField.setBounds(100, 100, 300, 25);
+                panel.add(descripcionField);
+
+                JLabel especificacionesLabel = new JLabel("Especificaciones:");
+                especificacionesLabel.setBounds(20, 140, 150, 25);
+                panel.add(especificacionesLabel);
+
+                JTextArea especificacionesArea = new JTextArea();
+                especificacionesArea.setBounds(20, 170, 400, 100);
+                especificacionesArea.setLineWrap(true);
+                panel.add(especificacionesArea);
+
+                JLabel precioLabel = new JLabel("Precio:");
+                precioLabel.setBounds(20, 280, 80, 25);
+                panel.add(precioLabel);
+
+                JTextField precioField = new JTextField(10);
+                precioField.setBounds(100, 280, 100, 25);
+                panel.add(precioField);
+
+                JLabel proveedorLabel = new JLabel("Proveedor:");
+                proveedorLabel.setBounds(20, 320, 100, 25);
+                panel.add(proveedorLabel);
+
+                JTextField proveedorField = new JTextField(20);
+                proveedorField.setBounds(100, 320, 200, 25);
+                panel.add(proveedorField);
+
+                JLabel categoriasLabel = new JLabel("Categorías:");
+                categoriasLabel.setBounds(20, 360, 100, 25);
+                panel.add(categoriasLabel);
+
+
+                List<String> categorias = Sistema.getInstance().listarCategoria();
+                JTree tree = new JTree(CrearArbol(categorias));
+                
+                
+                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+                
+                JScrollPane treeScrollPane = new JScrollPane(tree);
+                treeScrollPane.setBounds(100, 360, 200, 150);
+                panel.add(treeScrollPane);
+
+
+                JLabel imagenesLabel = new JLabel("Imágenes:");
+                imagenesLabel.setBounds(20, 530, 100, 25);
+                panel.add(imagenesLabel);
+
+                JButton seleccionarImagenButton = new JButton("Seleccionar Imágenes");
+                seleccionarImagenButton.setBounds(100, 530, 200, 25);
+                panel.add(seleccionarImagenButton);
+
+                JLabel imagenSeleccionadaLabel = new JLabel("No se ha seleccionado ninguna imagen");
+                imagenSeleccionadaLabel.setBounds(20, 570, 300, 25);
+                panel.add(imagenSeleccionadaLabel);
+
+                JButton registrarButton = new JButton("Registrar Producto");
+                registrarButton.setBounds(20, 610, 180, 25);
+                panel.add(registrarButton);
+
+                ventanaSecundaria.getContentPane().add(panel);
+                ventanaSecundaria.setVisible(true);
+
+                // Añadir el internal frame al desktop pane
+                desktopPane.add(ventanaSecundaria);
+
+                // Asegurarse de que el internal frame esté siempre en frente
+                ventanaSecundaria.toFront();
+
+                fileChooser = new JFileChooser();
+                seleccionarImagenButton.addActionListener(a -> {
+                    fileChooser.setMultiSelectionEnabled(true);
+                    int returnValue = fileChooser.showOpenDialog(null);
+                    if (returnValue == JFileChooser.APPROVE_OPTION) {
+                        File[] imagenesSeleccionadas = fileChooser.getSelectedFiles();
+                        StringBuilder imagenesNombres = new StringBuilder();
+                        for (File file : imagenesSeleccionadas) {
+                            imagenesNombres.append(file.getName()).append(", ");
+                        }
+                        imagenSeleccionadaLabel.setText(imagenesNombres.toString());
+                    }
+                });
+
+                registrarButton.addActionListener(b -> {
+                    // Validar y registrar el producto en el sistema
+                    String titulo = tituloField.getText();
+                    String referenciaStr = referenciaField.getText();
+                    String descripcion = descripcionField.getText();
+                    String especificaciones = especificacionesArea.getText();
+                    String precioStr = precioField.getText();
+                    String proveedor = proveedorField.getText();
+                    String categoria = tree.getLastSelectedPathComponent() != null 
+                            ? tree.getLastSelectedPathComponent().toString()
+                            : null;
+                    File[] imagenes = fileChooser.getSelectedFiles();
+                    
+                    
+
+                    // Validar campos vacíos
+                    if (titulo.isEmpty() || referenciaStr.isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty() || categoria == null) {
+                        JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+
+                    try {
+                        // Convertir referencia a int y precio a float
+                        int referencia = Integer.parseInt(referenciaStr);
+                        float precio = Float.parseFloat(precioStr);
+                        	// Registrar el producto en el sistema
+                            if(!Sistema.getInstance().agregarProducto(titulo, referencia, descripcion, especificaciones, precio, (Proveedor) Sistema.getInstance().getUsuario(proveedor))) {
+                            	JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.ERROR_MESSAGE);
+                            	return;
+                            }
+                            JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
+
+                            // Limpiar campos
+                            tituloField.setText("");
+                            referenciaField.setText("");
+                            descripcionField.setText("");
+                            especificacionesArea.setText("");
+                            precioField.setText("");
+                            proveedorField.setText("");
+                            tree.clearSelection();
+                            imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
+                    } catch (NumberFormatException ex) {
+                        JOptionPane.showMessageDialog(null, "El número de referencia debe ser un número entero válido y el precio debe ser un número decimal válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
+
+            }
+        });
+        mnCasosDeUso.add(mntmRegistrarProducto);
     }
+    
+    private static DefaultTreeModel CrearArbol(List<String> categorias) {
+        DefaultMutableTreeNode raiz = new DefaultMutableTreeNode("Categorias");
+
+        for (String categoria : categorias) {
+        	aniadirCategoria(raiz, categoria);
+        }
+
+        return new DefaultTreeModel(raiz);
+    }
+
+    private static void aniadirCategoria(DefaultMutableTreeNode raiz, String categoria) {
+        String[] partes = categoria.split("-");
+        DefaultMutableTreeNode padre = raiz;
+
+        // Create or find nodes at each level
+        for (int i = 0; i < partes.length; i++) {
+            String nombreNodos = partes[i].trim();
+            DefaultMutableTreeNode hoja = encontrarNodo(padre, nombreNodos);
+
+            if (hoja == null) {
+            	hoja = new DefaultMutableTreeNode(nombreNodos);
+                padre.add(hoja);
+            }
+            padre = hoja;
+        }
+    }
+
+    private static DefaultMutableTreeNode encontrarNodo(DefaultMutableTreeNode padre, String nombreNodos) {
+        for (int i = 0; i < padre.getChildCount(); i++) {
+            DefaultMutableTreeNode hoja = (DefaultMutableTreeNode) padre.getChildAt(i);
+            if (hoja.getUserObject().equals(nombreNodos)) {
+                return hoja;
+            }
+        }
+        return null;
+    }
+        
     
     private void mostrarDetallesOrden(DTOrdenDeCompra orden) {
         JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
@@ -744,7 +953,6 @@ public class Presentacion {
             DTCliente cliente = clientes.get(i);
             data[i][0] = cliente.getNick();
             data[i][1] = cliente.getCorreo();
-            data[i][2] = cliente.getNombre() + ' ' + cliente.getApellido();
         }
 
         // Crear la tabla
