@@ -3,6 +3,7 @@ package serverCentral;
 import java.util.List;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 //CREO QUE ES ASI
 public interface ISistema {
@@ -39,4 +40,10 @@ public interface ISistema {
     public List<DTOrdenDeCompra> listarOrdenes();
     
     public boolean existenOrdenesParaListar() ;
+
+
+	public abstract DefaultMutableTreeNode arbolCategorias();
+
+
+	public abstract void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException;
 }
