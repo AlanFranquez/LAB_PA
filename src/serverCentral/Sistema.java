@@ -6,6 +6,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.ImageIcon;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import java.awt.Image;
 import java.io.File;
@@ -15,12 +17,14 @@ public class Sistema implements ISistema {
     private Map<String, Usuario> usuarios;
     private Map<String, Categoria> categorias;
     private Map<Integer, OrdenDeCompra> ordenes;
+    private Map<String, Categoria> arbolCategorias;
 
     private Sistema() {
         // Inicialización de colecciones
         this.usuarios = new HashMap<>();
         this.categorias = new HashMap<>();
         this.ordenes = new HashMap<>();
+        this.arbolCategorias = new HashMap<>();
     }
 
     public static synchronized Sistema getInstance() {
@@ -109,7 +113,7 @@ public class Sistema implements ISistema {
     }
     
     public List<String> listarCategoria() {
-        Map<String, Categoria> listaCategoria = this.categorias; // Suponiendo que tienes un atributo `categorias` en la clase
+        Map<String, Categoria> listaCategoria = this.categorias;
         List<String> nombresCat = new ArrayList<>(); // Inicializar la lista
 
         for (Map.Entry<String, Categoria> entry : listaCategoria.entrySet()) {
@@ -177,6 +181,7 @@ public class Sistema implements ISistema {
 	   }
 	   Cat_Padre nuevaCategoria = new Cat_Padre(nombre);
 	   this.categorias.put(nombre, nuevaCategoria);
+	   this.arbolCategorias.put(nombre, nuevaCategoria);
    }
     public void agregarCategoriaConProductos(String nombre) throws CategoriaException{
 	   if(existeCategoria(nombre)) {
@@ -184,6 +189,7 @@ public class Sistema implements ISistema {
 	   }
 	   Cat_Producto nuevaCategoria = new Cat_Producto(nombre);
 	   this.categorias.put(nombre, nuevaCategoria);
+	   this.arbolCategorias.put(nombre, nuevaCategoria);
    }
     public void asignarlePadreCategoria(String nombrePadre, String nombre) throws CategoriaException {
 	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
@@ -193,28 +199,23 @@ public class Sistema implements ISistema {
 		   throw new CategoriaException("Esta categoria ya es su hijo");
 	   }
 	   
-	   // Esto tira error
-	   /*if((cat.obtenerPadre() != null)) {
-		   throw new CategoriaException("Esta categoria ya es su padre");
-	   }*/
 	   cat.setPadre(catPadre);
+	   catPadre.agregarHijo(cat);
+	   arbolCategorias.remove(cat.getNombre());
    }
     public void asignarlePadreACategoriaProds(String nombrePadre, String nombre) throws CategoriaException {
-	   Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
-	   Cat_Producto cat = (Cat_Producto) this.categorias.get(nombre);
-	   
-	   if(catPadre.verificarSiYaEsHijo(nombre)) {
-		   throw new CategoriaException("Esta categoria ya es su hijo");
-	   }
-	   
-	   if(cat.obtenerPadre() == null) {
-		   cat.setPadre(catPadre);
-		   return;
-	   } else {
-		   throw new CategoriaException("Ya posee un padre");
-	   }
-	  
-	 
+
+    	Cat_Padre catPadre = (Cat_Padre) this.categorias.get(nombrePadre);
+    	Cat_Producto cat = (Cat_Producto) this.categorias.get(nombre);
+ 	   
+ 	   if(catPadre.verificarSiYaEsHijo(nombre)) {
+ 		   throw new CategoriaException("Esta categoria ya es su hijo");
+ 	   }
+ 	   
+ 	   cat.setPadre(catPadre);
+ 	   catPadre.agregarHijo(cat);
+ 	   arbolCategorias.remove(cat.getNombre());
+
    }
    
     // CASO DE USO 3: FUNCIONES AUXILIARES
@@ -236,6 +237,7 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
+    // Reutilizacion de listarClientes del caso de uso 5 y listarCategorias del caso 2
     
     
     
@@ -363,9 +365,30 @@ public class Sistema implements ISistema {
 	
     
    
-
+    public DefaultMutableTreeNode arbolCategorias() {
+    	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
+    	 for(Categoria cat : arbolCategorias.values()) {
+    		 DefaultMutableTreeNode child = arbolCategorias(cat);
+    		 root.add(child);
+    	 }
+    	return root;
+    }
     
-   
+    public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
+   	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
+   	 	if(cat.getTipo() == "Padre") {
+   	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+   	 		if(hijos.size() >= 1) {
+   	 			for(Categoria hijo : hijos.values()) {
+   	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
+   	 				rama.add(child);
+   	 			}
+   	 		}else {
+   	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+   	 		}
+   	 	}
+   	return rama;
+   }
 
     
     

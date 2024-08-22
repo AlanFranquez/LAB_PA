@@ -57,6 +57,8 @@ import serverCentral.Proveedor;
 import serverCentral.Sistema;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Presentacion {
 
@@ -108,7 +110,7 @@ public class Presentacion {
                     */
                     
                     
-                    s.agregarProveedor("Bellzzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
+                    s.agregarProveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
                     s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
                     
                     s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
@@ -555,22 +557,16 @@ public class Presentacion {
 						try {
 							if(tieneProds) {
 								s.agregarCategoriaConProductos(textCat);
-								
+								if(tienePadre) {
+									s.asignarlePadreACategoriaProds(nombreCatPadre, textCat);
+								}
 								
 							} else {
 								s.agregarCategoria(textCat);
-								
-								try {
-									if(tienePadre) {
-										s.asignarlePadreCategoria(nombreCatPadre, textCat);
-									}
-								} catch(Exception e1) {
-									JOptionPane.showMessageDialog(null, e1.getMessage());
-									return;
+								if(tienePadre) {
+									s.asignarlePadreCategoria(nombreCatPadre, textCat);
 								}
 							}
-							
-							
 							
 						}	catch(Exception e1) {
 							JOptionPane.showMessageDialog(null, e1.getMessage());
@@ -833,6 +829,15 @@ public class Presentacion {
             }
         });
         mnCasosDeUso.add(mntmRegistrarProducto);
+        
+        JMenuItem mntmNewMenuItem = new JMenuItem("Generar orden compra");
+        mntmNewMenuItem.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	CrearOrdenCompra compra = new CrearOrdenCompra();
+            	desktopPane.add(compra);
+        	}
+        });
+        mnCasosDeUso.add(mntmNewMenuItem);
     }
     
     private static DefaultTreeModel CrearArbol(List<String> categorias) {
