@@ -336,20 +336,15 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 7: CANCELAR ORDEN DE COMPRA
     public Set<Integer> getOrdenes() {
-        Set<Integer> res = new HashSet<>();
-        for (OrdenDeCompra ordenActual : ordenes.values()) {
-            res.add(ordenActual.getNumero());
-        }
-        return res;
-    }    
-    /*public List<DTOrdenDeCompra> listarOrdenes() {
-        List<DTOrdenDeCompra> listaOrdenes = new ArrayList<>();
-        for (Map.Entry<Integer, OrdenDeCompra> entry : ordenes.entrySet()) {
-            OrdenDeCompra orden = entry.getValue();
-            listaOrdenes.add(orden.crearDT());
-        }
-        return listaOrdenes;
-    }*/
+	if(existenOrdenesParaListar()){
+            Set<Integer> res = new HashSet<>();
+            for (OrdenDeCompra ordenActual : ordenes.values())
+                res.add(ordenActual.getNumero());
+            return res;
+	}
+	return null;
+    }
+
     public Cliente getClienteDeOrden(OrdenDeCompra orden) {
     	for (Usuario usuario : usuarios.values()) {
             if (usuario instanceof Cliente) {
@@ -361,10 +356,14 @@ public class Sistema implements ISistema {
         return null; // Si no se encuentra el cliente
     }
 
-    public void eliminarOrdenDeCompra(int numero){
+    public void eliminarOrdenDeCompra(int numero)throws OrdenDeCompraException{
 	OrdenDeCompra orden = this.ordenes.get(numero);
+        if (orden == null)
+            throw new OrdenDeCompraException("La orden de compra no existe");
 	Cliente cliente = getClienteDeOrden(orden);
-	//Falta mostra info y todo eso creo, y exepciones 
+        if (cliente == null)
+            throw new OrdenDeCompraException("No se encontró un cliente");
+	//Falta mostra info de orden y todo eso creo
 	cliente.eliminarOrden(numero);
 	Map<Integer, Item> items = orden.getItems();
         items.clear();
@@ -425,22 +424,6 @@ public class Sistema implements ISistema {
     	return listarPadres;
     }
 
-	
-    
-   
-    
 
-    
-    
-
-
-    
-    
-    
-   
-
-
-   
-   
    
 }
