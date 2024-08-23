@@ -2,13 +2,18 @@ package estacionDeTrabajo;
 
 import java.awt.Component;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.List;
 
+import javax.swing.AbstractButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -29,6 +34,9 @@ import serverCentral.ISistema;
 @SuppressWarnings("serial")
 public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
+	private File imagenSeleccionada;
+	private ImageIcon imagenSelecc;
+	
 	public RegistrarProducto() {
 		setResizable(true);
         setIconifiable(true);
@@ -49,7 +57,6 @@ public class RegistrarProducto extends JInternalFrame{
         JTextField tituloField = new JTextField(20);
         tituloField.setBounds(100, 20, 200, 25);
         panel.add(tituloField);
-        System.out.println("Hola?");
 
         JLabel referenciaLabel = new JLabel("Número de referencia:");
         referenciaLabel.setBounds(20, 50, 150, 25);
@@ -141,6 +148,31 @@ public class RegistrarProducto extends JInternalFrame{
         seleccionarImagenButton.setBounds(100, 363, 200, 25);
         panel.add(seleccionarImagenButton);
 
+        JFileChooser fileChooser = new JFileChooser();
+        seleccionarImagenButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    imagenSeleccionada = fileChooser.getSelectedFile();
+                    // Verificar que imagenSeleccionada no sea null
+                    if (imagenSeleccionada != null) {
+                        String nombreArchivo = imagenSeleccionada.getName().toLowerCase();
+                        if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
+                        	imagenesLabel.setText(imagenSeleccionada.getName());
+                            imagenSelecc = new ImageIcon(imagenSeleccionada.getAbsolutePath());
+                        } else {
+                            // Mostrar mensaje de error si el archivo no es válido
+                            JOptionPane.showMessageDialog(null, "Por favor, selecciona un archivo con extensión .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        // Mensaje si no se selecciona un archivo
+                        JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        });
+        
         JLabel imagenSeleccionadaLabel = new JLabel("No se ha seleccionado ninguna imagen");
         imagenSeleccionadaLabel.setBounds(100, 384, 300, 25);
         panel.add(imagenSeleccionadaLabel);
@@ -189,21 +221,9 @@ public class RegistrarProducto extends JInternalFrame{
         return new ImageIcon(resizedImage);
     }
 	
-	/*
-	fileChooser = new JFileChooser();
-    seleccionarImagenButton.addActionListener(a -> {
-        fileChooser.setMultiSelectionEnabled(true);
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File[] imagenesSeleccionadas = fileChooser.getSelectedFiles();
-            StringBuilder imagenesNombres = new StringBuilder();
-            for (File file : imagenesSeleccionadas) {
-                imagenesNombres.append(file.getName()).append(", ");
-            }
-            imagenSeleccionadaLabel.setText(imagenesNombres.toString());
-        }
-    });
-    
+	
+	
+    /*
     registrarButton.addActionListener(b -> {
                     // Validar y registrar el producto en el sistema
                     String titulo = tituloField.getText();
