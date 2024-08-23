@@ -2,7 +2,6 @@ package estacionDeTrabajo;
 
 import java.awt.Component;
 import java.awt.Image;
-import java.io.File;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -24,9 +23,8 @@ import javax.swing.tree.TreeSelectionModel;
 import serverCentral.DTCliente;
 import serverCentral.Factory;
 import serverCentral.ISistema;
-import serverCentral.Proveedor;
-import serverCentral.Sistema;
 
+@SuppressWarnings("serial")
 public class CrearOrdenCompra extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
 	public CrearOrdenCompra() {
