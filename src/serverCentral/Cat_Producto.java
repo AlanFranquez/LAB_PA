@@ -48,7 +48,7 @@ Cat_Padre padre;
 	// Esto para que?
 	// Debería de bastar con obtener los dt de los productos
 	// Hay que tener cuidado de no romper el principio de las capas
-	public Map<Integer, Producto> darProductos(){
+	public Map<Integer, Producto> getProductos(){
 		return this.productos;
 	}
 

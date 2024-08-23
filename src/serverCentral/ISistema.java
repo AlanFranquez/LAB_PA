@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+
 //CREO QUE ES ASI
 public interface ISistema {
 	 // Verificiar si el usuario está o no agregado al sistema
@@ -15,13 +16,13 @@ public interface ISistema {
     public abstract boolean validarCorreo(String correo);
     
     // Agregar usuario a la coleccion
-    public abstract void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException;
+    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException;
     
-    public abstract void agregarCliente(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento) throws UsuarioRepetidoException;
+    public void agregarCliente(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento) throws UsuarioRepetidoException;
     
-    public abstract void agregarImagenUsuario(String nick, ImageIcon imageIcon);
+    public void agregarImagenUsuario(String nick, ImageIcon imageIcon);
     
-    public abstract List<DTCliente> listarClientes();
+    public List<DTCliente> listarClientes();
     
     public Usuario getUsuario(String nickname);
     
@@ -46,5 +47,8 @@ public interface ISistema {
 
 
 	public abstract DefaultMutableTreeNode arbolCategorias();
+
+
+	public List<DTProveedor> listarProveedores();
 
 }

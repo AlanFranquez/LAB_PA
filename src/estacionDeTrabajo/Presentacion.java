@@ -1,6 +1,7 @@
 package estacionDeTrabajo;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
@@ -18,6 +19,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -39,26 +41,24 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
 import serverCentral.DTOrdenDeCompra;
+import serverCentral.DTProveedor;
 import serverCentral.Factory;
 import serverCentral.ISistema;
 import serverCentral.Item;
-import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
 import serverCentral.Proveedor;
 import serverCentral.Sistema;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Presentacion {
 
@@ -527,6 +527,19 @@ public class Presentacion {
                     }
                 });
                 
+                padreNO.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e1) {
+                        boolean tienePadre = padreSI.isSelected();
+                        
+                        if(tienePadre) {
+                        	padresCategorias.setEnabled(true);
+                        } else {
+                        	padresCategorias.setEnabled(false);
+                        }
+                    }
+                });
+                
                 JButton registrarButton = new JButton("Registrar");
                 registrarButton.setBounds(20, 200, 240, 25);
                 panel.add(registrarButton);
@@ -720,21 +733,33 @@ public class Presentacion {
                 JLabel proveedorLabel = new JLabel("Proveedor:");
                 proveedorLabel.setBounds(20, 320, 100, 25);
                 panel.add(proveedorLabel);
-
-                JTextField proveedorField = new JTextField(20);
-                proveedorField.setBounds(100, 320, 200, 25);
-                panel.add(proveedorField);
+                
+                List<DTProveedor> proveedores = s.listarProveedores();
+                String[] nombres;
+                nombres = new String[proveedores.size()];
+                for (int i = 0; i < proveedores.size(); i++) {
+                    DTProveedor cliente = proveedores.get(i);
+                    nombres[i] = cliente.getNick();
+                }
+                
+                DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(nombres);
+                JComboBox<String> padresCategorias = new JComboBox<>(comboBoxModel);
+                padresCategorias.setBounds(140, 320, 160, 25);
+                padresCategorias.setEnabled(true);
+                panel.add(padresCategorias);
 
                 JLabel categoriasLabel = new JLabel("Categorías:");
                 categoriasLabel.setBounds(20, 360, 100, 25);
                 panel.add(categoriasLabel);
 
 
-                List<String> categorias = Sistema.getInstance().listarCategoria();
-                JTree tree = new JTree(CrearArbol(categorias));
+                DefaultMutableTreeNode root = s.arbolCategorias();
+
+                JTree tree = new JTree(root);
+                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+                tree.setBounds(83, 60, 275, 244);
                 
-                
-                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+                panel.add(tree);
                 
                 JScrollPane treeScrollPane = new JScrollPane(tree);
                 treeScrollPane.setBounds(100, 360, 200, 150);
@@ -787,7 +812,7 @@ public class Presentacion {
                     String descripcion = descripcionField.getText();
                     String especificaciones = especificacionesArea.getText();
                     String precioStr = precioField.getText();
-                    String proveedor = proveedorField.getText();
+                    String proveedor = (String) comboBoxModel.getSelectedItem();
                     String categoria = tree.getLastSelectedPathComponent() != null 
                             ? tree.getLastSelectedPathComponent().toString()
                             : null;
@@ -811,14 +836,13 @@ public class Presentacion {
                             	return;
                             }
                             JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
-
                             // Limpiar campos
                             tituloField.setText("");
                             referenciaField.setText("");
                             descripcionField.setText("");
                             especificacionesArea.setText("");
                             precioField.setText("");
-                            proveedorField.setText("");
+                            comboBoxModel.setSelectedItem(null);
                             tree.clearSelection();
                             imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
                     } catch (NumberFormatException ex) {

@@ -50,7 +50,6 @@ public class Sistema implements ISistema {
     	if (!verificarUnicidad(nick, correo)) {
     		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
     	}
-
     	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link);
     	usuarios.put(nick, nuevoProveedor);
     }
@@ -112,7 +111,7 @@ public class Sistema implements ISistema {
         return true;
     }
     
-    public List<String> listarCategoria() {
+    /*public List<String> listarCategoria() {
         Map<String, Categoria> listaCategoria = this.categorias;
         List<String> nombresCat = new ArrayList<>(); // Inicializar la lista
 
@@ -124,7 +123,39 @@ public class Sistema implements ISistema {
             }
         }
         return nombresCat;
-    }
+    }*/
+    
+    public DefaultMutableTreeNode listarCategoria() {
+      	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
+      	 for(Categoria cat : arbolCategorias.values()) {
+      		 DefaultMutableTreeNode child = arbolCategorias(cat);
+      		 root.add(child);
+      	 }
+      	return root;
+      }
+       public DefaultMutableTreeNode listarCategoria(Categoria cat) {
+     	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
+     	 	if(cat.getTipo() == "Padre") {
+     	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+     	 		if(hijos.size() >= 1) {
+     	 			for(Categoria hijo : hijos.values()) {
+     	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
+     	 				rama.add(child);
+     	 			}
+     	 		}else {
+     	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+     	 		}
+     	 	}else {
+     	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
+     	 		if(productos.size() >= 1) {
+     	 			for(Producto prod : productos.values()) {
+     	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(prod.getNombre());
+     					rama.add(child);
+     	 			}
+     	 		}
+     	 	}
+     	return rama;
+     }
     private void vincularProductoACategoria(Categoria cat, Producto p, String nombreCat) {
         if (cat.getNombre().equals(nombreCat)) {
             if (cat instanceof Cat_Producto) {
@@ -136,7 +167,6 @@ public class Sistema implements ISistema {
             }
         }
     }
-    // public void agregarImagenProducto(...){}
     
     //CASO DE USO 2: FUNCIONES AUXILIARES
     public boolean verificarUsuario(Usuario Proveedor) {
@@ -155,7 +185,7 @@ public class Sistema implements ISistema {
             Categoria categ = entry.getValue();
             if (categ instanceof Cat_Producto) {
                 Cat_Producto pcast = (Cat_Producto) categ;
-                Map<Integer, Producto> productos = pcast.darProductos();
+                Map<Integer, Producto> productos = pcast.getProductos();
                 for (Map.Entry<Integer, Producto> entry2 : productos.entrySet()) {
                     Producto prod = entry2.getValue();
                     if (prod.getNombre().equals(nombre)) {
@@ -238,6 +268,39 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
     // Reutilizacion de listarClientes del caso de uso 5 y listarCategorias del caso 2
+    public DefaultMutableTreeNode arbolCategorias() {
+   	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
+   	 for(Categoria cat : arbolCategorias.values()) {
+   		 DefaultMutableTreeNode child = arbolCategorias(cat);
+   		 root.add(child);
+   	 }
+   	return root;
+   }
+    public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
+  	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
+  	 	if(cat.getTipo() == "Padre") {
+  	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
+  	 		if(hijos.size() >= 1) {
+  	 			for(Categoria hijo : hijos.values()) {
+  	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
+  	 				rama.add(child);
+  	 			}
+  	 		}else {
+  	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+  	 		}
+  	 	}else {
+  	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
+  	 		if(productos.size() >= 1) {
+  	 			for(Producto prod : productos.values()) {
+  	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(prod.getNombre());
+  					rama.add(child);
+  	 			}
+  	 		}else {
+  	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
+  	 		}
+  	 	}
+  	return rama;
+  }
     
     
     
@@ -365,30 +428,7 @@ public class Sistema implements ISistema {
 	
     
    
-    public DefaultMutableTreeNode arbolCategorias() {
-    	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
-    	 for(Categoria cat : arbolCategorias.values()) {
-    		 DefaultMutableTreeNode child = arbolCategorias(cat);
-    		 root.add(child);
-    	 }
-    	return root;
-    }
     
-    public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
-   	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
-   	 	if(cat.getTipo() == "Padre") {
-   	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
-   	 		if(hijos.size() >= 1) {
-   	 			for(Categoria hijo : hijos.values()) {
-   	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
-   	 				rama.add(child);
-   	 			}
-   	 		}else {
-   	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
-   	 		}
-   	 	}
-   	return rama;
-   }
 
     
     

@@ -1,27 +1,31 @@
 package estacionDeTrabajo;
 
+import java.awt.Component;
+import java.awt.Image;
+import java.io.File;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreePath;
+import javax.swing.tree.TreeSelectionModel;
 
 import serverCentral.DTCliente;
 import serverCentral.Factory;
 import serverCentral.ISistema;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JScrollPane;
-import java.awt.Component;
-import java.awt.Image;
+import serverCentral.Proveedor;
+import serverCentral.Sistema;
 
 public class CrearOrdenCompra extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
@@ -33,7 +37,7 @@ public class CrearOrdenCompra extends JInternalFrame{
         setClosable(true);
         setTitle("Crear Orden de Compra");
         setBounds(10, 40, 360, 150);
-        setSize(600, 700);
+        setSize(412, 400);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -54,15 +58,13 @@ public class CrearOrdenCompra extends JInternalFrame{
         JComboBox<String> padresCategorias = new JComboBox<>(comboBoxModel);
         padresCategorias.setBounds(73, 20, 160, 25);
         padresCategorias.setEnabled(true);
-        panel.add(padresCategorias);
-        
-        
+        panel.add(padresCategorias); 
         getContentPane().add(panel);
+        
         
         JLabel lblCategoria = new JLabel("Categoria:");
         lblCategoria.setBounds(20, 56, 80, 25);
         panel.add(lblCategoria);
-        
         DefaultMutableTreeNode root = s.arbolCategorias();
         
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
@@ -83,16 +85,47 @@ public class CrearOrdenCompra extends JInternalFrame{
                 return this;
             }
         };
-        
-        
-//        JButton registrarButton = new JButton("Registrar");
-//        registrarButton.setBounds(20, 200, 240, 25);
-//        panel.add(registrarButton);
-        
         JTree tree = new JTree(root);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         tree.setCellRenderer(renderer);
-        tree.setBounds(83, 60, 160, 151);
+        tree.setBounds(83, 60, 275, 244);
+        
         panel.add(tree);
+        
+        
+        JButton registrarButton = new JButton("Crear");
+        registrarButton.setBounds(73, 315, 240, 25);
+        panel.add(registrarButton);
+        
+        registrarButton.addActionListener(b -> {
+            // Validar y registrar el producto en el sistema
+            String cliente = (String) comboBoxModel.getSelectedItem();
+            TreePath[] productos = tree.getSelectionPaths();
+            if (productos != null) {
+                for (TreePath path : productos) {
+                	DefaultMutableTreeNode selectedNode =
+                            (DefaultMutableTreeNode) path.getLastPathComponent();
+                    System.out.println(" - " + selectedNode.getUserObject());
+                }
+            }
+
+
+            // Validar campos vacíos
+            if (cliente.isEmpty() ) {
+                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "El número de referencia debe ser un número entero válido y el precio debe ser un número decimal válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        
+        });
+    
+        
+        
         setVisible(true);
         toFront();
         
