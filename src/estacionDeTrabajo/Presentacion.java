@@ -10,9 +10,14 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -41,10 +46,13 @@ import com.toedter.calendar.JDateChooser;
 
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
+import serverCentral.DTItem;
 import serverCentral.DTOrdenDeCompra;
+import serverCentral.DtProducto;
 import serverCentral.Factory;
 import serverCentral.ISistema;
 import serverCentral.Item;
+import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
@@ -94,10 +102,13 @@ public class Presentacion {
                     Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,"Lalala");
                     Item i1 = new Item(3, p1);
                     
-                    /* OrdenDeCompra o1 = new OrdenDeCompra(1);
+                    OrdenDeCompra o1 = new OrdenDeCompra(1);
                     o1.addItem(i1);
-                    */
                     
+                    s.addOrdenes(o1, "Juan123");
+                    
+                    
+                   
                     
                     s.agregarProveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
                     s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
@@ -627,7 +638,8 @@ public class Presentacion {
 
         	        
         	        List<DTOrdenDeCompra> ordenes = s.listarOrdenes();
-
+        	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        	        
         	        // Definir las columnas de la tabla
         	        String[] columnNames = {"Numero de Orden", "Fecha"};
 
@@ -636,7 +648,7 @@ public class Presentacion {
         	        for (int i = 0; i < ordenes.size(); i++) {
         	            DTOrdenDeCompra o = ordenes.get(i);
         	            data[i][0] = o.getNumero();
-        	            /*data[i][1] = o.getFecha();*/
+        	            data[i][1] = o.getFecha().format(formatter);
         	        }
 
         	        // Crear la tabla
@@ -669,6 +681,9 @@ public class Presentacion {
         	        ventanaOrdenes.setLocation(100, 100);
         	}
         });
+        
+        mnCasosDeUso.add(mntmMostrarOrden);
+        
         JMenuItem mntmRegistrarProducto = new JMenuItem("Registrar Producto");
         mntmRegistrarProducto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -694,38 +709,37 @@ public class Presentacion {
         ventanaDetalles.setSize(400, 300);
         ventanaDetalles.getContentPane().setLayout(new BorderLayout());
 
-        /*
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        // Agregar la información del cliente al panel
-        ImageIcon imagenIcon = cliente.getImagenes();
+        
+        List<DTItem> lista = orden.listarItems();
         
         
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        System.out.print(orden.getFecha().format(formatter));
+        panel.add(new JLabel("Numero de Orden: " + orden.getNumero()));
+        panel.add(new JLabel("Fecha: " + orden.getFecha().format(formatter)));
         
-        if (imagenIcon != null) {
-        	Image imagen = imagenIcon.getImage();
-            Image imagenRedimensionada = imagen.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
-            
-            imagenIcon = new ImageIcon(imagenRedimensionada);
-            // Crear nuevo ImageIcon con la imagen redimensionada
-            JLabel imagenLabel = new JLabel(imagenIcon);
-            
-            panel.add(imagenLabel);
+        panel.add(new JLabel("============================="));
+        
+        if(lista.isEmpty()) {
+        	panel.add(new JLabel("No se han añadido items"));
         } else {
-            panel.add(new JLabel("No hay imagen disponible"));
+        	for(DTItem l: lista) {
+        		Producto p = l.getProducto();
+        		DtProducto dtp = p.crearDT();
+        		
+        		panel.add(new JLabel("Nombre del producto: " + dtp.getNombre() + " - " + dtp.getPrecio()));
+        		panel.add(new JLabel("Cantidad: " + l.getCant()));
+        		panel.add(new JLabel("Subtotal: " + l.getSubTotal()));
+        		panel.add(new JLabel("============================="));
+        	}
         }
-        panel.add(new JLabel("Tipo de Usuario: " + cliente.getTipo()));
-        panel.add(new JLabel("Mail: " + cliente.getCorreo()));
-        panel.add(new JLabel("Nick: " + cliente.getNick()));
-        panel.add(new JLabel("Nombre Completo: " + cliente.getNombre() + " " + cliente.getApellido()));
-        panel.add(new JLabel("Fecha de Nacimiento: " + cliente.getNacimiento().getDia() + " - " + cliente.getNacimiento().getMes() + " - " + cliente.getNacimiento().getAnio()));
-        panel.add(Box.createVerticalStrut(5));
-       
-        panel.add(new JLabel("Ordenes: "));
-        if(cliente.getOrdenes().isEmpty()) {
-        	panel.add(new JLabel("   Todavia no existen ordenes"));
-        }
+        
+        panel.add(new JLabel("Precio total " + orden.getPrecioTotal()));
+        
+        
+        
         
         // Falta agregar las ordenes y que al seleccionar una se muestren
     
@@ -748,10 +762,11 @@ public class Presentacion {
             e.printStackTrace();
         }
 
-		*/
         // Opcional: Centrar la ventana interna
         ventanaDetalles.setLocation(150, 150);
     }
+    
+    
 
   
 
@@ -840,9 +855,20 @@ public class Presentacion {
         panel.add(new JLabel("Ordenes: "));
         if(cliente.getOrdenes().isEmpty()) {
         	panel.add(new JLabel("   Todavia no existen ordenes"));
+        } else {
+        	Map<Integer, OrdenDeCompra> ordenesCliente = cliente.getOrdenes();
+        	
+        	List<DTOrdenDeCompra> ordenesDT = new ArrayList<>();
+        	
+            for (OrdenDeCompra orden : ordenesCliente.values()) {
+                DTOrdenDeCompra dtOrden = orden.crearDT();
+                ordenesDT.add(dtOrden);
+            }
+            for (DTOrdenDeCompra dtOrden : ordenesDT) {
+                panel.add(new JLabel(dtOrden.toString()));
+            }
         }
         
-        // Falta agregar las ordenes y que al seleccionar una se muestren
     
         JScrollPane scrollPane = new JScrollPane(panel);
 

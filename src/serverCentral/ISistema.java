@@ -50,5 +50,9 @@ public interface ISistema {
 
 
 	public List<DTProveedor> listarProveedores();
+	
+	// Para probar lo de mostrar Ordenes
+
+    public void addOrdenes(OrdenDeCompra o, String nickUsuario);
 
 }

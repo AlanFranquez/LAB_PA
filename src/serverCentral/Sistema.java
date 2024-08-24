@@ -379,6 +379,8 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
     
+
+    
     public boolean existenOrdenesParaListar() {
         return !this.ordenes.isEmpty();
     }
@@ -424,6 +426,17 @@ public class Sistema implements ISistema {
     	return listarPadres;
     }
 
+ // Para probar lo de mostrar Ordenes
 
+    public void addOrdenes(OrdenDeCompra o, String nickUsuario) {
+    	Usuario us = this.usuarios.get(nickUsuario);
+    	
+    	Cliente cl = (Cliente) us;
+    	ordenes.put(o.getNumero(), o);
+    	cl.agregarCompra(o);
+    }
    
 }
+
+
+
