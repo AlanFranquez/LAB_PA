@@ -648,7 +648,7 @@ public class Presentacion {
         	        for (int i = 0; i < ordenes.size(); i++) {
         	            DTOrdenDeCompra o = ordenes.get(i);
         	            data[i][0] = o.getNumero();
-        	            data[i][1] = o.getFecha().format(formatter);
+        	            data[i][1] = o.getFecha().format(formatter).toString();
         	        }
 
         	        // Crear la tabla
@@ -705,7 +705,7 @@ public class Presentacion {
         
     
     private void mostrarDetallesOrden(DTOrdenDeCompra orden) {
-        JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
+        JInternalFrame ventanaDetalles = new JInternalFrame("Detalles de la Orden", true, true, true, true);
         ventanaDetalles.setSize(400, 300);
         ventanaDetalles.getContentPane().setLayout(new BorderLayout());
 
