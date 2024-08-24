@@ -96,36 +96,12 @@ public class Sistema implements ISistema {
     	}
     	return listaProveedor;
     }
-    public boolean agregarProducto(String titulo, Integer numRef, String descripcion, String especificaciones, Float precio, Proveedor p) {
-        if (!verificarUsuario(p)) {
-            // No existe el Proveedor
-            return false;
-        }
-
-        if (verificarNombre(titulo)) {
-            // Existe un nombre igual
-            return false;
-        }
-
-        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones);
-        return true;
+    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p) {
+        Proveedor proveedor = (Proveedor) usuarios.get(p);
+        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor);
+        proveedor.agregarProd(prod);
     }
-    
-    /*public List<String> listarCategoria() {
-        Map<String, Categoria> listaCategoria = this.categorias;
-        List<String> nombresCat = new ArrayList<>(); // Inicializar la lista
-
-        for (Map.Entry<String, Categoria> entry : listaCategoria.entrySet()) {
-            Categoria cat = entry.getValue();
-            if (cat instanceof Cat_Padre) {
-                // Recorrer la categoría y sus hijos para obtener todos los nombres
-                cat.recorrerCategorias(cat, nombresCat);
-            }
-        }
-        return nombresCat;
-    }*/
-    
-    public DefaultMutableTreeNode listarCategoria() {
+    public DefaultMutableTreeNode arbolCategorias() {
       	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
       	 for(Categoria cat : arbolCategorias.values()) {
       		 DefaultMutableTreeNode child = arbolCategorias(cat);
@@ -133,7 +109,7 @@ public class Sistema implements ISistema {
       	 }
       	return root;
       }
-       public DefaultMutableTreeNode listarCategoria(Categoria cat) {
+    public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
      	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
      	 	if(cat.getTipo() == "Padre") {
      	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
@@ -145,63 +121,43 @@ public class Sistema implements ISistema {
      	 		}else {
      	 			rama.add(new DefaultMutableTreeNode("Sin Elementos"));
      	 		}
-     	 	}else {
-     	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
-     	 		if(productos.size() >= 1) {
-     	 			for(Producto prod : productos.values()) {
-     	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(prod.getNombre());
-     					rama.add(child);
-     	 			}
-     	 		}
      	 	}
      	return rama;
      }
-    private void vincularProductoACategoria(Categoria cat, Producto p, String nombreCat) {
-        if (cat.getNombre().equals(nombreCat)) {
-            if (cat instanceof Cat_Producto) {
-                ((Cat_Producto) cat).agregarProducto(p);
-            }
-        } else if (cat instanceof Cat_Padre) {
-            for (Categoria hijo : ((Cat_Padre) cat).getHijos().values()) {
-                vincularProductoACategoria(hijo, p, nombreCat);
-            }
-        }
-    }
-    
-    //CASO DE USO 2: FUNCIONES AUXILIARES
-    public boolean verificarUsuario(Usuario Proveedor) {
-    	Map<String, Usuario> usuarios = this.usuarios;
-    	for(Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
-    		Usuario u = entry.getValue();
-    		if(u.equals(Proveedor)) {
-    			return true;
+    public boolean existeNombre(String nombre, int num) {
+    	Map<String, Categoria> categorias = this.categorias;
+    	for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
+    		Categoria categ = entry.getValue();
+    		if (categ instanceof Cat_Producto) {
+    			Cat_Producto pcast = (Cat_Producto) categ;
+    			Map<Integer, Producto> productos = pcast.getProductos();
+    			for (Map.Entry<Integer, Producto> entry2 : productos.entrySet()) {
+    				Producto prod = entry2.getValue();
+    				if (prod.getNombre().equals(nombre) || prod.getNumRef() == num) {
+    					return true;
+    				}
+    			}
     		}
     	}
     	return false;
     }
-    public boolean verificarNombre(String nombre) {
-        Map<String, Categoria> categorias = this.categorias;
-        for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-            Categoria categ = entry.getValue();
-            if (categ instanceof Cat_Producto) {
-                Cat_Producto pcast = (Cat_Producto) categ;
-                Map<Integer, Producto> productos = pcast.getProductos();
-                for (Map.Entry<Integer, Producto> entry2 : productos.entrySet()) {
-                    Producto prod = entry2.getValue();
-                    if (prod.getNombre().equals(nombre)) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+    public boolean esPadre(String nombre) {
+    	Categoria cat = categorias.get(nombre);
+    	return (cat instanceof Cat_Padre);
     }
-    public void vincularCatProd(Producto p, String nombre) {
-    	for (Categoria cat : this.categorias.values()) {
-    		vincularProductoACategoria(cat, p, nombre);
-        }
+    public void agregarProductoCategoria(String catName, int numRef) {
+    	for (Usuario user : usuarios.values()) {
+    		if (user instanceof Proveedor) {
+    			Proveedor p = (Proveedor) user;
+    			Producto prod = p.obtenerProd(numRef);
+    			if(prod != null) {
+    				Cat_Producto cat = (Cat_Producto) categorias.get(catName);
+    				prod.agregarCategorias(cat);
+    				cat.agregarProducto(prod);
+    			}
+    		}
+    	}
     }
-    
     
     
     // CASO DE USO 3: ALTA DE CATEGORIA
@@ -268,21 +224,21 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
     // Reutilizacion de listarClientes del caso de uso 5 y listarCategorias del caso 2
-    public DefaultMutableTreeNode arbolCategorias() {
+    public DefaultMutableTreeNode arbolProductos() {
    	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
    	 for(Categoria cat : arbolCategorias.values()) {
-   		 DefaultMutableTreeNode child = arbolCategorias(cat);
+   		 DefaultMutableTreeNode child = arbolProductos(cat);
    		 root.add(child);
    	 }
    	return root;
    }
-    public DefaultMutableTreeNode arbolCategorias(Categoria cat) {
+    public DefaultMutableTreeNode arbolProductos(Categoria cat) {
   	 	DefaultMutableTreeNode rama = new DefaultMutableTreeNode(cat.getNombre());
   	 	if(cat.getTipo() == "Padre") {
   	 		Map<String, Categoria> hijos = ((Cat_Padre) cat).getHijos();
   	 		if(hijos.size() >= 1) {
   	 			for(Categoria hijo : hijos.values()) {
-  	 				DefaultMutableTreeNode child = arbolCategorias(hijo);
+  	 				DefaultMutableTreeNode child = arbolProductos(hijo);
   	 				rama.add(child);
   	 			}
   	 		}else {

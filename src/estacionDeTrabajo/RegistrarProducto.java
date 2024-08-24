@@ -6,8 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
-import javax.swing.AbstractButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -27,6 +27,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
+import serverCentral.Categoria;
 import serverCentral.DTProveedor;
 import serverCentral.Factory;
 import serverCentral.ISistema;
@@ -62,6 +63,8 @@ public class RegistrarProducto extends JInternalFrame{
         referenciaLabel.setBounds(20, 50, 150, 25);
         panel.add(referenciaLabel);
 
+        
+        
         JTextField referenciaField = new JTextField(20);
         referenciaField.setBounds(185, 50, 200, 25);
         panel.add(referenciaField);
@@ -122,7 +125,6 @@ public class RegistrarProducto extends JInternalFrame{
             @Override
             public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
                                                           boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                // Llamar al método de la superclase para configurar el componente
                 super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
                 // Modificar el ícono según el tipo de nodo
@@ -182,30 +184,54 @@ public class RegistrarProducto extends JInternalFrame{
         registrarButton.setBounds(90, 420, 240, 25);
         panel.add(registrarButton);
         
+        // Validar y registrar el producto en el sistema
         registrarButton.addActionListener(b -> {
-            // Validar y registrar el producto en el sistema
-            String cliente = (String) comboBoxModel.getSelectedItem();
-            TreePath[] productos = tree.getSelectionPaths();
-            if (productos != null) {
-                for (TreePath path : productos) {
-                	DefaultMutableTreeNode selectedNode =
-                            (DefaultMutableTreeNode) path.getLastPathComponent();
-                    System.out.println(" - " + selectedNode.getUserObject());
-                }
-            }
+            String proveedor = (String) comboBoxModel.getSelectedItem();
+            String titulo = tituloField.getText();
+            int numRef = Integer.parseInt(referenciaField.getText());
+            String descripcion = descripcionField.getText();
+            String especificaciones = especificacionesArea.getText();
+            String precioStr = precioField.getText();
+            int precio = Integer.parseInt(precioStr);
+            File[] imagenes = fileChooser.getSelectedFiles();
+            TreePath[] categorias = tree.getSelectionPaths();
 
-
-            // Validar campos vacíos
-            if (cliente.isEmpty() ) {
+            if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-
-            try {
-                
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(null, "El número de referencia debe ser un número entero válido y el precio debe ser un número decimal válido.", "Error", JOptionPane.ERROR_MESSAGE);
+            
+            if(s.existeNombre(proveedor, numRef)) {
+            	JOptionPane.showMessageDialog(null, "Ya existe un producto con este nombre o numero referencia", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
             }
+            
+            s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor);
+            
+            if (categorias != null) {
+                for (TreePath path : categorias) {
+                	DefaultMutableTreeNode selectedNode =
+                            (DefaultMutableTreeNode) path.getLastPathComponent();
+                    System.out.println(" - " + selectedNode.getUserObject());
+                    String catName = selectedNode.getUserObject().toString();
+                    if(s.esPadre(catName)) {
+                    	JOptionPane.showMessageDialog(null, "Alguna de las categorias seleccionadas no es una categoria válida", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                    s.agregarProductoCategoria(catName, numRef);
+                }
+            }
+            
+            JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
+            
+            tituloField.setText("");
+            referenciaField.setText("");
+            descripcionField.setText("");
+            especificacionesArea.setText("");
+            precioField.setText("");
+            comboBoxModel.setSelectedItem(null);
+            tree.clearSelection();
+            imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
         
         });
     
@@ -221,59 +247,4 @@ public class RegistrarProducto extends JInternalFrame{
         return new ImageIcon(resizedImage);
     }
 	
-	
-	
-    /*
-    registrarButton.addActionListener(b -> {
-                    // Validar y registrar el producto en el sistema
-                    String titulo = tituloField.getText();
-                    String referenciaStr = referenciaField.getText();
-                    String descripcion = descripcionField.getText();
-                    String especificaciones = especificacionesArea.getText();
-                    String precioStr = precioField.getText();
-                    String proveedor = (String) comboBoxModel.getSelectedItem();
-                    String categoria = tree.getLastSelectedPathComponent() != null 
-                            ? tree.getLastSelectedPathComponent().toString()
-                            : null;
-                    File[] imagenes = fileChooser.getSelectedFiles();
-                    
-                    
-
-                    // Validar campos vacíos
-                    if (titulo.isEmpty() || referenciaStr.isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty() || categoria == null) {
-                        JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-
-                    try {
-                        // Convertir referencia a int y precio a float
-                        int referencia = Integer.parseInt(referenciaStr);
-                        float precio = Float.parseFloat(precioStr);
-                        	// Registrar el producto en el sistema
-                            if(!Sistema.getInstance().agregarProducto(titulo, referencia, descripcion, especificaciones, precio, (Proveedor) Sistema.getInstance().getUsuario(proveedor))) {
-                            	JOptionPane.showMessageDialog(null, "El proveedor no existe.", "Error", JOptionPane.ERROR_MESSAGE);
-                            	return;
-                            }
-                            JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
-                            // Limpiar campos
-                            tituloField.setText("");
-                            referenciaField.setText("");
-                            descripcionField.setText("");
-                            especificacionesArea.setText("");
-                            precioField.setText("");
-                            comboBoxModel.setSelectedItem(null);
-                            tree.clearSelection();
-                            imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(null, "El número de referencia debe ser un número entero válido y el precio debe ser un número decimal válido.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                });
-
-            }
-        });
-        mnCasosDeUso.add(mntmRegistrarProducto);
-        
-        
-    }
-    */
 }

@@ -54,6 +54,7 @@ import serverCentral.ISistema;
 import serverCentral.Item;
 import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
+import serverCentral.Proveedor;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
 
@@ -99,20 +100,21 @@ public class Presentacion {
                     
                     
                     // SOlo una prueba
-                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,"Lalala");
+                    
+                    
+                   
+                    Proveedor prov = new Proveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
+                    s.agregarProveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
+                    s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
+                    
+                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,"Lalala", prov);
                     Item i1 = new Item(3, p1);
                     
                     OrdenDeCompra o1 = new OrdenDeCompra(1);
                     o1.addItem(i1);
                     
                     s.addOrdenes(o1, "Juan123");
-                    
-                    
-                   
-                    
-                    s.agregarProveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
-                    s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
-                    
+
                     s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
                     s.agregarImagenUsuario("albert1341", new ImageIcon("./imagenes/p2.jpg"));
                     s.agregarImagenUsuario("agusmari", new ImageIcon("./imagenes/p3.jpg"));

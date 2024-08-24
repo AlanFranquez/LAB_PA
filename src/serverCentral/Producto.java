@@ -19,13 +19,14 @@ public class Producto {
 	
 	// Constructor:
 	// Tal vez al crear al producto conbendría asignarle directamente el proveedor y categorias en vez de hacerlo por separado
-	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones) {
+	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
 		this.numRef = numRef;
 		this.especificaciones = especificaciones;
 		this.categorias = new HashMap<>();
+		this.proveedor = prov;
 	}
 
 	// Hacer una lista de imágenes en vez de una única

@@ -48,11 +48,27 @@ public interface ISistema {
 
 	public abstract DefaultMutableTreeNode arbolCategorias();
 
+	public abstract DefaultMutableTreeNode arbolProductos();
 
 	public List<DTProveedor> listarProveedores();
 	
 	// Para probar lo de mostrar Ordenes
 
     public void addOrdenes(OrdenDeCompra o, String nickUsuario);
+
+
+	public abstract void agregarProductoCategoria(String catName, int numRef);
+
+
+	public abstract boolean existeNombre(String cliente, int num);
+
+
+	public abstract boolean esPadre(String catName);
+
+
+	public abstract void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones,
+			int precio, String proveedor);
+
+
 
 }

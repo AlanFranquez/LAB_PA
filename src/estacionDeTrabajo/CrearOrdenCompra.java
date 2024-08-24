@@ -63,7 +63,7 @@ public class CrearOrdenCompra extends JInternalFrame{
         JLabel lblCategoria = new JLabel("Categoria:");
         lblCategoria.setBounds(20, 56, 80, 25);
         panel.add(lblCategoria);
-        DefaultMutableTreeNode root = s.arbolCategorias();
+        DefaultMutableTreeNode root = s.arbolProductos();
         
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
             // Íconos personalizados
