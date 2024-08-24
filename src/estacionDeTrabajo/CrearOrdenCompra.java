@@ -99,19 +99,21 @@ public class CrearOrdenCompra extends JInternalFrame{
             // Validar y registrar el producto en el sistema
             String cliente = (String) comboBoxModel.getSelectedItem();
             TreePath[] productos = tree.getSelectionPaths();
-            if (productos != null) {
-                for (TreePath path : productos) {
-                	DefaultMutableTreeNode selectedNode =
-                            (DefaultMutableTreeNode) path.getLastPathComponent();
-                    System.out.println(" - " + selectedNode.getUserObject());
-                }
-            }
-
 
             // Validar campos vacíos
-            if (cliente.isEmpty() ) {
-                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
+            if (cliente.isEmpty() || productos == null) {
+            	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
+
+            s.CrearOrden();
+            for (TreePath path : productos) {
+            	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+            	String selection = (String) selectedNode.getUserObject();
+            	String[] parts = selection.split(" - "); 
+            	int numRef = Integer.parseInt(parts[0]);
+            	System.out.println("  )" + numRef);
+            	s.agregarProducto(numRef, 2);
             }
 
             try {

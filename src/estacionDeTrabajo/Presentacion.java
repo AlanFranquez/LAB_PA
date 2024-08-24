@@ -108,10 +108,8 @@ public class Presentacion {
                     s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
                     
                     Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,"Lalala", prov);
-                    Item i1 = new Item(3, p1);
-                    
                     OrdenDeCompra o1 = new OrdenDeCompra(1);
-                    o1.addItem(i1);
+                    o1.addItem(p1, 3);
                     
                     s.addOrdenes(o1, "Juan123");
 

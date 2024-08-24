@@ -47,7 +47,8 @@ public class OrdenDeCompra {
 	    }
     }
 
-    public void addItem(Item item) {
+    public void addItem(Producto p, int cant) {
+    	Item item = new Item(cant, p);
     	items.put(item.getProducto().getNumRef(), item);
     	setPrecioTotal();
     }

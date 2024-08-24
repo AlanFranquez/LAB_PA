@@ -223,7 +223,7 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 4: GENERAR ORDEN DE COMPRA
-    // Reutilizacion de listarClientes del caso de uso 5 y listarCategorias del caso 2
+    // Reutilizacion de listarClientes del caso de uso 5
     public DefaultMutableTreeNode arbolProductos() {
    	 DefaultMutableTreeNode root = new DefaultMutableTreeNode("Cats");
    	 for(Categoria cat : arbolCategorias.values()) {
@@ -248,7 +248,7 @@ public class Sistema implements ISistema {
   	 		Map<Integer, Producto> productos = ((Cat_Producto) cat).getProductos();
   	 		if(productos.size() >= 1) {
   	 			for(Producto prod : productos.values()) {
-  	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(prod.getNombre());
+  	 				DefaultMutableTreeNode child = new DefaultMutableTreeNode(prod.getNombre() + " - " + prod.getNumRef());
   					rama.add(child);
   	 			}
   	 		}else {
@@ -257,7 +257,21 @@ public class Sistema implements ISistema {
   	 	}
   	return rama;
   }
-    
+    public void CrearOrden() {
+    	OrdenDeCompra orden = new OrdenDeCompra(ordenes.size() + 1);
+    	ordenes.put((ordenes.size() + 1), orden);
+    }
+    public void agregarProducto(int numRef, int cant) {
+    	for (Usuario user : usuarios.values()) {
+    		if (user instanceof Proveedor) {
+    			Proveedor p = (Proveedor) user;
+    			Producto prod = p.obtenerProd(numRef);
+    			if(prod != null) {
+    				ordenes.get(ordenes.size()).addItem(prod, cant);
+    			}
+    		}
+    	}
+    }
     
     
     // CASO DE USO 5: VER INFORMACION DE CLIENTE 

@@ -70,5 +70,11 @@ public interface ISistema {
 			int precio, String proveedor);
 
 
+	public abstract void agregarProducto(int numRef, int cant);
+
+
+	public abstract void CrearOrden();
+
+
 
 }
