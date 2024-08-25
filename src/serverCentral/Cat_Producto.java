@@ -32,7 +32,12 @@ Cat_Padre padre;
 	    
 	}
 	
-	
+	public Cat_Padre getPadre() {
+		if(this.padre == null) {
+			return null;
+		}
+		return this.padre;
+	}
 	
 	public String obtenerPadre() {
 		if(this.padre == null) {
@@ -51,6 +56,10 @@ Cat_Padre padre;
 	// Hay que tener cuidado de no romper el principio de las capas
 	public Map<Integer, Producto> getProductos(){
 		return this.productos;
+	}
+	
+	public Producto getProducto(Integer intProd) {
+		return this.productos.get(intProd);
 	}
 
 	public void agregarProducto(Producto prod) {

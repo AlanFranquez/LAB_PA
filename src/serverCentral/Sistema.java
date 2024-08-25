@@ -347,6 +347,24 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 9: VER INFORMACION DE PRODUCTO
+    public List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException {
+    	List <DtProducto> listaProductos = new ArrayList<>();
+    	
+    	Cat_Producto prodC = (Cat_Producto) this.categorias.get(cat);
+    	
+    	if(prodC.getProductos().isEmpty()) {
+    		throw new ProductoException("Esta categoría no cuenta con productos");
+    	}
+    	
+    	for(Entry<Integer, Producto> entry: prodC.getProductos().entrySet()) {
+    		Producto p = entry.getValue();
+    		
+    		listaProductos.add(p.crearDT());
+    	}	
+    	
+    	return listaProductos;
+    }
+    
     public List<DtProducto> listarALLProductos() throws ProductoException {
     	List<DtProducto> listaProductos = new ArrayList<>();
     	
@@ -437,8 +455,30 @@ public class Sistema implements ISistema {
     	ordenes.put(o.getNumero(), o);
     	cl.agregarCompra(o);
     }
+    
+    public boolean comprobarCat(String cat) throws CategoriaException {
+    	if(this.categorias.get(cat) == null) {
+    		throw new CategoriaException("Esta categoria no existe");
+    	}
+    	
+    	return true;
+    }
+    
+    public DTProveedor traerProveedorProducto(int numKey) {
+        for (Map.Entry<String, Usuario> entry : this.usuarios.entrySet()) {
+            Usuario u = entry.getValue();
+            
+            if (u instanceof Proveedor) {
+                Proveedor proveedorBuscado = (Proveedor) u;
+                DTProveedor provDT = proveedorBuscado.crearDt();
+                if (provDT.existeProd(numKey)) {
+                    return provDT;
+                }
+            }
+        }
+        
+        return null;
+    }
    
 }
-
-
 

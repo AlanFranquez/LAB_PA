@@ -8,6 +8,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
@@ -45,16 +47,21 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import serverCentral.Cat_Producto;
+import serverCentral.CategoriaException;
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
 import serverCentral.DTItem;
 import serverCentral.DTOrdenDeCompra;
+import serverCentral.DTProveedor;
 import serverCentral.DtProducto;
 import serverCentral.Factory;
 import serverCentral.ISistema;
@@ -712,78 +719,176 @@ public class Presentacion {
         
         JMenuItem mntmListarProductos = new JMenuItem("Listar Productos");
         mntmListarProductos.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		
-        		JInternalFrame ventanaProductos = new JInternalFrame("Lista de Productos", true, true, true, true);
-    	        ventanaProductos.setSize(400, 600);
-    	        ventanaProductos.getContentPane().setLayout(new BorderLayout());
-        		JPanel panel = new JPanel(); 
-        	    panel.setLayout(null);
-        	    
-        	    List<DtProducto> listaP = new ArrayList<DtProducto>();
-				try {
-					listaP = s.listarALLProductos();
-				} catch (ProductoException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage());
-					return;
-				}
-				
-				panel.add(new JLabel("Listado de Productos"));
-                for(DtProducto dt: listaP) {
-                		System.out.print("Hola");
-                		System.out.print(dt.getNombre() + "/" + dt.getPrecio());
-                		JLabel dtLabel = new JLabel(dt.getNombre() + " - " + dt.getPrecio());
-                		 panel.add(dtLabel);
-                		
+            public void actionPerformed(ActionEvent e) {
+                JInternalFrame ventanaProductos = new JInternalFrame("Lista de Productos", true, true, true, true);
+                ventanaProductos.setSize(400, 600);
+                ventanaProductos.setLayout(new BorderLayout());
+
+                JPanel panel = new JPanel();
+                panel.setLayout(new BorderLayout());
+
+                List<DtProducto> listaP = new ArrayList<>();
+                try {
+                    listaP = s.listarALLProductos();
+                } catch (ProductoException e1) {
+                    JOptionPane.showMessageDialog(null, e1.getMessage());
+                    return;
                 }
+
+                JPanel productosPanel = new JPanel();
+                productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
+                productosPanel.add(new JLabel("Listado de Productos"));
+                for (DtProducto dt : listaP) {
+                	JLabel productoDT = new JLabel(dt.getNombre() + " - " + dt.getPrecio());
+                	productoDT.addMouseListener(new MouseListener() {
+						
+						@Override
+						public void mouseReleased(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void mousePressed(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void mouseExited(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void mouseEntered(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+						
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
+                            ventanaDetalleProducto.setSize(600, 400);
+                            ventanaDetalleProducto.setLayout(new BorderLayout());
+
+                            JPanel detallePanel = new JPanel();
+                            detallePanel.setLayout(new BoxLayout(detallePanel, BoxLayout.Y_AXIS));
+                            
+                            detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
+                            detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
+                            detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
+                            detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
+                            detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
+                            
+                            detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
+                            
+                            
+                            detallePanel.add(new JLabel("Categorias: "));
+
+                            ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
+                            ventanaDetalleProducto.setVisible(true);
+                            desktopPane.add(ventanaDetalleProducto);
+                            ventanaDetalleProducto.setLocation(150, 150);
+							
+						}
+					});
+                    productosPanel.add(productoDT);
+                }
+
+                panel.add(productosPanel, BorderLayout.NORTH);
+
+                JLabel lblCategoria = new JLabel("Categoría:");
+                panel.add(lblCategoria, BorderLayout.WEST);
                 
-                
-                JLabel lblCategoria = new JLabel("Categoria:");
-                lblCategoria.setBounds(20, 50, 80, 25);
-                panel.add(lblCategoria);
                 DefaultMutableTreeNode root = s.arbolCategorias();
-                
+
                 DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
                     // Íconos personalizados
-                	ImageIcon icon = new ImageIcon("./imagenes/sinElementos.png");
-                	Image img = icon.getImage();
-                    Image resizedImage = img.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
-                	
+                    ImageIcon icon = new ImageIcon("./imagenes/sinElementos.png");
+                    Image img = icon.getImage();
+                    Image resizedImage = img.getScaledInstance(16, 16, java.awt.Image.SCALE_SMOOTH);
+                    ImageIcon nuevoIcono = new ImageIcon(resizedImage);
+
                     @Override
                     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
                                                                   boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-                        // Modificar el ícono según el tipo de nodo
-                        if(value.toString() == "Sin Elementos") {
-                        	setIcon(closedIcon);
+                        Component comp = super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+                        if (value.toString().equals("Sin Elementos")) {
+                            setIcon(nuevoIcono);
                         }
-
-                        return this;
+                        return comp;
                     }
                 };
+
                 JTree tree = new JTree(root);
-                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
                 tree.setCellRenderer(renderer);
-                tree.setBounds(100, 50, 200, 220);
-                
-                /*panel.add(tree);*/
-                
-               
-        	    
-                ventanaProductos.getContentPane().add(panel);
-        	    	
-    	       
-    	        ventanaProductos.setVisible(true);
+                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
-    	        
-    	        desktopPane.add(ventanaProductos);
+                JScrollPane treeScrollPane = new JScrollPane(tree);
+                panel.add(treeScrollPane, BorderLayout.CENTER);
 
-    	        
-    	        ventanaProductos.setLocation(100, 100);
-        		
-        	}
+                // Listener para selección de nodos
+                tree.addTreeSelectionListener((TreeSelectionListener) new TreeSelectionListener() {
+                    public void valueChanged(TreeSelectionEvent event) {
+                        DefaultMutableTreeNode seleccionado = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+                        if(seleccionado == null) {
+                        	productosPanel.removeAll();
+                        	 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
+                             productosPanel.add(new JLabel("Listado de Productos"));
+                             List<DtProducto> listaPr = new ArrayList<>();
+							try {
+								listaPr = s.listarALLProductos();
+							} catch (ProductoException e) {
+								JOptionPane.showMessageDialog(null, "Ocurrio un error, volver a intentar");
+							}
+                             for (DtProducto dt : listaPr) {
+                                 productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
+                             }
+                        	return;
+                        }
+                        String nombreCategoria = seleccionado.getUserObject().toString();
+                        List<DtProducto> prodsFiltrados = new ArrayList<>();
+                        
+                        if(!s.esPadre(nombreCategoria)) {
+                        	
+                        	try {
+								s.comprobarCat(nombreCategoria);
+							} catch (CategoriaException e) {
+								return;
+							}
+                        	
+                        		
+                        	try {
+								prodsFiltrados = s.listarProductosPorCategoria(nombreCategoria);
+							} catch (ProductoException e) {
+								JOptionPane.showMessageDialog(null, e.getMessage());
+								return;
+							}
+                        	
+                        	productosPanel.removeAll();
+                            productosPanel.add(new JLabel("Listado de Productos"));
+                            for (DtProducto dt : prodsFiltrados) {
+                                 productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
+                             }
+                        		
+                        	
+                        }
+
+                        productosPanel.revalidate();
+                    	productosPanel.repaint();
+                        
+                    }
+                });
+
+                ventanaProductos.getContentPane().add(panel, BorderLayout.CENTER);
+
+                ventanaProductos.setVisible(true);
+                desktopPane.add(ventanaProductos);
+                ventanaProductos.setLocation(100, 100);
+            }
         });
+
         mnCasosDeUso.add(mntmListarProductos);
         
     
