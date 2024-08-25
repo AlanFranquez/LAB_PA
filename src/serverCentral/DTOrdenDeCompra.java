@@ -50,5 +50,12 @@ public class DTOrdenDeCompra {
     public Map<Integer, Item> getItems() {
         return items;
     }
+
+
+	@Override
+	public String toString() {
+		return "[numero=" + numero + ", precioTotal=" + precioTotal + ", fecha=" + fecha + ", items="
+				+ items + "]";
+	}
     
 }

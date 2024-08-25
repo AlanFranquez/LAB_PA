@@ -115,7 +115,11 @@ public class Presentacion {
                     s.agregarProveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
                     s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
                     
-                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 12, 1,"Lalala", prov);
+                    Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov);
+                    s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Lalala", 120, "Bellizzi");
+                    s.agregarProductoCategoria("Tecno", 1);
+                    s.agregarProducto("Cargador", 2, "Cargador tipo c", "Lalala", 220, "Bellizzi");
+                    s.agregarProductoCategoria("Tecno", 2);
                     OrdenDeCompra o1 = new OrdenDeCompra(1);
                     o1.addItem(p1, 3);
                     
