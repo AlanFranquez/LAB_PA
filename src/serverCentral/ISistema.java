@@ -26,7 +26,7 @@ public interface ISistema {
     
     public Usuario getUsuario(String nickname);
     
-    public boolean existeCategoria(String nombre) throws CategoriaException;
+    public boolean existeCategoria(String nombre);
     
     public List <DTCat_Padre> listarSoloPadres();
     
@@ -76,6 +76,12 @@ public interface ISistema {
 	public abstract void CrearOrden();
 	
 	public List<DtProducto> listarALLProductos() throws ProductoException;
+	
+	public List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException;
+	
+	public boolean comprobarCat(String cat) throws CategoriaException;
+	
+	public DTProveedor traerProveedorProducto(int numKey);
 
 
 

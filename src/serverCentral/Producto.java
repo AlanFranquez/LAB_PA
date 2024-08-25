@@ -53,6 +53,10 @@ public class Producto {
 		categorias.clear();
 	}
 	
+	public Map<String, Categoria> getCategorias() {
+		return this.categorias;
+	}
+	
 	// Getters y Setters:
 	public String getNombre() {
 		return nombre;
@@ -99,6 +103,6 @@ public class Producto {
 	}
 	
 	public DtProducto crearDT() {
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor());
 	}
 }
