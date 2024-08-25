@@ -57,7 +57,7 @@ public interface ISistema {
     public void addOrdenes(OrdenDeCompra o, String nickUsuario);
 
 
-	public abstract void agregarProductoCategoria(String catName, int numRef);
+	public abstract void agregarProductoCategoria(String catName, int numRef) throws CategoriaException;
 
 
 	public abstract boolean existeNombre(String cliente, int num);
@@ -75,7 +75,7 @@ public interface ISistema {
 
 	public abstract void CrearOrden();
 	
-	public List<DtProducto> listarALLProductos();
+	public List<DtProducto> listarALLProductos() throws ProductoException;
 
 
 

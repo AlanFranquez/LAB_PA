@@ -29,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -60,6 +61,7 @@ import serverCentral.ISistema;
 import serverCentral.Item;
 import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
+import serverCentral.ProductoException;
 import serverCentral.Proveedor;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
@@ -718,16 +720,21 @@ public class Presentacion {
         		JPanel panel = new JPanel(); 
         	    panel.setLayout(null);
         	    
-        	    List<DtProducto> listaP = s.listarALLProductos();
-                if(!listaP.isEmpty()) {
-                	for(DtProducto dt: listaP) {
+        	    List<DtProducto> listaP = new ArrayList<DtProducto>();
+				try {
+					listaP = s.listarALLProductos();
+				} catch (ProductoException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage());
+					return;
+				}
+				
+				panel.add(new JLabel("Listado de Productos"));
+                for(DtProducto dt: listaP) {
                 		System.out.print("Hola");
                 		System.out.print(dt.getNombre() + "/" + dt.getPrecio());
                 		JLabel dtLabel = new JLabel(dt.getNombre() + " - " + dt.getPrecio());
-                		 dtLabel.setBounds(20, 80, 80, 25);
                 		 panel.add(dtLabel);
                 		
-                	}
                 }
                 
                 

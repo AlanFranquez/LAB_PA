@@ -20,9 +20,6 @@ Cat_Padre padre;
 	
 	// Funcionalidad:
 	public List<DtProducto> listarProductos() {
-	    if (productos.isEmpty()) {
-	        return null;
-	    } else {
 	    	List<DtProducto> listaProds = new ArrayList<DtProducto>();
 	        
 	        for(Entry<Integer, Producto> entry: this.productos.entrySet()) {
@@ -32,7 +29,7 @@ Cat_Padre padre;
 	        	listaProds.add(dtp);
 	        }
 	        return listaProds;
-	    }
+	    
 	}
 	
 	
