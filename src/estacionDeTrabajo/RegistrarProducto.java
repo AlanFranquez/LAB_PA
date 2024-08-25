@@ -38,6 +38,7 @@ public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
 	private File imagenSeleccionada;
 	private ImageIcon imagenSelecc;
+	private JTextField textField;
 	
 	public RegistrarProducto() {
 		setResizable(true);
@@ -185,6 +186,20 @@ public class RegistrarProducto extends JInternalFrame{
         registrarButton.setBounds(90, 420, 240, 25);
         panel.add(registrarButton);
         
+        getContentPane().add(panel);
+        
+        JLabel lblStock = new JLabel("Stock:");
+        lblStock.setBounds(210, 205, 50, 25);
+        panel.add(lblStock);
+        setVisible(true);
+        toFront();
+        
+        JTextField cantStock = new JTextField(10);
+        cantStock.setText("");
+        cantStock.setBounds(300, 205, 100, 25);
+        panel.add(cantStock);
+        
+        
         // Validar y registrar el producto en el sistema
         registrarButton.addActionListener(b -> {
             String proveedor = (String) comboBoxModel.getSelectedItem();
@@ -194,6 +209,7 @@ public class RegistrarProducto extends JInternalFrame{
             String precioStr = precioField.getText();
             File[] imagenes = fileChooser.getSelectedFiles();
             TreePath[] categorias = tree.getSelectionPaths();
+            String stock = cantStock.getText();
             
             
             int precio = 0;
@@ -214,6 +230,15 @@ public class RegistrarProducto extends JInternalFrame{
             	JOptionPane.showMessageDialog(null, "El numero de referencia no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
             }
+            
+            int Stock = 0;
+            try {
+            	Stock = Integer.parseInt(referenciaField.getText());
+            	
+            } catch(NumberFormatException e1) {
+            	JOptionPane.showMessageDialog(null, "El stock no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
 
             
             
@@ -232,7 +257,7 @@ public class RegistrarProducto extends JInternalFrame{
                 return;
             }
             
-            s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor);
+            s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
             
             
             if (categorias != null) {
@@ -264,6 +289,7 @@ public class RegistrarProducto extends JInternalFrame{
             precioField.setText("");
             comboBoxModel.setSelectedItem(null);
             tree.clearSelection();
+            cantStock.setText("");
             imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
         
         });

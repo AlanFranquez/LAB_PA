@@ -67,7 +67,7 @@ public interface ISistema {
 
 
 	public abstract void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones,
-			int precio, String proveedor);
+			int precio, String proveedor, int stock);
 
 
 	public abstract void agregarProducto(int numRef, int cant);

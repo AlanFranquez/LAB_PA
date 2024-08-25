@@ -13,13 +13,14 @@ public class Producto {
 	private float precio;
 	private Integer numRef;
 	private String especificaciones;
+	private Integer stock;
 	private File imagenes; // Chequear esto----Carlos:Agregue un tipo file, no se como funciona para guardarlo pero creo que es el tipo de variable correcto
 	// Buscando ví que tambien existe el tipo ImageIcon que parece puede funcionar con la interfaz. Habría que esperar a tener una interfaz para ver si anda File.
 	
 	
 	// Constructor:
 	// Tal vez al crear al producto conbendría asignarle directamente el proveedor y categorias en vez de hacerlo por separado
-	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov) {
+	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
@@ -27,6 +28,7 @@ public class Producto {
 		this.especificaciones = especificaciones;
 		this.categorias = new HashMap<>();
 		this.proveedor = prov;
+		this.stock = stock;
 	}
 
 	// Hacer una lista de imágenes en vez de una única

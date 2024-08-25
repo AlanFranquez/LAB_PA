@@ -96,9 +96,9 @@ public class Sistema implements ISistema {
     	}
     	return listaProveedor;
     }
-    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p) {
+    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p, int stock) {
         Proveedor proveedor = (Proveedor) usuarios.get(p);
-        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor);
+        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
         proveedor.agregarProd(prod);
     }
     public DefaultMutableTreeNode arbolCategorias() {
