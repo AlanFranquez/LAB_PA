@@ -74,6 +74,8 @@ public interface ISistema {
 
 
 	public abstract void CrearOrden();
+	
+	public List<DtProducto> listarALLProductos();
 
 
 

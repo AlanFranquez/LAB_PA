@@ -1,8 +1,11 @@
 package serverCentral;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Cat_Producto extends Categoria{
 private Map<Integer, Producto> productos;
@@ -16,18 +19,19 @@ Cat_Padre padre;
 	}
 	
 	// Funcionalidad:
-	public DtProducto[] listarProductos() {
+	public List<DtProducto> listarProductos() {
 	    if (productos.isEmpty()) {
 	        return null;
 	    } else {
-	        Collection<Producto> prods = productos.values();
-	        DtProducto[] lista = new DtProducto[prods.size()];
-	        int i = 0;
-	        for (Producto prod : prods) {
-	            lista[i] = new DtProducto(prod.getNombre(), prod.getDescripcion(), prod.getPrecio(), prod.getNumRef());
-	            i++;
+	    	List<DtProducto> listaProds = new ArrayList<DtProducto>();
+	        
+	        for(Entry<Integer, Producto> entry: this.productos.entrySet()) {
+	        	Producto p = entry.getValue();
+	        	
+	        	DtProducto dtp = p.crearDT();
+	        	listaProds.add(dtp);
 	        }
-	        return lista;
+	        return listaProds;
 	    }
 	}
 	

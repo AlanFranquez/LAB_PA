@@ -1,6 +1,7 @@
 package estacionDeTrabajo;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Image;
@@ -23,6 +24,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -40,7 +42,11 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.TreeSelectionModel;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -623,7 +629,7 @@ public class Presentacion {
         mnCasosDeUso.add(mntmRegistrarUsuario);
         
         
-        JMenuItem mntmMostrarOrden = new JMenuItem("Mostrar Orden");
+        JMenuItem mntmMostrarOrden = new JMenuItem("Mostrar Ordenes");
         mntmMostrarOrden.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		System.out.println("Existen órdenes para listar: " + s.existenOrdenesParaListar());
@@ -667,17 +673,16 @@ public class Presentacion {
         	            }
         	        });
 
-        	        // Agregar la tabla al JScrollPane
         	        JScrollPane scrollPane = new JScrollPane(table);
         	        ventanaOrdenes.getContentPane().add(scrollPane, BorderLayout.CENTER);
 
-        	        // Mostrar la ventana interna
+        	       
         	        ventanaOrdenes.setVisible(true);
 
-        	        // Agregar la ventana interna al JDesktopPane
+        	        
         	        desktopPane.add(ventanaOrdenes);
 
-        	        // Opcional: Centrar la ventana interna
+        	        
         	        ventanaOrdenes.setLocation(100, 100);
         	}
         });
@@ -701,7 +706,81 @@ public class Presentacion {
                 	desktopPane.add(compra);
             	}
             });
-        mnCasosDeUso.add(mntmOrdenCompra);}
+        mnCasosDeUso.add(mntmOrdenCompra);
+        
+        JMenuItem mntmListarProductos = new JMenuItem("Listar Productos");
+        mntmListarProductos.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		
+        		JInternalFrame ventanaProductos = new JInternalFrame("Lista de Productos", true, true, true, true);
+    	        ventanaProductos.setSize(400, 600);
+    	        ventanaProductos.getContentPane().setLayout(new BorderLayout());
+        		JPanel panel = new JPanel(); 
+        	    panel.setLayout(null);
+        	    
+        	    List<DtProducto> listaP = s.listarALLProductos();
+                if(!listaP.isEmpty()) {
+                	for(DtProducto dt: listaP) {
+                		System.out.print("Hola");
+                		System.out.print(dt.getNombre() + "/" + dt.getPrecio());
+                		JLabel dtLabel = new JLabel(dt.getNombre() + " - " + dt.getPrecio());
+                		 dtLabel.setBounds(20, 80, 80, 25);
+                		 panel.add(dtLabel);
+                		
+                	}
+                }
+                
+                
+                JLabel lblCategoria = new JLabel("Categoria:");
+                lblCategoria.setBounds(20, 50, 80, 25);
+                panel.add(lblCategoria);
+                DefaultMutableTreeNode root = s.arbolCategorias();
+                
+                DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
+                    // Íconos personalizados
+                	ImageIcon icon = new ImageIcon("./imagenes/sinElementos.png");
+                	Image img = icon.getImage();
+                    Image resizedImage = img.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
+                	
+                    @Override
+                    public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
+                                                                  boolean expanded, boolean leaf, int row, boolean hasFocus) {
+                        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+                        // Modificar el ícono según el tipo de nodo
+                        if(value.toString() == "Sin Elementos") {
+                        	setIcon(closedIcon);
+                        }
+
+                        return this;
+                    }
+                };
+                JTree tree = new JTree(root);
+                tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+                tree.setCellRenderer(renderer);
+                tree.setBounds(100, 50, 200, 220);
+                
+                /*panel.add(tree);*/
+                
+               
+        	    
+                ventanaProductos.getContentPane().add(panel);
+        	    	
+    	       
+    	        ventanaProductos.setVisible(true);
+
+    	        
+    	        desktopPane.add(ventanaProductos);
+
+    	        
+    	        ventanaProductos.setLocation(100, 100);
+        		
+        	}
+        });
+        mnCasosDeUso.add(mntmListarProductos);
+        
+    
+    }
         
     
     private void mostrarDetallesOrden(DTOrdenDeCompra orden) {

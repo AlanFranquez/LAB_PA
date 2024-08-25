@@ -344,6 +344,28 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 9: VER INFORMACION DE PRODUCTO
+    public List<DtProducto> listarALLProductos() {
+    	List<DtProducto> listaProductos = new ArrayList<>();
+    	
+    	for(Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
+    		Categoria c = entry.getValue();
+    		
+    		if(c.getTipo() == "Producto") {
+    			Cat_Producto cProd = (Cat_Producto) c;
+    			
+    			List<DtProducto> listaPerProducto = cProd.listarProductos();
+    			
+    			for(DtProducto dt: listaPerProducto) {
+    				listaProductos.add(dt);
+    			}
+    		}
+    	}
+    	
+    	return listaProductos;
+    	
+    }
+    
+    
     
     
     
