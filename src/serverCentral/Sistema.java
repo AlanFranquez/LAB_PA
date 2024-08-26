@@ -275,7 +275,12 @@ public class Sistema implements ISistema {
     		}
     	}
     }
-    
+    public void asignarOrdenCliente(String cliente) {
+    	System.out.println(cliente);
+    	Cliente c = (Cliente) usuarios.get(cliente);
+    	System.out.println(c.getNombre());
+    	c.agregarCompra(ordenes.get(ordenes.size()));
+    }
     
     // CASO DE USO 5: VER INFORMACION DE CLIENTE 
     @Override

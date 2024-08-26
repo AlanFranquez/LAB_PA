@@ -54,8 +54,13 @@ public class DTOrdenDeCompra {
 
 	@Override
 	public String toString() {
-		return "[numero=" + numero + ", precioTotal=" + precioTotal + ", fecha=" + fecha + ", items="
-				+ items + "]";
+		String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+		String items = "";
+		for (Item item : this.items.values()) {
+			items = items + tab + tab + item.getProducto().getNombre() + ": " + item.getCant() + "<br />"; 
+		}
+		return "<html>Orden número = " + numero + "<br />" + tab + "precioTotal = " + precioTotal + "<br />" + tab + "fecha = "
+				+ fecha + "<br />" + tab + "items:<br />" + items + "</html>";
 	}
     
 }

@@ -158,6 +158,7 @@ public class CrearOrdenCompra extends JInternalFrame{
             	System.out.println("  )" + numRef);
             	s.agregarProducto(numRef, cant);
             }
+            s.asignarOrdenCliente(cliente);
             model.setRowCount(1);
             try {
                 
@@ -172,6 +173,10 @@ public class CrearOrdenCompra extends JInternalFrame{
         setVisible(true);
         toFront();
         
+	}
+	private void asignarOrdenCliente(String cliente) {
+		// TODO Auto-generated method stub
+		
 	}
 	private static Icon resizeIcon(ImageIcon icon, int width, int height) {
         Image img = icon.getImage();

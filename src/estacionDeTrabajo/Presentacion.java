@@ -1066,13 +1066,9 @@ public class Presentacion {
         } else {
         	Map<Integer, OrdenDeCompra> ordenesCliente = cliente.getOrdenes();
         	
-        	List<DTOrdenDeCompra> ordenesDT = new ArrayList<>();
         	
             for (OrdenDeCompra orden : ordenesCliente.values()) {
                 DTOrdenDeCompra dtOrden = orden.crearDT();
-                ordenesDT.add(dtOrden);
-            }
-            for (DTOrdenDeCompra dtOrden : ordenesDT) {
                 panel.add(new JLabel(dtOrden.toString()));
             }
         }
