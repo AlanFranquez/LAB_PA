@@ -721,7 +721,7 @@ public class Presentacion {
             });
         mnCasosDeUso.add(mntmOrdenCompra);
         
-<<<<<<< HEAD
+
         
         //Opcion Mostrar Proveedor
         JMenuItem mntmMostrarProveedor = new JMenuItem("Mostrar Proveedor");
@@ -732,7 +732,7 @@ public class Presentacion {
         	}
     	});}
     	
-=======
+
         JMenuItem mntmListarProductos = new JMenuItem("Listar Productos");
         mntmListarProductos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -909,7 +909,7 @@ public class Presentacion {
         
     
     }
->>>>>>> branch 'main' of https://github.com/AlanFranquez/LAB_PA.git
+
         
     
     private void mostrarDetallesOrden(DTOrdenDeCompra orden) {
@@ -1178,7 +1178,7 @@ public class Presentacion {
         panel.add(new JLabel("Mail: " + proveedor.getCorreo()));
         panel.add(new JLabel("Nick: " + proveedor.getNick()));
         panel.add(new JLabel("Nombre Completo: " + proveedor.getNombre() + " " + proveedor.getApellido()));
-        panel.add(new JLabel("Fecha de Nacimiento: " + proveedor.getNacimiento().getDia() + " - " + proveedor.getNacimiento().getMes() + " - " + cliente.getNacimiento().getAnio()));
+        panel.add(new JLabel("Fecha de Nacimiento: " + proveedor.getNacimiento().getDia() + " - " + proveedor.getNacimiento().getMes() + " - " + proveedor.getNacimiento().getAnio()));
         panel.add(Box.createVerticalStrut(5));
        
         
