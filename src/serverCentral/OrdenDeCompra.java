@@ -48,8 +48,13 @@ public class OrdenDeCompra {
     }
 
     public void addItem(Producto p, int cant) {
-    	Item item = new Item(cant, p);
-    	items.put(item.getProducto().getNumRef(), item);
+    	if(items.containsKey(p.getNumRef())) {
+    		Item item = items.get(p.getNumRef());
+    		item.setCant(item.getCant() + cant);
+    	}else {
+    		Item item = new Item(cant, p);
+    		items.put(p.getNumRef(), item);    		
+    	}
     	setPrecioTotal();
     }
     public void removeItem(Integer codigo) {

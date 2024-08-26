@@ -96,9 +96,9 @@ public class Sistema implements ISistema {
     	}
     	return listaProveedor;
     }
-    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p) {
+    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p, int stock) {
         Proveedor proveedor = (Proveedor) usuarios.get(p);
-        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor);
+        Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
         proveedor.agregarProd(prod);
     }
     public DefaultMutableTreeNode arbolCategorias() {
@@ -145,13 +145,16 @@ public class Sistema implements ISistema {
     	Categoria cat = categorias.get(nombre);
     	return (cat instanceof Cat_Padre);
     }
-    public void agregarProductoCategoria(String catName, int numRef) {
+    public void agregarProductoCategoria(String catName, int numRef) throws CategoriaException {
     	for (Usuario user : usuarios.values()) {
     		if (user instanceof Proveedor) {
     			Proveedor p = (Proveedor) user;
     			Producto prod = p.obtenerProd(numRef);
     			if(prod != null) {
     				Cat_Producto cat = (Cat_Producto) categorias.get(catName);
+    				if(cat == null) {
+    					throw new CategoriaException("Hubo un error en la Categoria, vuelva a intentarlo");
+    				}
     				prod.agregarCategorias(cat);
     				cat.agregarProducto(prod);
     			}
@@ -344,6 +347,53 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 9: VER INFORMACION DE PRODUCTO
+    public List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException {
+    	List <DtProducto> listaProductos = new ArrayList<>();
+    	
+    	Cat_Producto prodC = (Cat_Producto) this.categorias.get(cat);
+    	
+    	if(prodC.getProductos().isEmpty()) {
+    		throw new ProductoException("Esta categoría no cuenta con productos");
+    	}
+    	
+    	for(Entry<Integer, Producto> entry: prodC.getProductos().entrySet()) {
+    		Producto p = entry.getValue();
+    		
+    		listaProductos.add(p.crearDT());
+    	}	
+    	
+    	return listaProductos;
+    }
+    
+    public List<DtProducto> listarALLProductos() throws ProductoException {
+    	List<DtProducto> listaProductos = new ArrayList<>();
+    	
+    	for(Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
+    		Categoria c = entry.getValue();
+    		
+    		if(c.getTipo() == "Producto") {
+    			Cat_Producto cProd = (Cat_Producto) c;
+    			
+    			List<DtProducto> listaPerProducto = cProd.listarProductos();
+    			
+    			if(listaPerProducto.isEmpty()) {
+    				continue;
+    			}
+    			
+    			for(DtProducto dt: listaPerProducto) {
+    				listaProductos.add(dt);
+    			}
+    		}
+    	}
+    	if(listaProductos.isEmpty()) {
+    		throw new ProductoException("No se ha encontrado ningun producto para listar");
+    	}
+    	
+    	return listaProductos;
+    	
+    }
+    
+    
     
     
     
@@ -405,8 +455,30 @@ public class Sistema implements ISistema {
     	ordenes.put(o.getNumero(), o);
     	cl.agregarCompra(o);
     }
+    
+    public boolean comprobarCat(String cat) throws CategoriaException {
+    	if(this.categorias.get(cat) == null) {
+    		throw new CategoriaException("Esta categoria no existe");
+    	}
+    	
+    	return true;
+    }
+    
+    public DTProveedor traerProveedorProducto(int numKey) {
+        for (Map.Entry<String, Usuario> entry : this.usuarios.entrySet()) {
+            Usuario u = entry.getValue();
+            
+            if (u instanceof Proveedor) {
+                Proveedor proveedorBuscado = (Proveedor) u;
+                DTProveedor provDT = proveedorBuscado.crearDt();
+                if (provDT.existeProd(numKey)) {
+                    return provDT;
+                }
+            }
+        }
+        
+        return null;
+    }
    
 }
-
-
 

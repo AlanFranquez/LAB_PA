@@ -15,18 +15,23 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTree;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import serverCentral.DTCliente;
+import serverCentral.DTOrdenDeCompra;
 import serverCentral.Factory;
 import serverCentral.ISistema;
+import javax.swing.JTextField;
+import javax.swing.JTable;
 
 @SuppressWarnings("serial")
 public class CrearOrdenCompra extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
+	
 	public CrearOrdenCompra() {
 		setResizable(true);
         setIconifiable(true);
@@ -60,7 +65,7 @@ public class CrearOrdenCompra extends JInternalFrame{
         getContentPane().add(panel);
         
         
-        JLabel lblCategoria = new JLabel("Categoria:");
+        JLabel lblCategoria = new JLabel("Producto:");
         lblCategoria.setBounds(20, 56, 80, 25);
         panel.add(lblCategoria);
         DefaultMutableTreeNode root = s.arbolProductos();
@@ -84,38 +89,76 @@ public class CrearOrdenCompra extends JInternalFrame{
             }
         };
         JTree tree = new JTree(root);
-        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         tree.setCellRenderer(renderer);
-        tree.setBounds(83, 60, 275, 244);
+        tree.setBounds(83, 50, 275, 170);
         
         panel.add(tree);
         
         
         JButton registrarButton = new JButton("Crear");
-        registrarButton.setBounds(73, 315, 240, 25);
+        registrarButton.setBounds(73, 334, 240, 25);
         panel.add(registrarButton);
         
+        JLabel lblCantidad = new JLabel("Cantidad:");
+        lblCantidad.setBounds(20, 225, 80, 25);
+        panel.add(lblCantidad);
+        
+        JTextField cantidad = new JTextField();
+        cantidad.setBounds(82, 225, 96, 20);
+        panel.add(cantidad);
+        
+        JButton productoButton = new JButton("Agregar Producto");
+        productoButton.setBounds(224, 231, 134, 23);
+        panel.add(productoButton);
+        
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Numero de Referencia");
+        model.addColumn("Cantidad");
+        model.addRow(new Object[]{"Numero de Referencia", "Cantidad"});
+        JTable lista = new JTable(model);
+        lista.setBounds(52, 261, 287, 62);
+    	panel.add(lista);
+
+        
+        productoButton.addActionListener(b -> { 
+        	TreePath[] productos = tree.getSelectionPaths();
+        	int cant = Integer.parseInt(cantidad.getText());
+        	
+        	if(cant > 0) {
+        		for (TreePath path : productos) {
+                	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+                	String selection = (String) selectedNode.getUserObject();
+                	String[] parts = selection.split(" - "); 
+                	int numRef = Integer.parseInt(parts[1]);
+                	s.agregarProducto(numRef, 2);
+                	
+                	model.addRow(new Object[]{numRef, cant});
+                	cantidad.setText("");
+                	tree.clearSelection();
+                }
+        	}
+        });
         registrarButton.addActionListener(b -> {
             // Validar y registrar el producto en el sistema
             String cliente = (String) comboBoxModel.getSelectedItem();
             TreePath[] productos = tree.getSelectionPaths();
-
             // Validar campos vacíos
-            if (cliente.isEmpty() || productos == null) {
+            if (cliente.isEmpty()) {
             	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
             }
 
             s.CrearOrden();
-            for (TreePath path : productos) {
-            	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-            	String selection = (String) selectedNode.getUserObject();
-            	String[] parts = selection.split(" - "); 
-            	int numRef = Integer.parseInt(parts[0]);
-            	System.out.println("  )" + numRef);
-            	s.agregarProducto(numRef, 2);
-            }
+            for (int i = 1; i < model.getRowCount(); i++) {
 
+            	System.out.println(model.getValueAt(i, 0).toString());
+            	int numRef = Integer.parseInt(model.getValueAt(i, 0).toString());
+            	int cant = Integer.parseInt(model.getValueAt(i, 1).toString());
+            	System.out.println("  )" + numRef);
+            	s.agregarProducto(numRef, cant);
+            }
+            model.setRowCount(1);
             try {
                 
             } catch (NumberFormatException ex) {

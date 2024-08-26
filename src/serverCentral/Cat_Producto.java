@@ -1,8 +1,11 @@
 package serverCentral;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Cat_Producto extends Categoria{
 private Map<Integer, Producto> productos;
@@ -16,22 +19,25 @@ Cat_Padre padre;
 	}
 	
 	// Funcionalidad:
-	public DtProducto[] listarProductos() {
-	    if (productos.isEmpty()) {
-	        return null;
-	    } else {
-	        Collection<Producto> prods = productos.values();
-	        DtProducto[] lista = new DtProducto[prods.size()];
-	        int i = 0;
-	        for (Producto prod : prods) {
-	            lista[i] = new DtProducto(prod.getNombre(), prod.getDescripcion(), prod.getPrecio(), prod.getNumRef());
-	            i++;
+	public List<DtProducto> listarProductos() {
+	    	List<DtProducto> listaProds = new ArrayList<DtProducto>();
+	        
+	        for(Entry<Integer, Producto> entry: this.productos.entrySet()) {
+	        	Producto p = entry.getValue();
+	        	
+	        	DtProducto dtp = p.crearDT();
+	        	listaProds.add(dtp);
 	        }
-	        return lista;
-	    }
+	        return listaProds;
+	    
 	}
 	
-	
+	public Cat_Padre getPadre() {
+		if(this.padre == null) {
+			return null;
+		}
+		return this.padre;
+	}
 	
 	public String obtenerPadre() {
 		if(this.padre == null) {
@@ -50,6 +56,10 @@ Cat_Padre padre;
 	// Hay que tener cuidado de no romper el principio de las capas
 	public Map<Integer, Producto> getProductos(){
 		return this.productos;
+	}
+	
+	public Producto getProducto(Integer intProd) {
+		return this.productos.get(intProd);
 	}
 
 	public void agregarProducto(Producto prod) {

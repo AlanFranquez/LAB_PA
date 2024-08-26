@@ -28,6 +28,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import serverCentral.Categoria;
+import serverCentral.CategoriaException;
 import serverCentral.DTProveedor;
 import serverCentral.Factory;
 import serverCentral.ISistema;
@@ -37,6 +38,7 @@ public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
 	private File imagenSeleccionada;
 	private ImageIcon imagenSelecc;
+	private JTextField textField;
 	
 	public RegistrarProducto() {
 		setResizable(true);
@@ -184,18 +186,67 @@ public class RegistrarProducto extends JInternalFrame{
         registrarButton.setBounds(90, 420, 240, 25);
         panel.add(registrarButton);
         
+        getContentPane().add(panel);
+        
+        JLabel lblStock = new JLabel("Stock:");
+        lblStock.setBounds(210, 205, 50, 25);
+        panel.add(lblStock);
+        setVisible(true);
+        toFront();
+        
+        JTextField cantStock = new JTextField(10);
+        cantStock.setText("");
+        cantStock.setBounds(300, 205, 100, 25);
+        panel.add(cantStock);
+        
+        
         // Validar y registrar el producto en el sistema
         registrarButton.addActionListener(b -> {
             String proveedor = (String) comboBoxModel.getSelectedItem();
             String titulo = tituloField.getText();
-            int numRef = Integer.parseInt(referenciaField.getText());
             String descripcion = descripcionField.getText();
             String especificaciones = especificacionesArea.getText();
             String precioStr = precioField.getText();
-            int precio = Integer.parseInt(precioStr);
             File[] imagenes = fileChooser.getSelectedFiles();
             TreePath[] categorias = tree.getSelectionPaths();
+            String stock = cantStock.getText();
+            
+            
+            int precio = 0;
+            
+            try {
+            	precio = Integer.parseInt(precioStr);
+            	
+            } catch(NumberFormatException e1) {
+            	JOptionPane.showMessageDialog(null, "El precio debe ser un numero", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
+            
+            int numRef = 0;
+            try {
+            	numRef = Integer.parseInt(referenciaField.getText());
+            	
+            } catch(NumberFormatException e1) {
+            	JOptionPane.showMessageDialog(null, "El numero de referencia no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
+            
+            int Stock = 0;
+            try {
+            	Stock = Integer.parseInt(referenciaField.getText());
+            	
+            } catch(NumberFormatException e1) {
+            	JOptionPane.showMessageDialog(null, "El stock no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
 
+            
+            
+            if(categorias == null) {
+            	JOptionPane.showMessageDialog(null, "Recuerde ingresar una Categoría", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
+            
             if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -206,7 +257,8 @@ public class RegistrarProducto extends JInternalFrame{
                 return;
             }
             
-            s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor);
+            s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
+            
             
             if (categorias != null) {
                 for (TreePath path : categorias) {
@@ -218,7 +270,13 @@ public class RegistrarProducto extends JInternalFrame{
                     	JOptionPane.showMessageDialog(null, "Alguna de las categorias seleccionadas no es una categoria válida", "Error", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    s.agregarProductoCategoria(catName, numRef);
+                    try {
+                    	s.agregarProductoCategoria(catName, numRef);
+                    	
+                    } catch(CategoriaException e1) {
+                    	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    	return;
+                    }
                 }
             }
             
@@ -231,6 +289,7 @@ public class RegistrarProducto extends JInternalFrame{
             precioField.setText("");
             comboBoxModel.setSelectedItem(null);
             tree.clearSelection();
+            cantStock.setText("");
             imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
         
         });
