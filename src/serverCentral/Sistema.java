@@ -339,7 +339,7 @@ public class Sistema implements ISistema {
 	//Falta mostra info de orden y todo eso creo
     	DTOrdenDeCompra mostrar = elegirOrden(numero);
     	// esto quedaria asi?
-    
+    // pruedbhbsdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 	cliente.eliminarOrden(numero);
 	Map<Integer, Item> items = orden.getItems();
         items.clear();
