@@ -730,7 +730,7 @@ public class Presentacion {
         public void actionPerformed(ActionEvent e) {
             MostrarProveedor();
         	}
-    	});}
+    	});
     	
 
         JMenuItem mntmListarProductos = new JMenuItem("Listar Productos");
@@ -1158,7 +1158,7 @@ public class Presentacion {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // Agregar la información del cliente al panel
-        ImageIcon imagenIcon = proveedor.getImagenes();
+        ImageIcon imagenIcon = proveedor.getImagen();
         
         
         
