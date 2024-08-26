@@ -48,6 +48,7 @@ import serverCentral.DTCliente;
 import serverCentral.DTFecha;
 import serverCentral.DTItem;
 import serverCentral.DTOrdenDeCompra;
+import serverCentral.DTProveedor;
 import serverCentral.DtProducto;
 import serverCentral.Factory;
 import serverCentral.ISistema;
@@ -701,7 +702,18 @@ public class Presentacion {
                 	desktopPane.add(compra);
             	}
             });
-        mnCasosDeUso.add(mntmOrdenCompra);}
+        mnCasosDeUso.add(mntmOrdenCompra);
+        
+        
+        //Opcion Mostrar Proveedor
+        JMenuItem mntmMostrarProveedor = new JMenuItem("Mostrar Proveedor");
+        mnCasosDeUso.add(mntmMostrarProveedor);
+    	mntmMostrarProveedor.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+            MostrarProveedor();
+        	}
+    	});}
+    	
         
     
     private void mostrarDetallesOrden(DTOrdenDeCompra orden) {
@@ -868,6 +880,112 @@ public class Presentacion {
                 panel.add(new JLabel(dtOrden.toString()));
             }
         }
+        
+    
+        JScrollPane scrollPane = new JScrollPane(panel);
+
+        
+        ventanaDetalles.getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+    
+        ventanaDetalles.setVisible(true);
+
+     
+        desktopPane.add(ventanaDetalles);
+
+        
+        try {
+            ventanaDetalles.setSelected(true);
+            ventanaDetalles.toFront();
+        } catch (java.beans.PropertyVetoException e) {
+            e.printStackTrace();
+        }
+
+        // Opcional: Centrar la ventana interna
+        ventanaDetalles.setLocation(150, 150);
+    }
+    
+    private void MostrarProveedor() {
+    	JInternalFrame ventanaProveedores = new JInternalFrame("Lista de Proveedores", true, true, true, true);
+        ventanaProveedores.setSize(500, 300);
+        ventanaProveedores.getContentPane().setLayout(new BorderLayout());
+        // Recuperar la lista de proveedores
+        List<DTProveedor> proveedores = s.listarProveedores();
+
+        // Definir las columnas de la tabla
+        String[] columnNames = {"Nick", "Correo"};
+
+     // Crear datos para la tabla
+        Object[][] data = new Object[proveedores.size()][3];
+        for (int i = 0; i < proveedores.size(); i++) {
+            DTProveedor proveedor = proveedores.get(i);
+            data[i][0] = proveedor.getNick();
+            data[i][1] = proveedor.getCorreo();
+        }
+        // Crear la tabla
+        JTable table = new JTable(data, columnNames);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        // Agregar un listener para manejar clics en la tabla
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = table.rowAtPoint(evt.getPoint());
+                if (row >= 0) {
+                    DTProveedor proveedor = proveedores.get(row);
+                    mostrarDetallesProveedor(proveedor);
+                }
+            }
+        });
+
+        // Agregar la tabla al JScrollPane
+        JScrollPane scrollPane = new JScrollPane(table);
+        ventanaProveedores.getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+        // Mostrar la ventana interna
+        ventanaProveedores.setVisible(true);
+
+        // Agregar la ventana interna al JDesktopPane
+        desktopPane.add(ventanaProveedores);
+
+        // Opcional: Centrar la ventana interna
+        ventanaProveedores.setLocation(100, 100);
+    }
+    
+    
+    private void mostrarDetallesProveedor(DTProveedor proveedor) {
+    	JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
+        ventanaDetalles.setSize(400, 300);
+        ventanaDetalles.getContentPane().setLayout(new BorderLayout());
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+        // Agregar la información del cliente al panel
+        ImageIcon imagenIcon = proveedor.getImagenes();
+        
+        
+        
+        if (imagenIcon != null) {
+        	Image imagen = imagenIcon.getImage();
+            Image imagenRedimensionada = imagen.getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            
+            imagenIcon = new ImageIcon(imagenRedimensionada);
+            // Crear nuevo ImageIcon con la imagen redimensionada
+            JLabel imagenLabel = new JLabel(imagenIcon);
+            
+            panel.add(imagenLabel);
+        } else {
+            panel.add(new JLabel("No hay imagen disponible"));
+        }
+        panel.add(new JLabel("Tipo de Usuario: Proveedor"));
+        panel.add(new JLabel("Mail: " + proveedor.getCorreo()));
+        panel.add(new JLabel("Nick: " + proveedor.getNick()));
+        panel.add(new JLabel("Nombre Completo: " + proveedor.getNombre() + " " + proveedor.getApellido()));
+        panel.add(new JLabel("Fecha de Nacimiento: " + proveedor.getNacimiento().getDia() + " - " + proveedor.getNacimiento().getMes() + " - " + cliente.getNacimiento().getAnio()));
+        panel.add(Box.createVerticalStrut(5));
+       
+        
         
     
         JScrollPane scrollPane = new JScrollPane(panel);
