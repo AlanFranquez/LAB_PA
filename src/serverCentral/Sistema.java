@@ -338,7 +338,7 @@ public class Sistema implements ISistema {
             throw new OrdenDeCompraException("No se encontró un cliente");
 	//Falta mostra info de orden y todo eso creo
     	DTOrdenDeCompra mostrar = elegirOrden(numero);
-    
+    	// esto quedaria asi?
     
 	cliente.eliminarOrden(numero);
 	Map<Integer, Item> items = orden.getItems();
