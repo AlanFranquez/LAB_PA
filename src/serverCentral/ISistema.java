@@ -85,4 +85,7 @@ public interface ISistema {
 
 	public abstract void asignarOrdenCliente(String cliente);
 
+
+	public abstract DtProducto getDtProducto(int numRef);
+
 }
