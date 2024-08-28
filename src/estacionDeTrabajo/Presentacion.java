@@ -398,6 +398,7 @@ public class Presentacion {
 								
 							} catch (UsuarioRepetidoException e) {
 								JOptionPane.showMessageDialog(null,e.getMessage());
+								return;
 							}
                         	Usuario u = s.getUsuario(nickname);
                         	
@@ -413,6 +414,7 @@ public class Presentacion {
 							
 							} catch (UsuarioRepetidoException e) {
 								JOptionPane.showMessageDialog(null,e.getMessage());
+								return;
 							}
                         	
                         	Usuario u = s.getUsuario(nickname);
@@ -980,7 +982,7 @@ public class Presentacion {
                 JPanel productosPanel = new JPanel();
                 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
                 productosPanel.add(new JLabel("Listado de Productos"));
-                /*for (DtProducto dt : listaP) {
+                for (DtProducto dt : listaP) {
                 	JLabel productoDT = new JLabel(dt.getNombre() + " - " + dt.getPrecio());
                 	productoDT.addMouseListener(new MouseListener() {
 						@Override
@@ -1036,7 +1038,6 @@ public class Presentacion {
 					});
                     productosPanel.add(productoDT);
                 }
-*/
                 panel.add(productosPanel, BorderLayout.NORTH);
 
                 JLabel lblCategoria = new JLabel("Categoría:");
