@@ -361,7 +361,7 @@ public class Sistema implements ISistema {
     
     public boolean verificarNumero(int numero, String titulo) {
     	Map<String, Categoria> cats = categorias;
-    	
+    	int cont = 0;
     	for (Map.Entry<String, Categoria> entry : cats.entrySet()) {
     	
     		Cat_Producto prodC = (Cat_Producto) entry.getValue();
@@ -369,11 +369,15 @@ public class Sistema implements ISistema {
     	    	
     		for(Entry<Integer, Producto> entry1: prodC.getProductos().entrySet()) {
     			Producto p = entry1.getValue();
-    			if(p.getNombre() != titulo && p.getNumRef() == numero) {
-    				return false;
+    			if(p.getNombre() == titulo && p.getNumRef() == numero) {
+    				cont++;
     			}
     		}
     	}
+    	if(cont > 1) {
+    		return false;
+    	}
+
     	return true;
     }
     
