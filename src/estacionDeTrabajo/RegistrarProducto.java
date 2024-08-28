@@ -120,7 +120,7 @@ public class RegistrarProducto extends JInternalFrame{
         lblCategoria.setBounds(20, 263, 80, 25);
         panel.add(lblCategoria);
         
-        DefaultMutableTreeNode root = s.arbolProductos();
+        DefaultMutableTreeNode root = s.arbolCategorias();
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setLocation(80, 263);
 
@@ -148,16 +148,8 @@ public class RegistrarProducto extends JInternalFrame{
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         tree.setCellRenderer(renderer);
-        
-        JTree tree_1 = new JTree(root);
-        scrollPane.setViewportView(tree_1);
-        tree_1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        tree_1.setCellRenderer(renderer);
-        TreePath[] productos = tree_1.getSelectionPaths();
-        tree_1.clearSelection();
-        
-        
-        panel.add(tree);
+        scrollPane.setViewportView(tree);
+        tree.clearSelection();
         
         JLabel imagenesLabel = new JLabel("Imágenes:");
         imagenesLabel.setBounds(20, 363, 100, 25);
@@ -166,6 +158,10 @@ public class RegistrarProducto extends JInternalFrame{
         JButton seleccionarImagenButton = new JButton("Seleccionar Imágenes");
         seleccionarImagenButton.setBounds(100, 363, 200, 25);
         panel.add(seleccionarImagenButton);
+
+        JLabel imagenSeleccionadaLabel = new JLabel("No se ha seleccionado ninguna imagen");
+        imagenSeleccionadaLabel.setBounds(100, 384, 300, 25);
+        panel.add(imagenSeleccionadaLabel);
 
         JFileChooser fileChooser = new JFileChooser();
         seleccionarImagenButton.addActionListener(new ActionListener() {
@@ -178,7 +174,7 @@ public class RegistrarProducto extends JInternalFrame{
                     if (imagenSeleccionada != null) {
                         String nombreArchivo = imagenSeleccionada.getName().toLowerCase();
                         if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
-                        	imagenesLabel.setText(imagenSeleccionada.getName());
+                        	imagenSeleccionadaLabel.setText(imagenSeleccionada.getName());
                             imagenSelecc = new ImageIcon(imagenSeleccionada.getAbsolutePath());
                         } else {
                             // Mostrar mensaje de error si el archivo no es válido
@@ -192,28 +188,13 @@ public class RegistrarProducto extends JInternalFrame{
             }
         });
         
-        JLabel imagenSeleccionadaLabel = new JLabel("No se ha seleccionado ninguna imagen");
-        imagenSeleccionadaLabel.setBounds(100, 384, 300, 25);
-        panel.add(imagenSeleccionadaLabel);
         
         
         JButton registrarButton = new JButton("Crear");
         registrarButton.setBounds(90, 420, 240, 25);
         panel.add(registrarButton);
         
-        getContentPane().add(panel);
-        
-        /*JLabel lblStock = new JLabel("Stock:");
-        lblStock.setBounds(210, 205, 50, 25);
-        panel.add(lblStock);
-        setVisible(true);
-        toFront();
-        
-        JTextField cantStock = new JTextField(10);
-        cantStock.setText("");
-        cantStock.setBounds(300, 205, 100, 25);
-        panel.add(cantStock);*/
-        
+        getContentPane().add(panel);   
         
         // Validar y registrar el producto en el sistema
         registrarButton.addActionListener(b -> {
@@ -223,9 +204,12 @@ public class RegistrarProducto extends JInternalFrame{
             String especificaciones = especificacionesArea.getText();
             String precioStr = precioField.getText();
             File[] imagenes = fileChooser.getSelectedFiles();
-            TreePath[] categorias = tree.getSelectionPaths();
             //String stock = cantStock.getText();
             
+            if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
+            	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+            }
             
             int precio = 0;
             
@@ -254,17 +238,11 @@ public class RegistrarProducto extends JInternalFrame{
             	JOptionPane.showMessageDialog(null, "El stock no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
             }
-
             
-            
-            if(categorias == null) {
+            TreePath[] selectedPaths = tree.getSelectionPaths();
+            if(selectedPaths == null) {
             	JOptionPane.showMessageDialog(null, "Recuerde ingresar una Categoría", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
-            }
-            
-            if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
             }
             
             if(s.existeNombre(proveedor, numRef)) {
@@ -274,24 +252,19 @@ public class RegistrarProducto extends JInternalFrame{
             
             s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
             
-            
-            if (categorias != null) {
-                for (TreePath path : categorias) {
-                	DefaultMutableTreeNode selectedNode =
-                            (DefaultMutableTreeNode) path.getLastPathComponent();
-                    System.out.println(" - " + selectedNode.getUserObject());
-                    String catName = selectedNode.getUserObject().toString();
-                    if(s.esPadre(catName)) {
-                    	JOptionPane.showMessageDialog(null, "Alguna de las categorias seleccionadas no es una categoria válida", "Error", JOptionPane.ERROR_MESSAGE);
-                        return;
-                    }
-                    try {
-                    	s.agregarProductoCategoria(catName, numRef);
-                    	
-                    } catch(CategoriaException e1) {
-                    	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    	return;
-                    }
+            for (TreePath path : selectedPaths) {
+            	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+            	String catName = selectedNode.getUserObject().toString();
+                if(s.esPadre(catName)) {
+                	JOptionPane.showMessageDialog(null, "Alguna de las categorias seleccionadas no es una categoria válida", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                try {
+                	s.agregarProductoCategoria(catName, numRef);
+                	
+                } catch(CategoriaException e1) {
+                	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                	return;
                 }
             }
             
@@ -304,7 +277,6 @@ public class RegistrarProducto extends JInternalFrame{
             precioField.setText("");
             comboBoxModel.setSelectedItem(null);
             tree.clearSelection();
-            //cantStock.setText("");
             imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
         
         });

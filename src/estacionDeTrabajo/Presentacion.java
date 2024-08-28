@@ -114,7 +114,7 @@ public class Presentacion {
                     
                     s.agregarCategoriaConProductos("Tecno");
                     s.asignarlePadreACategoriaProds("Living", "Tecno");
-                    
+                    s.agregarCategoriaConProductos("Otros");
                     
                     // SOlo una prueba
                     
@@ -127,6 +127,7 @@ public class Presentacion {
                     Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov, 2);
                     s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Lalala", 120, "Bellizzi", 2);
                     s.agregarProductoCategoria("Tecno", 1);
+                    s.agregarProductoCategoria("Otros", 1);
                     s.agregarProducto("Cargador", 2, "Cargador tipo c", "Lalala", 220, "Bellizzi", 20);
                     s.agregarProductoCategoria("Tecno", 2);
                     OrdenDeCompra o1 = new OrdenDeCompra(1);
@@ -1022,7 +1023,7 @@ public class Presentacion {
                                 detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
                                         
-                                detallePanel.add(new JLabel("Categorias: " + dt.getCategorias()));
+                                detallePanel.add(new JLabel("<html>Categorias: " + dt.getCategorias()));
 
                                 ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                                 ventanaDetalleProducto.setVisible(true);

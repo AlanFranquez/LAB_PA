@@ -100,17 +100,15 @@ public class Producto {
 	}
 	
 	public DtProducto crearDT() {
+		String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		String catStr = "";
 		if(this.categorias.isEmpty()) {
 			catStr = "El producto no tiene categorias asignadas";
 		}
-		for (Categoria cat : this.categorias.values()) {
-			if(catStr == "") {
-				catStr = cat.getNombre();	
-			}else {
-				catStr = catStr + "\n" + cat.getNombre();				
-			}
+		for (Categoria cat : this.categorias.values()) {	
+			catStr = catStr + "<br>" + tab + cat.getNombre();				
 		}
+		catStr = catStr + "</html>";	
 		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr);
 	}
 }
