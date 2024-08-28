@@ -999,6 +999,9 @@ public class Presentacion {
                              if (selectedNode.isLeaf()) {
                             	 // Disparar el evento deseado
                                  String selection = (String) selectedNode.getUserObject();
+                                 if(selection == "Sin Elementos") {
+                                	 return;
+                                 }
                                  String[] parts = selection.split(" - "); 
                                  int numRef = Integer.parseInt(parts[1]);
                                  DtProducto dt = s.getDtProducto(numRef);
@@ -1019,7 +1022,7 @@ public class Presentacion {
                                 detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
                                         
-                                detallePanel.add(new JLabel("Categorias: "));
+                                detallePanel.add(new JLabel("Categorias: " + dt.getCategorias()));
 
                                 ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                                 ventanaDetalleProducto.setVisible(true);

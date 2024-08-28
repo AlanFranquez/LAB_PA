@@ -36,8 +36,6 @@ public class Producto {
 		return imagenes;
 	}
 	
-	
-	// No creo que esto funcione
 	public void agregarComentario(Comentario com) {
 		comentarios[comentarios.length] = com;
 	}
@@ -102,6 +100,17 @@ public class Producto {
 	}
 	
 	public DtProducto crearDT() {
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor());
+		String catStr = "";
+		if(this.categorias.isEmpty()) {
+			catStr = "El producto no tiene categorias asignadas";
+		}
+		for (Categoria cat : this.categorias.values()) {
+			if(catStr == "") {
+				catStr = cat.getNombre();	
+			}else {
+				catStr = catStr + "\n" + cat.getNombre();				
+			}
+		}
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr);
 	}
 }
