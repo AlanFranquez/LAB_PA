@@ -14,6 +14,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -69,6 +70,14 @@ public class CrearOrdenCompra extends JInternalFrame{
         lblCategoria.setBounds(20, 56, 80, 25);
         panel.add(lblCategoria);
         DefaultMutableTreeNode root = s.arbolProductos();
+        //tree.setBounds(83, 50, 275, 170);
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setLocation(73, 56);
+
+        JFrame frame = new JFrame("Ejemplo de JTree con desplazamiento");
+        scrollPane.setSize(266, 158);  // Tamaño limitado de la ventana
+        scrollPane.setVisible(true);
+        panel.add(scrollPane);
         
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
             // Íconos personalizados
@@ -88,12 +97,12 @@ public class CrearOrdenCompra extends JInternalFrame{
                 return this;
             }
         };
-        JTree tree = new JTree(root);
-        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        tree.setCellRenderer(renderer);
-        tree.setBounds(83, 50, 275, 170);
-        
-        panel.add(tree);
+        JTree tree_1 = new JTree(root);
+        scrollPane.setViewportView(tree_1);
+        tree_1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree_1.setCellRenderer(renderer);
+        TreePath[] productos = tree_1.getSelectionPaths();
+        tree_1.clearSelection();
         
         
         JButton registrarButton = new JButton("Crear");
@@ -122,7 +131,6 @@ public class CrearOrdenCompra extends JInternalFrame{
 
         
         productoButton.addActionListener(b -> { 
-        	TreePath[] productos = tree.getSelectionPaths();
         	int cant = Integer.parseInt(cantidad.getText());
         	
         	if(cant > 0) {
@@ -135,14 +143,12 @@ public class CrearOrdenCompra extends JInternalFrame{
                 	
                 	model.addRow(new Object[]{numRef, cant});
                 	cantidad.setText("");
-                	tree.clearSelection();
                 }
         	}
         });
         registrarButton.addActionListener(b -> {
             // Validar y registrar el producto en el sistema
             String cliente = (String) comboBoxModel.getSelectedItem();
-            TreePath[] productos = tree.getSelectionPaths();
             // Validar campos vacíos
             if (cliente.isEmpty()) {
             	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);

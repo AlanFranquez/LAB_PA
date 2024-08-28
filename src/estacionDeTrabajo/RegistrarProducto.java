@@ -19,6 +19,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -118,7 +119,15 @@ public class RegistrarProducto extends JInternalFrame{
         JLabel lblCategoria = new JLabel("Categoria:");
         lblCategoria.setBounds(20, 263, 80, 25);
         panel.add(lblCategoria);
-        DefaultMutableTreeNode root = s.arbolCategorias();
+        
+        DefaultMutableTreeNode root = s.arbolProductos();
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setLocation(80, 263);
+
+        JFrame frame = new JFrame("Ejemplo de JTree con desplazamiento");
+        scrollPane.setSize(266, 90);
+        scrollPane.setVisible(true);
+        panel.add(scrollPane);
         
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
             // Íconos personalizados
@@ -140,7 +149,14 @@ public class RegistrarProducto extends JInternalFrame{
         JTree tree = new JTree(root);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         tree.setCellRenderer(renderer);
-        tree.setBounds(110, 263, 275, 94);
+        
+        JTree tree_1 = new JTree(root);
+        scrollPane.setViewportView(tree_1);
+        tree_1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree_1.setCellRenderer(renderer);
+        TreePath[] productos = tree_1.getSelectionPaths();
+        tree_1.clearSelection();
+        
         
         panel.add(tree);
         
