@@ -188,7 +188,7 @@ public class RegistrarProducto extends JInternalFrame{
         
         getContentPane().add(panel);
         
-        JLabel lblStock = new JLabel("Stock:");
+        /*JLabel lblStock = new JLabel("Stock:");
         lblStock.setBounds(210, 205, 50, 25);
         panel.add(lblStock);
         setVisible(true);
@@ -197,7 +197,7 @@ public class RegistrarProducto extends JInternalFrame{
         JTextField cantStock = new JTextField(10);
         cantStock.setText("");
         cantStock.setBounds(300, 205, 100, 25);
-        panel.add(cantStock);
+        panel.add(cantStock);*/
         
         
         // Validar y registrar el producto en el sistema
@@ -209,7 +209,7 @@ public class RegistrarProducto extends JInternalFrame{
             String precioStr = precioField.getText();
             File[] imagenes = fileChooser.getSelectedFiles();
             TreePath[] categorias = tree.getSelectionPaths();
-            String stock = cantStock.getText();
+            //String stock = cantStock.getText();
             
             
             int precio = 0;
@@ -289,7 +289,7 @@ public class RegistrarProducto extends JInternalFrame{
             precioField.setText("");
             comboBoxModel.setSelectedItem(null);
             tree.clearSelection();
-            cantStock.setText("");
+            //cantStock.setText("");
             imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
         
         });

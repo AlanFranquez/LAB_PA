@@ -83,6 +83,9 @@ public interface ISistema {
 	
 	public DTProveedor traerProveedorProducto(int numKey);
 
+	public abstract void asignarOrdenCliente(String cliente);
 
+
+	public abstract DtProducto getDtProducto(int numRef);
 
 }

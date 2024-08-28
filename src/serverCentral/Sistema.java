@@ -275,7 +275,12 @@ public class Sistema implements ISistema {
     		}
     	}
     }
-    
+    public void asignarOrdenCliente(String cliente) {
+    	System.out.println(cliente);
+    	Cliente c = (Cliente) usuarios.get(cliente);
+    	System.out.println(c.getNombre());
+    	c.agregarCompra(ordenes.get(ordenes.size()));
+    }
     
     // CASO DE USO 5: VER INFORMACION DE CLIENTE 
     @Override
@@ -337,6 +342,9 @@ public class Sistema implements ISistema {
         if (cliente == null)
             throw new OrdenDeCompraException("No se encontró un cliente");
 	//Falta mostra info de orden y todo eso creo
+    	DTOrdenDeCompra mostrar = elegirOrden(numero);
+    	// esto quedaria asi?
+    // pruedbhbsdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 	cliente.eliminarOrden(numero);
 	Map<Integer, Item> items = orden.getItems();
         items.clear();
@@ -344,7 +352,37 @@ public class Sistema implements ISistema {
     }
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
     
+    public boolean verificarNumero(int numero, String titulo) {
+    	Map<String, Categoria> cats = categorias;
+    	
+    	for (Map.Entry<String, Categoria> entry : cats.entrySet()) {
+    	
+    		Cat_Producto prodC = (Cat_Producto) entry.getValue();
+    	    	
+    	    	
+    		for(Entry<Integer, Producto> entry1: prodC.getProductos().entrySet()) {
+    			Producto p = entry1.getValue();
+    			if(p.getNombre() != titulo && p.getNumRef() == numero) {
+    				return false;
+    			}
+    		}
+    	}
+    	return true;
+    }
     
+    public int editarProducto(String titulo, int numero, String deescripcion, float precio, Producto p) {
+    	if(!verificarNumero(numero, titulo)) {
+    		return 1;
+    	}
+    	
+    	
+    	p.setNombre(titulo);
+    	p.setPrecio(precio);
+    	p.setDescripcion(deescripcion);
+    	p.setNumRef(numero);
+    	
+    	return 0;
+    }
     
     // CASO DE USO 9: VER INFORMACION DE PRODUCTO
     public List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException {
@@ -394,7 +432,18 @@ public class Sistema implements ISistema {
     }
     
     
-    
+    public DtProducto getDtProducto(int numRef) {
+    	for (Usuario user : usuarios.values()) {
+    		if (user instanceof Proveedor) {
+    			Proveedor p = (Proveedor) user;
+    			Producto prod = p.obtenerProd(numRef);
+    			if(prod != null) {
+    				return prod.crearDT();
+    			}
+    		}
+    	}
+    	return null;
+    }
     
     
     // CASO DE USO 10: VER INFORMACION DE ORDEN DE COMPRA
