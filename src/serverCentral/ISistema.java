@@ -2,6 +2,7 @@ package serverCentral;
 
 import java.util.List;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -87,5 +88,8 @@ public interface ISistema {
 
 
 	public abstract DtProducto getDtProducto(int numRef);
+
+
+	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
 
 }

@@ -783,30 +783,6 @@ public class Presentacion {
                             ventanaDetalleProducto.setLocation(150, 150);
 							
 						}
-
-						@Override
-						public void mousePressed(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void mouseReleased(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void mouseEntered(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void mouseExited(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
 					});
                     productosPanel.add(productoDT);
                 }
@@ -817,21 +793,21 @@ public class Presentacion {
                 panel.add(lblCategoria, BorderLayout.WEST);
                 
                 DefaultMutableTreeNode root = s.arbolProductos();
+                JScrollPane scrollPane = new JScrollPane();
+                scrollPane.setLocation(73, 56);
+
+                scrollPane.setSize(266, 158);
+                scrollPane.setVisible(true);
+                panel.add(scrollPane);
                 
                 DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
-                    // Íconos personalizados
-                	ImageIcon icon = new ImageIcon("./imagenes/sinElementos.png");
-                	Image img = icon.getImage();
-                    Image resizedImage = img.getScaledInstance(16, 16,  java.awt.Image.SCALE_SMOOTH);
-                	Icon closedIcon = new ImageIcon(resizedImage);
+					private static final long serialVersionUID = 1L;
+					Icon closedIcon = s.resizeIcon(new ImageIcon("./imagenes/sinElementos.png"), 16, 16);
 
                     @Override
                     public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
                                                                   boolean expanded, boolean leaf, int row, boolean hasFocus) {
-                        // Llamar al método de la superclase para configurar el componente
                         super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-                        // Modificar el ícono según el tipo de nodo
                         if(value.toString() == "Sin Elementos") {
                         	setIcon(closedIcon);
                         }
@@ -840,20 +816,19 @@ public class Presentacion {
                     }
                 };
                 JTree tree = new JTree(root);
+                scrollPane.setViewportView(tree);
                 tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
                 tree.setCellRenderer(renderer);
-                tree.setBounds(83, 50, 275, 170);
+                TreePath[] productos = tree.getSelectionPaths();
+                tree.clearSelection();
                 
-                panel.add(tree);
-                JScrollPane treeScrollPane = new JScrollPane(tree);
-                panel.add(treeScrollPane, BorderLayout.CENTER);
 
                 // Listener para selección de nodos
                 tree.addTreeSelectionListener((TreeSelectionListener) new TreeSelectionListener() {
                     public void valueChanged(TreeSelectionEvent event) {
                         DefaultMutableTreeNode seleccionado = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
                         if(seleccionado == null) {
-                        	productosPanel.removeAll();
+                        	 productosPanel.removeAll();
                         	 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
                              productosPanel.add(new JLabel("Listado de Productos"));
                              List<DtProducto> listaPr = new ArrayList<>();
@@ -868,6 +843,7 @@ public class Presentacion {
                         	return;
                         }
                         String nombreCategoria = seleccionado.getUserObject().toString();
+                        System.out.println(nombreCategoria);
                         List<DtProducto> prodsFiltrados = new ArrayList<>();
                         
                         if(!s.esPadre(nombreCategoria)) {
@@ -894,6 +870,10 @@ public class Presentacion {
                         		
                         	
                         }
+                    }
+                    
+                    
+                });
 
                         tree.addMouseListener(new MouseAdapter() {
                             @Override
@@ -945,10 +925,6 @@ public class Presentacion {
                         productosPanel.revalidate();
                     	productosPanel.repaint();
                         
-                    }
-                    
-                    
-                });
 
                 ventanaProductos.getContentPane().add(panel, BorderLayout.CENTER);
 
@@ -1135,12 +1111,10 @@ public class Presentacion {
                                     // Verificar si el nodo es una hoja
                                     if (selectedNode.isLeaf()) {
                                         // Disparar el evento deseado
-                                    	String numRefStr = (String) selectedNode.getUserObject();
-                                    	System.out.println(numRefStr);
-                                    	int numRef = Integer.parseInt(numRefStr);
-                                    	System.out.println(numRef);
-                                    	DtProducto dt = s.getDtProducto(numRef); 
-                                    	System.out.println(dt.toString());
+                                    	String selection = (String) selectedNode.getUserObject();
+                                    	String[] parts = selection.split(" - "); 
+                                    	int numRef = Integer.parseInt(parts[1]);
+                                    	DtProducto dt = s.getDtProducto(numRef);
                                     	
                                     	JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
                                         ventanaDetalleProducto.setSize(600, 400);

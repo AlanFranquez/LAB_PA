@@ -69,19 +69,18 @@ public class CrearOrdenCompra extends JInternalFrame{
         JLabel lblCategoria = new JLabel("Producto:");
         lblCategoria.setBounds(20, 56, 80, 25);
         panel.add(lblCategoria);
+        
         DefaultMutableTreeNode root = s.arbolProductos();
-        //tree.setBounds(83, 50, 275, 170);
         JScrollPane scrollPane = new JScrollPane();
         scrollPane.setLocation(73, 56);
 
-        JFrame frame = new JFrame("Ejemplo de JTree con desplazamiento");
-        scrollPane.setSize(266, 158);  // Tamaño limitado de la ventana
+        scrollPane.setSize(266, 158);
         scrollPane.setVisible(true);
         panel.add(scrollPane);
         
         DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
             // Íconos personalizados
-        	Icon closedIcon = resizeIcon(new ImageIcon("./imagenes/sinElementos.png"), 16, 16);
+        	Icon closedIcon = s.resizeIcon(new ImageIcon("./imagenes/sinElementos.png"), 16, 16);
 
             @Override
             public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel,
@@ -184,9 +183,4 @@ public class CrearOrdenCompra extends JInternalFrame{
 		// TODO Auto-generated method stub
 		
 	}
-	private static Icon resizeIcon(ImageIcon icon, int width, int height) {
-        Image img = icon.getImage();
-        Image resizedImage = img.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
-        return new ImageIcon(resizedImage);
-    }
 }
