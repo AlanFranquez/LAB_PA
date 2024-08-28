@@ -947,74 +947,8 @@ public class Presentacion {
                 JPanel panel = new JPanel();
                 panel.setLayout(new BorderLayout());
 
-                List<DtProducto> listaP = new ArrayList<>();
-                try {
-                    listaP = s.listarALLProductos();
-                } catch (ProductoException e1) {
-                    JOptionPane.showMessageDialog(null, e1.getMessage());
-                    return;
-                }
-
                 JPanel productosPanel = new JPanel();
-                productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
-                productosPanel.add(new JLabel("Listado de Productos"));
-                for (DtProducto dt : listaP) {
-                	JLabel productoDT = new JLabel(dt.getNombre() + " - " + dt.getPrecio());
-                	productoDT.addMouseListener(new MouseListener() {
-						@Override
-						public void mouseClicked(MouseEvent e) {
-							JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
-                            ventanaDetalleProducto.setSize(600, 400);
-                            ventanaDetalleProducto.setLayout(new BorderLayout());
-
-                            JPanel detallePanel = new JPanel();
-                            detallePanel.setLayout(new BoxLayout(detallePanel, BoxLayout.Y_AXIS));
-                            
-                            detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                            detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                            detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                            detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                            detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
-                            
-                            detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
-                            
-                            
-                            detallePanel.add(new JLabel("Categorias: "));
-
-                            ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
-                            ventanaDetalleProducto.setVisible(true);
-                            desktopPane.add(ventanaDetalleProducto);
-                            ventanaDetalleProducto.setLocation(150, 150);
-							
-						}
-
-						@Override
-						public void mousePressed(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void mouseReleased(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void mouseEntered(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-
-						@Override
-						public void mouseExited(MouseEvent e) {
-							// TODO Auto-generated method stub
-							
-						}
-					});
-                    productosPanel.add(productoDT);
-                }
-                panel.add(productosPanel, BorderLayout.NORTH);
+                
 
                 JLabel lblCategoria = new JLabel("Categoría:");
                 panel.add(lblCategoria, BorderLayout.WEST);
@@ -1050,106 +984,55 @@ public class Presentacion {
                 panel.add(tree);
                 JScrollPane treeScrollPane = new JScrollPane(tree);
                 panel.add(treeScrollPane, BorderLayout.CENTER);
+                
+                tree.addMouseListener(new MouseAdapter() {
+                      @Override
+                      public void mouseClicked(MouseEvent e) {
+                          // Obtener la ruta del nodo donde se hizo clic
+                          TreePath path = tree.getPathForLocation(e.getX(), e.getY());
 
-                // Listener para selección de nodos
-                tree.addTreeSelectionListener((TreeSelectionListener) new TreeSelectionListener() {
-                    public void valueChanged(TreeSelectionEvent event) {
-                        DefaultMutableTreeNode seleccionado = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-                        if(seleccionado == null) {
-                        	productosPanel.removeAll();
-                        	 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
-                             productosPanel.add(new JLabel("Listado de Productos"));
-                             List<DtProducto> listaPr = new ArrayList<>();
-							try {
-								listaPr = s.listarALLProductos();
-							} catch (ProductoException e) {
-								JOptionPane.showMessageDialog(null, "Ocurrio un error, volver a intentar");
-							}
-                             for (DtProducto dt : listaPr) {
-                                 productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
-                             }
-                        	return;
-                        }
-                        String nombreCategoria = seleccionado.getUserObject().toString();
-                        List<DtProducto> prodsFiltrados = new ArrayList<>();
-                        
-                        if(!s.esPadre(nombreCategoria)) {
-                        	
-                        	try {
-								s.comprobarCat(nombreCategoria);
-							} catch (CategoriaException e) {
-								return;
-							}
-                        	
-                        		
-                        	try {
-								prodsFiltrados = s.listarProductosPorCategoria(nombreCategoria);
-							} catch (ProductoException e) {
-								JOptionPane.showMessageDialog(null, e.getMessage());
-								return;
-							}
-                        	
-                        	productosPanel.removeAll();
-                            productosPanel.add(new JLabel("Listado de Productos"));
-                            for (DtProducto dt : prodsFiltrados) {
-                                 productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
-                             }
-                        		
-                        	
-                        }
+                          if (path != null) {
+                             // Obtener el nodo seleccionado
+                             DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
 
-                        tree.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                // Obtener la ruta del nodo donde se hizo clic
-                                TreePath path = tree.getPathForLocation(e.getX(), e.getY());
-
-                                if (path != null) {
-                                    // Obtener el nodo seleccionado
-                                    DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
-
-                                    // Verificar si el nodo es una hoja
-                                    if (selectedNode.isLeaf()) {
-                                        // Disparar el evento deseado
-                                    	String selection = (String) selectedNode.getUserObject();
-                                    	String[] parts = selection.split(" - "); 
-                                    	int numRef = Integer.parseInt(parts[1]);
-                                    	DtProducto dt = s.getDtProducto(numRef);
+                             // Verificar si el nodo es una hoja
+                             if (selectedNode.isLeaf()) {
+                            	 // Disparar el evento deseado
+                                 String selection = (String) selectedNode.getUserObject();
+                                 String[] parts = selection.split(" - "); 
+                                 int numRef = Integer.parseInt(parts[1]);
+                                 DtProducto dt = s.getDtProducto(numRef);
                                     	
-                                    	JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
-                                        ventanaDetalleProducto.setSize(600, 400);
-                                        ventanaDetalleProducto.setLayout(new BorderLayout());
+                                JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
+                                ventanaDetalleProducto.setSize(600, 400);
+                                ventanaDetalleProducto.setLayout(new BorderLayout());
 
-                                        JPanel detallePanel = new JPanel();
-                                        detallePanel.setLayout(new BoxLayout(detallePanel, BoxLayout.Y_AXIS));
+                                JPanel detallePanel = new JPanel();
+                                detallePanel.setLayout(new BoxLayout(detallePanel, BoxLayout.Y_AXIS));
                                         
-                                        detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                                        detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                                        detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                                        detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                                        detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
+                                detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
+                                detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
+                                detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
+                                detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
+                                detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
                                         
-                                        detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
+                                detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
                                         
-                                        detallePanel.add(new JLabel("Categorias: "));
+                                detallePanel.add(new JLabel("Categorias: "));
 
-                                        ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
-                                        ventanaDetalleProducto.setVisible(true);
-                                        desktopPane.add(ventanaDetalleProducto);
-                                        ventanaDetalleProducto.setLocation(150, 150);
-                                    }
-                                }
-                            }
-                        });
-                        
-                        productosPanel.revalidate();
-                    	productosPanel.repaint();
-                        
-                    }
-                    
-                    
+                                ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
+                                ventanaDetalleProducto.setVisible(true);
+                                ventanaDetalleProducto.toFront();
+                                desktopPane.add(ventanaDetalleProducto);
+                                ventanaDetalleProducto.setLocation(150, 150);
+                             }
+                          }
+                      }
                 });
+                        
+                productosPanel.revalidate();
+                productosPanel.repaint();
 
                 ventanaProductos.getContentPane().add(panel, BorderLayout.CENTER);
 
