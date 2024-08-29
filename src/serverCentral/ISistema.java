@@ -92,4 +92,10 @@ public interface ISistema {
 
 	public abstract Icon resizeIcon(ImageIcon imageIcon, int i, int j);
 
+
+	public abstract void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException;
+
+
+	public abstract boolean existeOrden(int i);
+
 }

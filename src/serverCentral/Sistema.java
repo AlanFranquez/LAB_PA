@@ -268,8 +268,9 @@ public class Sistema implements ISistema {
   	return rama;
   }
     public void CrearOrden() {
-    	OrdenDeCompra orden = new OrdenDeCompra(ordenes.size() + 1);
-    	ordenes.put((ordenes.size() + 1), orden);
+    	int maxKey = ordenes.keySet().stream().max(Integer::compare).orElse(0);
+    	OrdenDeCompra orden = new OrdenDeCompra(maxKey + 1);
+    	ordenes.put(orden.getNumero(), orden);
     }
     public void agregarProducto(int numRef, int cant) {
     	for (Usuario user : usuarios.values()) {
@@ -320,45 +321,37 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 7: CANCELAR ORDEN DE COMPRA
-    public Set<Integer> getOrdenes() {
-	if(existenOrdenesParaListar()){
-            Set<Integer> res = new HashSet<>();
-            for (OrdenDeCompra ordenActual : ordenes.values())
-                res.add(ordenActual.getNumero());
-            return res;
-	}
-	return null;
-    }
-
-    public Cliente getClienteDeOrden(OrdenDeCompra orden) {
+    public Cliente getClienteDeOrden(Integer orden) {
     	for (Usuario usuario : usuarios.values()) {
             if (usuario instanceof Cliente) {
                 Cliente cliente = (Cliente) usuario;
-                if (cliente.existeOrden(orden.getNumero()))
+                if (cliente.existeOrden(orden))
                     return cliente;
             }
         }
-        return null; // Si no se encuentra el cliente
+        return null;
     }
 
-    public void eliminarOrdenDeCompra(int numero)throws OrdenDeCompraException{
-	OrdenDeCompra orden = this.ordenes.get(numero);
-        if (orden == null)
+    public void eliminarOrdenDeCompra(int numero) throws OrdenDeCompraException {
+    	OrdenDeCompra orden = this.ordenes.get(numero);
+        if (orden == null) {
             throw new OrdenDeCompraException("La orden de compra no existe");
-	Cliente cliente = getClienteDeOrden(orden);
-        if (cliente == null)
-            throw new OrdenDeCompraException("No se encontró un cliente");
-	//Falta mostra info de orden y todo eso creo
-    	DTOrdenDeCompra mostrar = elegirOrden(numero);
-    	// esto quedaria asi?
-    // pruedbhbsdhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-	cliente.eliminarOrden(numero);
-	Map<Integer, Item> items = orden.getItems();
+        }
+        Cliente cliente = getClienteDeOrden(orden.getNumero());
+        if (cliente == null) {
+        	throw new OrdenDeCompraException("No se encontró un cliente");        	
+        }
+        cliente.eliminarOrden(numero);
+        Map<Integer, Item> items = orden.getItems();
         items.clear();
-	this.ordenes.remove(numero);
+        this.ordenes.remove(numero);
+        
     }
-    // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
+    public boolean existeOrden(int num) {
+    	return ordenes.containsKey(num);
+    }
     
+    // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
     public boolean verificarNumero(int numero, String titulo) {
     	Map<String, Categoria> cats = categorias;
     	int cont = 0;

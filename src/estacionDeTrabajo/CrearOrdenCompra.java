@@ -96,12 +96,11 @@ public class CrearOrdenCompra extends JInternalFrame{
                 return this;
             }
         };
-        JTree tree_1 = new JTree(root);
-        scrollPane.setViewportView(tree_1);
-        tree_1.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        tree_1.setCellRenderer(renderer);
-        TreePath[] productos = tree_1.getSelectionPaths();
-        tree_1.clearSelection();
+        JTree tree = new JTree(root);
+        scrollPane.setViewportView(tree);
+        tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        tree.setCellRenderer(renderer);
+        tree.clearSelection();
         
         
         JButton registrarButton = new JButton("Crear");
@@ -130,6 +129,7 @@ public class CrearOrdenCompra extends JInternalFrame{
 
         
         productoButton.addActionListener(b -> { 
+        	TreePath[] productos = tree.getSelectionPaths();
         	int cant = Integer.parseInt(cantidad.getText());
         	
         	if(cant > 0) {
@@ -138,7 +138,6 @@ public class CrearOrdenCompra extends JInternalFrame{
                 	String selection = (String) selectedNode.getUserObject();
                 	String[] parts = selection.split(" - "); 
                 	int numRef = Integer.parseInt(parts[1]);
-                	s.agregarProducto(numRef, 2);
                 	
                 	model.addRow(new Object[]{numRef, cant});
                 	cantidad.setText("");
@@ -177,10 +176,5 @@ public class CrearOrdenCompra extends JInternalFrame{
         
         setVisible(true);
         toFront();
-        
-	}
-	private void asignarOrdenCliente(String cliente) {
-		// TODO Auto-generated method stub
-		
 	}
 }

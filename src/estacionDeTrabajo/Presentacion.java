@@ -646,58 +646,8 @@ public class Presentacion {
         JMenuItem mntmMostrarOrden = new JMenuItem("Mostrar Ordenes");
         mntmMostrarOrden.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		System.out.println("Existen órdenes para listar: " + s.existenOrdenesParaListar());
-        		if(!s.existenOrdenesParaListar()) {
-    	        	JOptionPane.showMessageDialog(null, "Todavia no hay ordenes para listar");
-    	        	return;
-    	        }
-        		
-        		 JInternalFrame ventanaOrdenes = new JInternalFrame("Lista de Ordenes", true, true, true, true);
-        	        ventanaOrdenes.setSize(500, 300);
-        	        ventanaOrdenes.getContentPane().setLayout(new BorderLayout());
-
-        	        
-        	        List<DTOrdenDeCompra> ordenes = s.listarOrdenes();
-        	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        	        
-        	        // Definir las columnas de la tabla
-        	        String[] columnNames = {"Numero de Orden", "Fecha"};
-
-        	        // Crear datos para la tabla
-        	        Object[][] data = new Object[ordenes.size()][3];
-        	        for (int i = 0; i < ordenes.size(); i++) {
-        	            DTOrdenDeCompra o = ordenes.get(i);
-        	            data[i][0] = o.getNumero();
-        	            data[i][1] = o.getFecha().format(formatter).toString();
-        	        }
-
-        	        // Crear la tabla
-        	        JTable table = new JTable(data, columnNames);
-        	        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        	        // Agregar un listener para manejar clics en la tabla
-        	        table.addMouseListener(new java.awt.event.MouseAdapter() {
-        	            @Override
-        	            public void mouseClicked(java.awt.event.MouseEvent evt) {
-        	                int row = table.rowAtPoint(evt.getPoint());
-        	                if (row >= 0) {
-        	                    DTOrdenDeCompra o = ordenes.get(row);
-        	                    mostrarDetallesOrden(o);
-        	                }
-        	            }
-        	        });
-
-        	        JScrollPane scrollPane = new JScrollPane(table);
-        	        ventanaOrdenes.getContentPane().add(scrollPane, BorderLayout.CENTER);
-
-        	       
-        	        ventanaOrdenes.setVisible(true);
-
-        	        
-        	        desktopPane.add(ventanaOrdenes);
-
-        	        
-        	        ventanaOrdenes.setLocation(100, 100);
+        		ListarOrdenes ords = new ListarOrdenes("Detalles");
+        		desktopPane.add(ords);
         	}
         });
         
@@ -708,7 +658,6 @@ public class Presentacion {
             public void actionPerformed(ActionEvent e) {
             	RegistrarProducto prod = new RegistrarProducto();
             	desktopPane.add(prod);
-        
             }
         });
         mnCasosDeUso.add(mntmRegistrarProducto);
@@ -938,10 +887,10 @@ public class Presentacion {
         mnCasosDeUso.add(mntmListarProductos);
         
         
-        JMenuItem mntmModificarProductos = new JMenuItem("Listar Productos");
+        JMenuItem mntmModificarProductos = new JMenuItem("Modificar Productos");
         mntmModificarProductos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JInternalFrame ventanaProductos = new JInternalFrame("Lista de Productos", true, true, true, true);
+                JInternalFrame ventanaProductos = new JInternalFrame("Modificar Productos", true, true, true, true);
                 ventanaProductos.setSize(400, 600);
                 ventanaProductos.setLayout(new BorderLayout());
 
@@ -1048,76 +997,17 @@ public class Presentacion {
 
         mnCasosDeUso.add(mntmModificarProductos);
         
+        JMenuItem mntmCancelarOrden = new JMenuItem("Cancelar Orden de Compra");
+        mntmCancelarOrden.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	ListarOrdenes cancelar = new ListarOrdenes("Eliminar");
+            	desktopPane.add(cancelar);
+            }
+        });
+        mnCasosDeUso.add(mntmCancelarOrden);
     
     }
 
-        
-    
-    private void mostrarDetallesOrden(DTOrdenDeCompra orden) {
-        JInternalFrame ventanaDetalles = new JInternalFrame("Detalles de la Orden", true, true, true, true);
-        ventanaDetalles.setSize(400, 300);
-        ventanaDetalles.getContentPane().setLayout(new BorderLayout());
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        
-        List<DTItem> lista = orden.listarItems();
-        
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        System.out.print(orden.getFecha().format(formatter));
-        panel.add(new JLabel("Numero de Orden: " + orden.getNumero()));
-        panel.add(new JLabel("Fecha: " + orden.getFecha().format(formatter)));
-        
-        panel.add(new JLabel("============================="));
-        
-        if(lista.isEmpty()) {
-        	panel.add(new JLabel("No se han añadido items"));
-        } else {
-        	for(DTItem l: lista) {
-        		Producto p = l.getProducto();
-        		DtProducto dtp = p.crearDT();
-        		
-        		panel.add(new JLabel("Nombre del producto: " + dtp.getNombre() + " - " + dtp.getPrecio()));
-        		panel.add(new JLabel("Cantidad: " + l.getCant()));
-        		panel.add(new JLabel("Subtotal: " + l.getSubTotal()));
-        		panel.add(new JLabel("============================="));
-        	}
-        }
-        
-        panel.add(new JLabel("Precio total " + orden.getPrecioTotal()));
-        
-        
-        
-        
-        // Falta agregar las ordenes y que al seleccionar una se muestren
-    
-        JScrollPane scrollPane = new JScrollPane(panel);
-
-        
-        ventanaDetalles.getContentPane().add(scrollPane, BorderLayout.CENTER);
-
-    
-        ventanaDetalles.setVisible(true);
-
-     
-        desktopPane.add(ventanaDetalles);
-
-        
-        try {
-            ventanaDetalles.setSelected(true);
-            ventanaDetalles.toFront();
-        } catch (java.beans.PropertyVetoException e) {
-            e.printStackTrace();
-        }
-
-        // Opcional: Centrar la ventana interna
-        ventanaDetalles.setLocation(150, 150);
-    }
-    
-    
-
-  
 
     private void mostrarClientes() {
         JInternalFrame ventanaClientes = new JInternalFrame("Lista de Clientes", true, true, true, true);
