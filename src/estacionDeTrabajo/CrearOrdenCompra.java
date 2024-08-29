@@ -1,8 +1,6 @@
 package estacionDeTrabajo;
 
 import java.awt.Component;
-import java.awt.Image;
-import java.awt.font.NumericShaper;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -16,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -24,11 +24,8 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import serverCentral.DTCliente;
-import serverCentral.DTOrdenDeCompra;
 import serverCentral.Factory;
 import serverCentral.ISistema;
-import javax.swing.JTextField;
-import javax.swing.JTable;
 
 @SuppressWarnings("serial")
 public class CrearOrdenCompra extends JInternalFrame{

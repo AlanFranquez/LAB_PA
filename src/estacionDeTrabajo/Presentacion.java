@@ -14,12 +14,9 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +29,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
@@ -57,18 +53,14 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.toedter.calendar.JDateChooser;
 
-import serverCentral.Cat_Producto;
-import serverCentral.Categoria;
 import serverCentral.CategoriaException;
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
-import serverCentral.DTItem;
 import serverCentral.DTOrdenDeCompra;
 import serverCentral.DTProveedor;
 import serverCentral.DtProducto;
 import serverCentral.Factory;
 import serverCentral.ISistema;
-import serverCentral.Item;
 import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
 import serverCentral.ProductoException;
@@ -84,7 +76,6 @@ public class Presentacion {
     private JDesktopPane desktopPane;
     private static ISistema s = Factory.getSistema();
     private JFileChooser fileChooser;
-    private Date fechaSeleccionada;
     Calendar calendar = Calendar.getInstance();
     
     /**
@@ -534,8 +525,6 @@ public class Presentacion {
                 padresCategorias.setEnabled(false);
                 panel.add(padresCategorias);
                 
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-                
                 padreSI.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e1) {
@@ -729,13 +718,7 @@ public class Presentacion {
                             detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                             
                             detallePanel.add(new JLabel("=================================================="));
-                            detallePanel.add(new JLabel("Categorias de los productos: "));
-                            List<Categoria> listaNueva = dt.categoriasProducto();
-                            for(Categoria l: listaNueva) {
-                            	String catString = l.getNombre();
-                            	detallePanel.add(new JLabel("	• " + catString ));
-                            	
-                            }
+                            detallePanel.add(new JLabel("<html>Categorias de los productos: " + dt.getCategorias()));
                             
                             
                             ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
@@ -864,7 +847,7 @@ public class Presentacion {
                 });
 
                 
-                /*
+                
                         tree.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseClicked(MouseEvent e) {
@@ -878,12 +861,10 @@ public class Presentacion {
                                     // Verificar si el nodo es una hoja
                                     if (selectedNode.isLeaf()) {
                                         // Disparar el evento deseado
-                                    	String numRefStr = (String) selectedNode.getUserObject();
-                                    	System.out.println(numRefStr);
-                                    	int numRef = Integer.parseInt(numRefStr);
-                                    	System.out.println(numRef);
-                                    	DtProducto dt = s.getDtProducto(numRef); 
-                                    	System.out.println(dt.toString());
+                                    	String selection = (String) selectedNode.getUserObject();
+                                    	String[] parts = selection.split(" - "); 
+                                    	int numRef = Integer.parseInt(parts[1]);
+                                    	DtProducto dt = s.getDtProducto(numRef);
                                     	
                                     	JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
                                         ventanaDetalleProducto.setSize(600, 400);
@@ -900,7 +881,10 @@ public class Presentacion {
                                         
                                         detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
-
+                                        detallePanel.add(new JLabel("=================================================="));
+                                        detallePanel.add(new JLabel("<html>Categorias de los productos: " + dt.getCategorias()));
+                                        
+                                        
                                         ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                                         ventanaDetalleProducto.setVisible(true);
                                         desktopPane.add(ventanaDetalleProducto);
@@ -909,7 +893,7 @@ public class Presentacion {
                                 }
                             }
                         });
-                        */
+                        
                         productosPanel.revalidate();
                     	productosPanel.repaint();
                         
@@ -943,7 +927,8 @@ public class Presentacion {
                 
                 DefaultMutableTreeNode root = s.arbolProductos();
                 
-                DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
+                @SuppressWarnings("serial")
+				DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
                     // Íconos personalizados
                 	ImageIcon icon = new ImageIcon("./imagenes/sinElementos.png");
                 	Image img = icon.getImage();

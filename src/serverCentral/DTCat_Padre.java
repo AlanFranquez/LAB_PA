@@ -1,8 +1,5 @@
 package serverCentral;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class DTCat_Padre {
 	
 	private String nombre;

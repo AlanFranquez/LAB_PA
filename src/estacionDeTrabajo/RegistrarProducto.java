@@ -1,12 +1,10 @@
 package estacionDeTrabajo;
 
 import java.awt.Component;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
@@ -28,7 +26,6 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import serverCentral.Categoria;
 import serverCentral.CategoriaException;
 import serverCentral.DTProveedor;
 import serverCentral.Factory;
@@ -38,8 +35,6 @@ import serverCentral.ISistema;
 public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
 	private File imagenSeleccionada;
-	private ImageIcon imagenSelecc;
-	private JTextField textField;
 	
 	public RegistrarProducto() {
 		setResizable(true);
@@ -175,7 +170,6 @@ public class RegistrarProducto extends JInternalFrame{
                         String nombreArchivo = imagenSeleccionada.getName().toLowerCase();
                         if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
                         	imagenSeleccionadaLabel.setText(imagenSeleccionada.getName());
-                            imagenSelecc = new ImageIcon(imagenSeleccionada.getAbsolutePath());
                         } else {
                             // Mostrar mensaje de error si el archivo no es válido
                             JOptionPane.showMessageDialog(null, "Por favor, selecciona un archivo con extensión .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
@@ -204,7 +198,6 @@ public class RegistrarProducto extends JInternalFrame{
             String especificaciones = especificacionesArea.getText();
             String precioStr = precioField.getText();
             File[] imagenes = fileChooser.getSelectedFiles();
-            //String stock = cantStock.getText();
             
             if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
             	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -278,9 +271,7 @@ public class RegistrarProducto extends JInternalFrame{
             comboBoxModel.setSelectedItem(null);
             tree.clearSelection();
             imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
-        
         });
-    
         
         getContentPane().add(panel);
         setVisible(true);

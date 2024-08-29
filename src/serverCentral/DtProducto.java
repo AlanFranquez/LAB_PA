@@ -1,7 +1,6 @@
 package serverCentral;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,10 +10,10 @@ public class DtProducto {
 	private Integer numRef;
 	private String especs;
 	private Proveedor proveedor;
-	private Map<String, Categoria>categorias;
+	private String categorias;
 	
 	// Constructor:
-	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, Map<String, Categoria> cat) {
+	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
@@ -47,11 +46,11 @@ public class DtProducto {
 		return especs;
 	}
 	
-	public Map<String, Categoria> getCategorias() {
+	public String getCategorias() {
 		return categorias;
 	}
 	
-
+/*
 	public List<Categoria> categoriasProducto() {
 	    List<Categoria> listacats = new ArrayList<>();
 	    
@@ -78,7 +77,7 @@ public class DtProducto {
 	    }
 	    
 	    return listacats;
-	}
+	}*/
 
 
 }

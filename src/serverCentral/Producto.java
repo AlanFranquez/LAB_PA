@@ -1,7 +1,6 @@
 package serverCentral;
 
 import java.io.File;
-import java.security.KeyStore.Entry;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ public class Producto {
 	private float precio;
 	private Integer numRef;
 	private String especificaciones;
-	//private Integer stock;
 	private File imagenes;
 	
 	// Constructor:
@@ -26,7 +24,6 @@ public class Producto {
 		this.especificaciones = especificaciones;
 		this.categorias = new HashMap<>();
 		this.proveedor = prov;
-		//this.stock = stock;
 	}
 
 	// Hacer una lista de imágenes en vez de una única
@@ -126,7 +123,7 @@ public class Producto {
     }
 	
 	public DtProducto crearDT() {
-		/*String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+		String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;•";
 		String catStr = "";
 		if(this.categorias.isEmpty()) {
 			catStr = "El producto no tiene categorias asignadas";
@@ -134,7 +131,7 @@ public class Producto {
 		for (Categoria cat : this.categorias.values()) {	
 			catStr = catStr + "<br>" + tab + cat.getNombre();				
 		}
-		catStr = catStr + "</html>"; */	
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), getCategorias());
+		catStr = catStr + "</html>";
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr);
 	}
 }
