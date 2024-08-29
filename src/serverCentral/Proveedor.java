@@ -45,6 +45,8 @@ public class Proveedor extends Usuario {
         return listaProductos.size();
     }
     
+  
+    
     public DTProveedor crearDt() {
         return new DTProveedor(this.getNombre(), getNick(), getApellido(), getCorreo(), getNacimiento(), getImagen(), getCompania(), getLink());
     }

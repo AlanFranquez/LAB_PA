@@ -1,5 +1,6 @@
 package serverCentral;
 
+import java.io.File;
 import java.util.List;
 
 import javax.swing.Icon;
@@ -99,5 +100,11 @@ public interface ISistema {
 	public abstract boolean existeOrden(int i);
 	
 	public void eliminarUltimaOrden();
+	
+	public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo);
+	
+	public void eliminarPDesdeProveedor(String proveedor, int numRef);
+	
+	public void agregarImagenesProducto(String cat, int num, File imagen);
 
 }

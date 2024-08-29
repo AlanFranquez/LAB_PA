@@ -1,6 +1,7 @@
 package serverCentral;
 
 import java.awt.Image;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,6 +95,17 @@ public class Sistema implements ISistema {
     
     
     // CASO DE USO 2: REGISTRAR PRODUCTO
+    public boolean verificarUnicidadProducto(String nombreCategoria, int numRef, String titulo) {
+    	
+    	Cat_Producto c = (Cat_Producto) this.categorias.get(nombreCategoria);
+    	
+    	if(!c.verificarProducto(numRef, titulo)) {
+    		return false;
+    	}
+     	
+    	return true;
+    }
+    
     public List<DTProveedor> listarProveedores(){
     	List<DTProveedor> listaProveedor = new ArrayList<>();
     	for(Map.Entry<String, Usuario> entry : usuarios.entrySet()) {
@@ -547,6 +559,21 @@ public class Sistema implements ISistema {
         
         return null;
     }
-   
+    
+    
+    public void eliminarPDesdeProveedor(String proveedor, int numRef) {
+    	Proveedor prov = (Proveedor) this.usuarios.get(proveedor);
+    	
+    	prov.eliminarProd(numRef);
+    }
+    
+    public void agregarImagenesProducto(String cat, int num, File imagen) {
+    	Cat_Producto catP = (Cat_Producto) this.categorias.get(cat);
+    	Producto p = catP.getProducto(num);
+    	
+    	
+    	p.agregarImagen(imagen);
+    }
+
 }
 

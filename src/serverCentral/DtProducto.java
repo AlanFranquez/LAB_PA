@@ -1,5 +1,8 @@
 package serverCentral;
 
+import java.io.File;
+import java.util.List;
+
 public class DtProducto {
 	private String nombre, descripcion;
 	private float precio;
@@ -7,9 +10,10 @@ public class DtProducto {
 	private String especs;
 	private Proveedor proveedor;
 	private String categorias;
+	List<File> imagenes;
 	
 	// Constructor:
-	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat) {
+	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<File> imagenes) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
@@ -17,6 +21,7 @@ public class DtProducto {
 		this.especs = especs;
 		this.proveedor = prov;
 		this.categorias = cat;
+		this.imagenes = imagenes;
 	}
 	
 	// Getters:
@@ -44,6 +49,14 @@ public class DtProducto {
 	
 	public String getCategorias() {
 		return categorias;
+	}
+	
+	public void agregarImagen(File img) {
+		this.imagenes.add(img);
+	}
+	
+	public List<File> getImagenes() {
+		return this.imagenes;
 	}
 	
 /*

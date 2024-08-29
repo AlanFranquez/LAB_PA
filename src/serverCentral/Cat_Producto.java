@@ -65,5 +65,21 @@ Cat_Padre padre;
 		productos.put(prod.getNumRef(), prod);
 	}
 	
+	public boolean verificarProducto(int numReferencia, String titulo) {
+	    if (this.productos.containsKey(numReferencia)) {
+	        return false; 
+	    }
+	    
+	  
+	    for (Producto p : this.productos.values()) {
+	        if (p.getNombre().equals(titulo)) {
+	            return false;
+	        }
+	    }
+	    
+	 
+	    return true;
+	}
+	
 	
 }

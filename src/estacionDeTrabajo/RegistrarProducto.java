@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -35,6 +36,7 @@ import serverCentral.ISistema;
 public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
 	private File imagenSeleccionada;
+	private List<File> imagenesSeleccionadas = new ArrayList<>();
 	
 	public RegistrarProducto() {
 		setResizable(true);
@@ -154,29 +156,35 @@ public class RegistrarProducto extends JInternalFrame{
         seleccionarImagenButton.setBounds(100, 363, 200, 25);
         panel.add(seleccionarImagenButton);
 
-        JLabel imagenSeleccionadaLabel = new JLabel("No se ha seleccionado ninguna imagen");
-        imagenSeleccionadaLabel.setBounds(100, 384, 300, 25);
-        panel.add(imagenSeleccionadaLabel);
+        JLabel imagenesSeleccionadasLabel = new JLabel("No se ha seleccionado ninguna imagen");
+        imagenesSeleccionadasLabel.setBounds(100, 384, 300, 25);
+        panel.add(imagenesSeleccionadasLabel);
 
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
         seleccionarImagenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e1) {
                 int returnValue = fileChooser.showOpenDialog(null);
                 if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    imagenSeleccionada = fileChooser.getSelectedFile();
-                    // Verificar que imagenSeleccionada no sea null
-                    if (imagenSeleccionada != null) {
-                        String nombreArchivo = imagenSeleccionada.getName().toLowerCase();
+                    File[] archivosSeleccionados = fileChooser.getSelectedFiles();
+                    imagenesSeleccionadas.clear();
+                    StringBuilder imagenesNombres = new StringBuilder();
+                    
+                    for (File archivo : archivosSeleccionados) {
+                        String nombreArchivo = archivo.getName().toLowerCase();
                         if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
-                        	imagenSeleccionadaLabel.setText(imagenSeleccionada.getName());
+                            imagenesSeleccionadas.add(archivo);
+                            imagenesNombres.append(archivo.getName()).append("; ");
                         } else {
-                            // Mostrar mensaje de error si el archivo no es válido
-                            JOptionPane.showMessageDialog(null, "Por favor, selecciona un archivo con extensión .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "El archivo " + archivo.getName() + " no es válido. Seleccione archivos .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
                         }
+                    }
+                    
+                    if (imagenesSeleccionadas.isEmpty()) {
+                        imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
                     } else {
-                        // Mensaje si no se selecciona un archivo
-                        JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo", "Error", JOptionPane.ERROR_MESSAGE);
+                        imagenesSeleccionadasLabel.setText("Imágenes seleccionadas: " + imagenesNombres.toString());
                     }
                 }
             }
@@ -197,12 +205,13 @@ public class RegistrarProducto extends JInternalFrame{
             String descripcion = descripcionField.getText();
             String especificaciones = especificacionesArea.getText();
             String precioStr = precioField.getText();
-            //File[] imagenes = fileChooser.getSelectedFiles();
             
             if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
             	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
             	return;
             }
+            
+           
             
             int precio = 0;
             
@@ -238,22 +247,40 @@ public class RegistrarProducto extends JInternalFrame{
             	return;
             }
             
-            if(s.existeNombre(proveedor, numRef)) {
-            	JOptionPane.showMessageDialog(null, "Ya existe un producto con este nombre o numero referencia", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            
             
             s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
+            
+            
             
             for (TreePath path : selectedPaths) {
             	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             	String catName = selectedNode.getUserObject().toString();
+            	
+            	if(!s.verificarUnicidadProducto(catName, numRef, titulo)) {
+            		JOptionPane.showMessageDialog(null, "El nombre o el numero de referencia ya existe", "Error", JOptionPane.ERROR_MESSAGE);
+                	
+                	s.eliminarPDesdeProveedor(proveedor, numRef);
+                    return;
+            	}
+            	
                 if(s.esPadre(catName)) {
                 	JOptionPane.showMessageDialog(null, "Alguna de las categorias seleccionadas no es una categoria válida", "Error", JOptionPane.ERROR_MESSAGE);
+                	
+                	s.eliminarPDesdeProveedor(proveedor, numRef);
                     return;
                 }
+                
+                
+                
                 try {
                 	s.agregarProductoCategoria(catName, numRef);
+                	
+                	// Agregar imgs
+                    
+                    for(File imgs: imagenesSeleccionadas) {
+                    	s.agregarImagenesProducto(catName, numRef, imgs);
+                    }
                 	
                 } catch(CategoriaException e1) {
                 	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -268,9 +295,9 @@ public class RegistrarProducto extends JInternalFrame{
             descripcionField.setText("");
             especificacionesArea.setText("");
             precioField.setText("");
-            comboBoxModel.setSelectedItem(null);
+            comboBoxModel.setSelectedItem(nombres[0]);
             tree.clearSelection();
-            imagenSeleccionadaLabel.setText("No se ha seleccionado ninguna imagen");
+            imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
         });
         
         getContentPane().add(panel);

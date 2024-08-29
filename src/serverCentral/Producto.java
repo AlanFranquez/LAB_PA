@@ -1,7 +1,9 @@
 package serverCentral;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Producto {
@@ -13,7 +15,7 @@ public class Producto {
 	private float precio;
 	private Integer numRef;
 	private String especificaciones;
-	private File imagenes;
+	private List<File> imagenes;
 	
 	// Constructor:
 	public Producto(String nombre, String descripcion, float precio, Integer numRef, String especificaciones, Proveedor prov, int stock) {
@@ -24,14 +26,16 @@ public class Producto {
 		this.especificaciones = especificaciones;
 		this.categorias = new HashMap<>();
 		this.proveedor = prov;
+		this.imagenes = new ArrayList<>();
 	}
 
 	// Hacer una lista de imágenes en vez de una única
 	public void agregarImagen(File img) {
-		imagenes = img;
+		this.imagenes.add(img);
 	}
-	public File getImagen() {
-		return imagenes;
+	
+	public List<File> getImagenes() {
+		return this.imagenes;
 	}
 	
 	public void agregarComentario(Comentario com) {
@@ -132,6 +136,6 @@ public class Producto {
 			catStr = catStr + "<br>" + tab + cat.getNombre();				
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr);
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes());
 	}
 }

@@ -719,7 +719,21 @@ public class Presentacion {
                             
                             detallePanel.add(new JLabel("=================================================="));
                             detallePanel.add(new JLabel("<html>Categorias de los productos: " + dt.getCategorias()));
-                            
+                            List<File> imagenes = dt.getImagenes();
+                            if (imagenes != null && !imagenes.isEmpty()) {
+                                for (File imagenFile : imagenes) {
+                                    try {
+                                        ImageIcon imageIcon = new ImageIcon(imagenFile.getAbsolutePath());
+                                        Image imagenAjuste = imageIcon.getImage();
+                                        Image reajuste = imagenAjuste.getScaledInstance(75, 75, 0);
+                                        ImageIcon imagenIconAjustada = new ImageIcon(reajuste);
+                                        JLabel imageLabel = new JLabel(imagenIconAjustada);
+                                        detallePanel.add(imageLabel);
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                    }
+                                }
+                            }
                             
                             ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                             ventanaDetalleProducto.setVisible(true);
@@ -994,6 +1008,8 @@ public class Presentacion {
                                         
                                         
                                 detallePanel.add(new JLabel("<html>Categorias: " + dt.getCategorias()));
+                                
+                                
 
                                 ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                                 ventanaDetalleProducto.setVisible(true);
