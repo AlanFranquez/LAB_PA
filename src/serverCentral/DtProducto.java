@@ -1,9 +1,5 @@
 package serverCentral;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 public class DtProducto {
 	private String nombre, descripcion;
 	private float precio;

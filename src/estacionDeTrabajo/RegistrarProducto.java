@@ -197,7 +197,7 @@ public class RegistrarProducto extends JInternalFrame{
             String descripcion = descripcionField.getText();
             String especificaciones = especificacionesArea.getText();
             String precioStr = precioField.getText();
-            File[] imagenes = fileChooser.getSelectedFiles();
+            //File[] imagenes = fileChooser.getSelectedFiles();
             
             if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
             	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);

@@ -678,7 +678,7 @@ public class Presentacion {
         mntmListarProductos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JInternalFrame ventanaProductos = new JInternalFrame("Lista de Productos", true, true, true, true);
-                ventanaProductos.setSize(400, 600);
+                ventanaProductos.setSize(400, 500);
                 ventanaProductos.setLayout(new BorderLayout());
 
                 JPanel panel = new JPanel();
@@ -763,11 +763,10 @@ public class Presentacion {
                 JScrollPane scrollPane = new JScrollPane();
                 scrollPane.setLocation(73, 56);
 
-                scrollPane.setSize(266, 158);
+                scrollPane.setSize(200, 100);
                 scrollPane.setVisible(true);
                 panel.add(scrollPane);
                 
-                JPanel proceder = productosPanel;
                 DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
 					private static final long serialVersionUID = 1L;
 					Icon closedIcon = s.resizeIcon(new ImageIcon("./imagenes/sinElementos.png"), 16, 16);
@@ -787,7 +786,6 @@ public class Presentacion {
                 scrollPane.setViewportView(tree);
                 tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
                 tree.setCellRenderer(renderer);
-                TreePath[] productos = tree.getSelectionPaths();
                 tree.clearSelection();
                 
 
