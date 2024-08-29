@@ -2,6 +2,7 @@ package estacionDeTrabajo;
 
 import java.awt.Component;
 import java.awt.Image;
+import java.awt.font.NumericShaper;
 import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
@@ -130,11 +131,26 @@ public class CrearOrdenCompra extends JInternalFrame{
         
         productoButton.addActionListener(b -> { 
         	TreePath[] productos = tree.getSelectionPaths();
-        	int cant = Integer.parseInt(cantidad.getText());
+        	if(productos == null) {
+        		JOptionPane.showMessageDialog(null, "No se ha seleccionado producto.", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+        	}
+        	int cant = 0;
+        	try {
+        		cant = Integer.parseInt(cantidad.getText());
+        		
+        	} catch(NumberFormatException e) {
+        		JOptionPane.showMessageDialog(null, "Cantidad debe ser un numero entero.", "Error", JOptionPane.ERROR_MESSAGE);
+            	return;
+        	}
         	
         	if(cant > 0) {
         		for (TreePath path : productos) {
                 	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+                	if(!selectedNode.isLeaf()) {
+                		JOptionPane.showMessageDialog(null, "Debe seleccionar un producto.", "Error", JOptionPane.ERROR_MESSAGE);
+                    	return;
+                	}
                 	String selection = (String) selectedNode.getUserObject();
                 	String[] parts = selection.split(" - "); 
                 	int numRef = Integer.parseInt(parts[1]);
@@ -157,8 +173,26 @@ public class CrearOrdenCompra extends JInternalFrame{
             for (int i = 1; i < model.getRowCount(); i++) {
 
             	System.out.println(model.getValueAt(i, 0).toString());
-            	int numRef = Integer.parseInt(model.getValueAt(i, 0).toString());
-            	int cant = Integer.parseInt(model.getValueAt(i, 1).toString());
+            	
+            	int numRef = 0;
+            	int cant = 0;
+            	
+            	try {
+            		numRef = Integer.parseInt(model.getValueAt(i, 0).toString());
+            		cant = Integer.parseInt(model.getValueAt(i, 1).toString());
+            		
+            	} catch(NumberFormatException e) {
+            		JOptionPane.showMessageDialog(null, "El numero de referencia y la cantidad deben ser numeros enteros", "Error", JOptionPane.ERROR_MESSAGE);
+            		s.eliminarUltimaOrden();
+            		return;
+            	}
+            	
+            	if(numRef <= 0 || cant <= 0) {
+            		JOptionPane.showMessageDialog(null, "El numero de referencia y la cantidad deben ser mayor a 0", "Error", JOptionPane.ERROR_MESSAGE);
+            		s.eliminarUltimaOrden();
+            		return;
+            	}
+            	
             	System.out.println("  )" + numRef);
             	s.agregarProducto(numRef, cant);
             }

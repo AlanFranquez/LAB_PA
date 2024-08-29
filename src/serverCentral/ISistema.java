@@ -97,5 +97,7 @@ public interface ISistema {
 
 
 	public abstract boolean existeOrden(int i);
+	
+	public void eliminarUltimaOrden();
 
 }

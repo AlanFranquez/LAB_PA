@@ -534,7 +534,7 @@ public class Presentacion {
                 padresCategorias.setEnabled(false);
                 panel.add(padresCategorias);
                 
-                
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 
                 padreSI.addActionListener(new ActionListener() {
                     @Override
@@ -1125,7 +1125,11 @@ public class Presentacion {
         panel.add(new JLabel("Tipo de Usuario: " + cliente.getTipo()));
         panel.add(new JLabel("Mail: " + cliente.getCorreo()));
         panel.add(new JLabel("Nick: " + cliente.getNick()));
+        
         panel.add(new JLabel("Nombre Completo: " + cliente.getNombre() + " " + cliente.getApellido()));
+
+        
+        
         panel.add(new JLabel("Fecha de Nacimiento: " + cliente.getNacimiento().getDia() + " - " + cliente.getNacimiento().getMes() + " - " + cliente.getNacimiento().getAnio()));
         panel.add(Box.createVerticalStrut(5));
        
@@ -1215,7 +1219,7 @@ public class Presentacion {
     
     
     private void mostrarDetallesProveedor(DTProveedor proveedor) {
-    	JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Cliente", true, true, true, true);
+    	JInternalFrame ventanaDetalles = new JInternalFrame("Detalles del Proveedor", true, true, true, true);
         ventanaDetalles.setSize(400, 300);
         ventanaDetalles.getContentPane().setLayout(new BorderLayout());
 
@@ -1244,6 +1248,8 @@ public class Presentacion {
         panel.add(new JLabel("Nick: " + proveedor.getNick()));
         panel.add(new JLabel("Nombre Completo: " + proveedor.getNombre() + " " + proveedor.getApellido()));
         panel.add(new JLabel("Fecha de Nacimiento: " + proveedor.getNacimiento().getDia() + " - " + proveedor.getNacimiento().getMes() + " - " + proveedor.getNacimiento().getAnio()));
+        panel.add(new JLabel("Compañía: " + proveedor.getCompania()));
+        panel.add(new JLabel("Link: " + proveedor.getLink()));
         panel.add(Box.createVerticalStrut(5));
        
         

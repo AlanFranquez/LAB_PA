@@ -291,6 +291,11 @@ public class Sistema implements ISistema {
     		}
     	}
     }
+    
+    public void eliminarUltimaOrden() {
+    	int keyOrden = ordenes.size();
+    	ordenes.remove(keyOrden);
+    }
     public void asignarOrdenCliente(String cliente) {
     	System.out.println(cliente);
     	Cliente c = (Cliente) usuarios.get(cliente);
