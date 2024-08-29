@@ -1,6 +1,7 @@
 package serverCentral;
 
 import java.io.File;
+import java.security.KeyStore.Entry;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,8 +100,33 @@ public class Producto {
 		return this.especificaciones;
 	}
 	
+	public String[] categoriasProducto() {
+    	int contador = 0;
+    	String[] arrString = new String[contador];
+    		
+    	for(Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
+    		
+    		Categoria c = entry.getValue();
+    		Cat_Producto cProducto = (Cat_Producto) c;
+    		arrString[contador++] = cProducto.getNombre();
+    		
+    	
+    		Cat_Padre cPadre = cProducto.getPadre();
+    		
+    		while(cPadre.traerPadre() != null) {
+    			arrString[contador++] = cPadre.getNombre();
+    			
+    			
+    			
+    			cPadre = cPadre.traerPadre();
+    		}
+    	}
+    	
+    	return arrString;
+    }
+	
 	public DtProducto crearDT() {
-		String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+		/*String tab = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		String catStr = "";
 		if(this.categorias.isEmpty()) {
 			catStr = "El producto no tiene categorias asignadas";
@@ -108,7 +134,7 @@ public class Producto {
 		for (Categoria cat : this.categorias.values()) {	
 			catStr = catStr + "<br>" + tab + cat.getNombre();				
 		}
-		catStr = catStr + "</html>";	
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr);
+		catStr = catStr + "</html>"; */	
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), getCategorias());
 	}
 }

@@ -58,6 +58,7 @@ import javax.swing.tree.TreeSelectionModel;
 import com.toedter.calendar.JDateChooser;
 
 import serverCentral.Cat_Producto;
+import serverCentral.Categoria;
 import serverCentral.CategoriaException;
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
@@ -132,6 +133,7 @@ public class Presentacion {
                     s.agregarProductoCategoria("Tecno", 2);
                     OrdenDeCompra o1 = new OrdenDeCompra(1);
                     o1.addItem(p1, 3);
+                    
                     
                     s.addOrdenes(o1, "Juan123");
 
@@ -704,7 +706,7 @@ public class Presentacion {
                 JPanel productosPanel = new JPanel();
                 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
                 productosPanel.add(new JLabel("Listado de Productos"));
-                /*for (DtProducto dt : listaP) {
+                for (DtProducto dt : listaP) {
                 	JLabel productoDT = new JLabel(dt.getNombre() + " - " + dt.getPrecio());
                 	productoDT.addMouseListener(new MouseListener() {
 						@Override
@@ -724,19 +726,49 @@ public class Presentacion {
                             
                             detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                             
+                            detallePanel.add(new JLabel("=================================================="));
+                            detallePanel.add(new JLabel("Categorias de los productos: "));
+                            List<Categoria> listaNueva = dt.categoriasProducto();
+                            for(Categoria l: listaNueva) {
+                            	String catString = l.getNombre();
+                            	detallePanel.add(new JLabel("	• " + catString ));
+                            	
+                            }
                             
-                            detallePanel.add(new JLabel("Categorias: "));
-
+                            
                             ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                             ventanaDetalleProducto.setVisible(true);
                             desktopPane.add(ventanaDetalleProducto);
                             ventanaDetalleProducto.setLocation(150, 150);
 							
 						}
+
+						@Override
+						public void mousePressed(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void mouseReleased(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void mouseEntered(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void mouseExited(MouseEvent e) {
+							// TODO Auto-generated method stub
+							
+						}
 					});
                     productosPanel.add(productoDT);
                 }
-*/
                 panel.add(productosPanel, BorderLayout.NORTH);
 
                 JLabel lblCategoria = new JLabel("Categoría:");
@@ -750,6 +782,7 @@ public class Presentacion {
                 scrollPane.setVisible(true);
                 panel.add(scrollPane);
                 
+                JPanel proceder = productosPanel;
                 DefaultTreeCellRenderer renderer = new DefaultTreeCellRenderer() {
 					private static final long serialVersionUID = 1L;
 					Icon closedIcon = s.resizeIcon(new ImageIcon("./imagenes/sinElementos.png"), 16, 16);
@@ -793,7 +826,6 @@ public class Presentacion {
                         	return;
                         }
                         String nombreCategoria = seleccionado.getUserObject().toString();
-                        System.out.println(nombreCategoria);
                         List<DtProducto> prodsFiltrados = new ArrayList<>();
                         
                         if(!s.esPadre(nombreCategoria)) {
@@ -820,11 +852,17 @@ public class Presentacion {
                         		
                         	
                         }
+                        
+                        productosPanel.revalidate();
+                    	productosPanel.repaint();
+                        
                     }
                     
                     
                 });
 
+                
+                /*
                         tree.addMouseListener(new MouseAdapter() {
                             @Override
                             public void mouseClicked(MouseEvent e) {
@@ -860,8 +898,6 @@ public class Presentacion {
                                         
                                         detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
-                                        
-                                        detallePanel.add(new JLabel("Categorias: "));
 
                                         ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                                         ventanaDetalleProducto.setVisible(true);
@@ -871,7 +907,7 @@ public class Presentacion {
                                 }
                             }
                         });
-                        
+                        */
                         productosPanel.revalidate();
                     	productosPanel.repaint();
                         
@@ -883,7 +919,7 @@ public class Presentacion {
                 ventanaProductos.setLocation(100, 100);
             }
         });
-
+		
         mnCasosDeUso.add(mntmListarProductos);
         
         

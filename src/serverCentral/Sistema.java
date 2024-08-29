@@ -37,15 +37,23 @@ public class Sistema implements ISistema {
 
     // CASO DE USO 1: REGISTRAR USUARIO
     public boolean verificarUnicidad(String nick, String correo) {
-    	if(!this.usuarios.containsKey(nick)) {
-    		for (Usuario usuario : usuarios.values()) {
-                if(usuario.getCorreo() == correo) {
-                	return false;
-                }
+    	Usuario u = this.usuarios.get(nick);
+        if (u != null) {
+       
+            if (u.getCorreo().equals(correo)) {
+                return false;
             }
-    		return true;
-    	}
-    	return false;
+        }
+        
+        for (Usuario usuario : this.usuarios.values()) {
+            if (usuario.getCorreo().equals(correo)) {
+                return false;
+            }
+        }
+        
+        return true;
+    	
+    	
     }
     public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
@@ -434,6 +442,8 @@ public class Sistema implements ISistema {
     	return listaProductos;
     	
     }
+    
+    
     
     
     public DtProducto getDtProducto(int numRef) {

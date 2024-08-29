@@ -43,6 +43,11 @@ public class Cat_Padre extends Categoria{
 	public void agregarHijo(Categoria cat) {
 		hijos.put(cat.getNombre(), cat);
 	}
+	
+	public Cat_Padre traerPadre() {
+		
+		return this.padre;
+	}
 
 }
  
