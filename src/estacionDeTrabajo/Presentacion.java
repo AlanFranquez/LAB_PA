@@ -704,6 +704,8 @@ public class Presentacion {
                 }
 
                 JPanel productosPanel = new JPanel();
+                
+                // lo pasare a una funcion, 1 argumento lista P
                 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
                 productosPanel.add(new JLabel("Listado de Productos"));
                 for (DtProducto dt : listaP) {
