@@ -1016,6 +1016,92 @@ public class Presentacion {
                                 ventanaDetalleProducto.toFront();
                                 desktopPane.add(ventanaDetalleProducto);
                                 ventanaDetalleProducto.setLocation(150, 150);
+                                JButton modificarButton = new JButton("Modificar");
+                                modificarButton.setBounds(20, 540, 240, 25);
+                                
+                                modificarButton.addActionListener(new ActionListener() {
+                                    public void actionPerformed(ActionEvent z) {
+                                        JInternalFrame modificarFrame = new JInternalFrame();
+
+                                        modificarFrame.setResizable(true);
+                                        modificarFrame.setIconifiable(true);
+                                        modificarFrame.setMaximizable(true);
+                                        modificarFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                                        modificarFrame.setClosable(true);
+                                        modificarFrame.setTitle("Registrar Producto");
+                                        modificarFrame.setBounds(10, 40, 360, 150);
+                                        modificarFrame.setSize(440, 257);
+
+                                        JPanel panel1 = new JPanel();
+                                        panel1.setLayout(null);  // Se cambió "panel" por "panel1"
+
+                                        JLabel tituloLabel = new JLabel("Título:");
+                                        tituloLabel.setBounds(20, 20, 80, 25);
+                                        panel1.add(tituloLabel);
+
+                                        JTextField tituloField = new JTextField(20);
+                                        tituloField.setBounds(100, 20, 200, 25);
+                                        panel1.add(tituloField);
+
+                                        JLabel referenciaLabel = new JLabel("Número de referencia:");
+                                        referenciaLabel.setBounds(20, 50, 150, 25);
+                                        panel1.add(referenciaLabel);
+
+                                        JTextField referenciaField = new JTextField(20);
+                                        referenciaField.setBounds(185, 50, 200, 25);
+                                        panel1.add(referenciaField);
+
+                                        JLabel descripcionLabel = new JLabel("Descripción:");
+                                        descripcionLabel.setBounds(20, 80, 100, 25);
+                                        panel1.add(descripcionLabel);
+
+                                        JTextField descripcionField = new JTextField(20);
+                                        descripcionField.setBounds(100, 80, 266, 25);
+                                        panel1.add(descripcionField);
+
+                                        JLabel precioLabel = new JLabel("Precio:");
+                                        precioLabel.setBounds(20, 115, 80, 25);
+                                        panel1.add(precioLabel);
+
+                                        JTextField precioField = new JTextField(10);
+                                        precioField.setBounds(100, 115, 100, 25);
+                                        panel1.add(precioField);
+
+                                        JButton registrarButton = new JButton("Crear");
+                                        registrarButton.setBounds(88, 172, 240, 25);
+                                        panel1.add(registrarButton);
+
+                                        modificarFrame.getContentPane().add(panel1);  // Aquí se agrega "panel1" al "JInternalFrame"
+
+                                        // Validar y registrar el producto en el sistema
+                                        registrarButton.addActionListener(b -> {
+                                            String titulo = tituloField.getText();
+                                            String descripcion = descripcionField.getText();
+                                            String precioStr = precioField.getText();
+
+                                            if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || precioStr.isEmpty()) {
+                                                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                                                return;
+                                            }
+
+                                            // Aquí se puede añadir la lógica para guardar el producto en el sistema
+                                            JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
+
+                                            tituloField.setText("");
+                                            referenciaField.setText("");
+                                            descripcionField.setText("");
+                                            precioField.setText("");
+                                        });
+
+                                        modificarFrame.setVisible(true);
+                                        modificarFrame.toFront();
+                                        desktopPane.add(modificarFrame);
+                                    }
+                                });
+
+                                
+                                
+                                detallePanel.add(modificarButton);
                              }
                           }
                       }
