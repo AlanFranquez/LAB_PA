@@ -65,6 +65,7 @@ import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
 import serverCentral.ProductoException;
 import serverCentral.Proveedor;
+import serverCentral.Sistema;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
 
@@ -1067,25 +1068,46 @@ public class Presentacion {
                                         precioField.setBounds(100, 115, 100, 25);
                                         panel1.add(precioField);
 
-                                        JButton registrarButton = new JButton("Crear");
+                                        JButton registrarButton = new JButton("Guardar Cambios");
                                         registrarButton.setBounds(88, 172, 240, 25);
                                         panel1.add(registrarButton);
 
                                         modificarFrame.getContentPane().add(panel1);  // Aquí se agrega "panel1" al "JInternalFrame"
-
+                                        
+                                        
+                                        
                                         // Validar y registrar el producto en el sistema
                                         registrarButton.addActionListener(b -> {
                                             String titulo = tituloField.getText();
                                             String descripcion = descripcionField.getText();
                                             String precioStr = precioField.getText();
+                                            
 
                                             if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || precioStr.isEmpty()) {
                                                 JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                                                 return;
                                             }
+                                            
+                                            int precio = 0;
+                                            
+                                            try {
+                                            	precio = Integer.parseInt(precioStr);
+                                            	
+                                            } catch(NumberFormatException e1) {
+                                            	JOptionPane.showMessageDialog(null, "El precio debe ser un numero", "Error", JOptionPane.ERROR_MESSAGE);
+                                            	return;
+                                            }
+                                            
+                                            int numRef = 0;
+                                            try {
+                                            	numRef = Integer.parseInt(referenciaField.getText());
+                                            	
+                                            } catch(NumberFormatException e1) {
+                                            	JOptionPane.showMessageDialog(null, "El numero de referencia no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
+                                            	return;
+                                            }
 
-                                            // Aquí se puede añadir la lógica para guardar el producto en el sistema
-                                            JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
+                                            Sistema.getInstance().editarProducto(titulo, numRef, descripcion, precio);
 
                                             tituloField.setText("");
                                             referenciaField.setText("");

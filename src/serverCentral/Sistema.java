@@ -378,40 +378,73 @@ public class Sistema implements ISistema {
     
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
     public boolean verificarNumero(int numero, String titulo) {
-    	Map<String, Categoria> cats = categorias;
-    	int cont = 0;
-    	for (Map.Entry<String, Categoria> entry : cats.entrySet()) {
-    	
-    		Cat_Producto prodC = (Cat_Producto) entry.getValue();
-    	    	
-    	    	
-    		for(Entry<Integer, Producto> entry1: prodC.getProductos().entrySet()) {
-    			Producto p = entry1.getValue();
-    			if(p.getNombre() == titulo && p.getNumRef() == numero) {
-    				cont++;
-    			}
-    		}
-    	}
-    	if(cont > 1) {
-    		return false;
-    	}
+        Map<String, Categoria> cats = categorias;
+        int cont = 0;
+        for (Map.Entry<String, Categoria> entry : cats.entrySet()) {
 
-    	return true;
+            Categoria categoria = entry.getValue();
+            
+            // Verificar si la categoría es una instancia de Cat_Producto
+            if (categoria instanceof Cat_Producto) {
+                Cat_Producto prodC = (Cat_Producto) categoria;
+                
+                for (Entry<Integer, Producto> entry1: prodC.getProductos().entrySet()) {
+                    Producto p = entry1.getValue();
+                    if (p.getNombre().equals(titulo) && p.getNumRef() == numero) {
+                        cont++;
+                    }
+                }
+            }
+        }
+        return cont <= 1;
     }
+
     
-    public int editarProducto(String titulo, int numero, String deescripcion, float precio, Producto p) {
-    	if(!verificarNumero(numero, titulo)) {
-    		return 1;
-    	}
-    	
-    	
-    	p.setNombre(titulo);
-    	p.setPrecio(precio);
-    	p.setDescripcion(deescripcion);
-    	p.setNumRef(numero);
-    	
-    	return 0;
+    public Producto obtenerProducto(int numero, String titulo) {
+        Map<String, Categoria> cats = categorias;
+        for (Map.Entry<String, Categoria> entry : cats.entrySet()) {
+
+            Categoria categoria = entry.getValue();
+
+            // Verificar si la categoría es una instancia de Cat_Producto
+            if (categoria instanceof Cat_Producto) {
+                Cat_Producto prodC = (Cat_Producto) categoria;
+
+                for (Entry<Integer, Producto> entry1 : prodC.getProductos().entrySet()) {
+                    Producto p = entry1.getValue();
+                    // Comparar el título del producto usando equals
+                    if (p.getNombre().equals(titulo) && p.getNumRef() == numero) {
+                        return p;
+                    }
+                }
+            }
+        }
+        return null; // Si no se encuentra el producto, devolver null
     }
+
+    
+    public int editarProducto(String titulo, int numero, String descripcion, float precio) {
+        if (!verificarNumero(numero, titulo)) {
+            return 1; 
+        }
+
+        
+        Producto p = obtenerProducto(numero, titulo);
+        
+        
+        if (p == null) {
+            return 2; 
+        }
+        
+
+        p.setNombre(titulo);
+        p.setPrecio(precio);
+        p.setDescripcion(descripcion);
+        p.setNumRef(numero);
+        
+        return 0; 
+    }
+
     
     // CASO DE USO 9: VER INFORMACION DE PRODUCTO
     public List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException {
