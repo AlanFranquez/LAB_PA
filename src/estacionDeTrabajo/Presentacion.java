@@ -1029,7 +1029,7 @@ public class Presentacion {
                                         modificarFrame.setMaximizable(true);
                                         modificarFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
                                         modificarFrame.setClosable(true);
-                                        modificarFrame.setTitle("Registrar Producto");
+                                        modificarFrame.setTitle("Modificar Producto");
                                         modificarFrame.setBounds(10, 40, 360, 150);
                                         modificarFrame.setSize(440, 257);
 

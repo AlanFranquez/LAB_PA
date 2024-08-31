@@ -377,21 +377,18 @@ public class Sistema implements ISistema {
     }
     
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
-    public boolean verificarNumero(int numero, String titulo) {
-        Map<String, Categoria> cats = categorias;
+    public boolean verificarNumero(int numero, String titulo, Producto productoAEditar) {
         int cont = 0;
-        for (Map.Entry<String, Categoria> entry : cats.entrySet()) {
-
+        for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
             Categoria categoria = entry.getValue();
-            
-            // Verificar si la categoría es una instancia de Cat_Producto
             if (categoria instanceof Cat_Producto) {
                 Cat_Producto prodC = (Cat_Producto) categoria;
-                
-                for (Entry<Integer, Producto> entry1: prodC.getProductos().entrySet()) {
+                for (Entry<Integer, Producto> entry1 : prodC.getProductos().entrySet()) {
                     Producto p = entry1.getValue();
                     if (p.getNombre().equals(titulo) && p.getNumRef() == numero) {
-                        cont++;
+                        if (productoAEditar == null || !p.equals(productoAEditar)) {
+                            cont++;
+                        }
                     }
                 }
             }
@@ -422,28 +419,25 @@ public class Sistema implements ISistema {
         return null; // Si no se encuentra el producto, devolver null
     }
 
-    
+
     public int editarProducto(String titulo, int numero, String descripcion, float precio) {
-        if (!verificarNumero(numero, titulo)) {
-            return 1; 
-        }
-
-        
-        Producto p = obtenerProducto(numero, titulo);
-        
-        
-        if (p == null) {
-            return 2; 
+        Producto productoAEditar = obtenerProducto(numero, titulo);
+        if (productoAEditar == null) {
+            return 2; // Producto no encontrado
         }
         
-
-        p.setNombre(titulo);
-        p.setPrecio(precio);
-        p.setDescripcion(descripcion);
-        p.setNumRef(numero);
+        if (!verificarNumero(numero, titulo, productoAEditar)) {
+            return 1; // Número o título duplicado
+        }
         
-        return 0; 
+        productoAEditar.setNombre(titulo);
+        productoAEditar.setNumRef(numero);
+        productoAEditar.setDescripcion(descripcion);
+        productoAEditar.setPrecio(precio);
+        
+        return 0; // Producto editado con éxito
     }
+
 
     
     // CASO DE USO 9: VER INFORMACION DE PRODUCTO
