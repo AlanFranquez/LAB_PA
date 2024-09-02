@@ -1045,12 +1045,12 @@ public class Presentacion {
                                     	
                                     	RegistrarProducto prod = new RegistrarProducto(dt.getNicknameProveedor(), dt.getNombre(), dt.getNumRef());
                                     	desktopPane.add(prod);
-                                    	ventanaDetalleProducto.setVisible(false);
-                                    	ventanaProductos.setVisible(false);
                                     	
+                                    	 ventanaDetalleProducto.setVisible(false);
+                                     	ventanaProductos.setVisible(false);
                                     }
                                 });
-
+                               
                                 
                                 
                                 detallePanel.add(modificarButton);

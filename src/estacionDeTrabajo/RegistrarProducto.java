@@ -49,7 +49,7 @@ public class RegistrarProducto extends JInternalFrame{
         else
         	setTitle("Modificar Producto");
         setBounds(10, 40, 360, 150);
-        setSize(440, 482);
+        setSize(440, 600);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
@@ -72,34 +72,45 @@ public class RegistrarProducto extends JInternalFrame{
         JTextField referenciaField = new JTextField(20);
         referenciaField.setBounds(185, 50, 200, 25);
         panel.add(referenciaField);
+        
+        JLabel stockLabel = new JLabel("Número de Stock:");
+        stockLabel.setBounds(20, 80, 150, 25);
+        panel.add(stockLabel);
+
+        
+        
+        JTextField stockField = new JTextField(20);
+        stockField.setBounds(185, 80, 200, 25);
+        panel.add(stockField);
 
         JLabel descripcionLabel = new JLabel("Descripción:");
-        descripcionLabel.setBounds(20, 80, 100, 25);
+        descripcionLabel.setBounds(20, 120, 100, 25);
         panel.add(descripcionLabel);
 
         JTextField descripcionField = new JTextField(20);
-        descripcionField.setBounds(100, 80, 266, 25);
+        descripcionField.setBounds(100, 120, 266, 25);
         panel.add(descripcionField);
 
         JLabel especificacionesLabel = new JLabel("Especificaciones:");
-        especificacionesLabel.setBounds(20, 110, 150, 25);
+        especificacionesLabel.setBounds(20, 150, 150, 25);
         panel.add(especificacionesLabel);
 
         JTextArea especificacionesArea = new JTextArea();
-        especificacionesArea.setBounds(20, 135, 394, 64);
+        especificacionesArea.setBounds(20, 170, 394, 64);
         especificacionesArea.setLineWrap(true);
         panel.add(especificacionesArea);
+        
 
         JLabel precioLabel = new JLabel("Precio:");
-        precioLabel.setBounds(20, 205, 80, 25);
+        precioLabel.setBounds(20, 250, 80, 25);
         panel.add(precioLabel);
 
         JTextField precioField = new JTextField(10);
-        precioField.setBounds(100, 205, 100, 25);
+        precioField.setBounds(100, 250, 100, 25);
         panel.add(precioField);
         
         JLabel proveedorLabel = new JLabel("Proveedor:");
-        proveedorLabel.setBounds(20, 235, 100, 25);
+        proveedorLabel.setBounds(20, 290, 100, 25);
         panel.add(proveedorLabel);
         
         List<DTProveedor> proveedores = s.listarProveedores();
@@ -112,7 +123,7 @@ public class RegistrarProducto extends JInternalFrame{
         
         DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(nombres);
         JComboBox<String> padresCategorias = new JComboBox<>(comboBoxModel);
-        padresCategorias.setBounds(100, 235, 160, 25);
+        padresCategorias.setBounds(100, 290, 160, 25);
         padresCategorias.setEnabled(true);
         panel.add(padresCategorias);
         
@@ -123,12 +134,12 @@ public class RegistrarProducto extends JInternalFrame{
         
         
         JLabel lblCategoria = new JLabel("Categoria:");
-        lblCategoria.setBounds(20, 263, 80, 25);
+        lblCategoria.setBounds(20, 330, 80, 25);
         panel.add(lblCategoria);
         
         DefaultMutableTreeNode root = s.arbolCategorias();
         JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setLocation(80, 263);
+        scrollPane.setLocation(80, 350);
 
         scrollPane.setSize(266, 90);
         scrollPane.setVisible(true);
@@ -158,15 +169,15 @@ public class RegistrarProducto extends JInternalFrame{
         tree.clearSelection();
         
         JLabel imagenesLabel = new JLabel("Imágenes:");
-        imagenesLabel.setBounds(20, 363, 100, 25);
+        imagenesLabel.setBounds(20, 450, 100, 25);
         panel.add(imagenesLabel);
 
         JButton seleccionarImagenButton = new JButton("Seleccionar Imágenes");
-        seleccionarImagenButton.setBounds(100, 363, 200, 25);
+        seleccionarImagenButton.setBounds(100, 450, 200, 25);
         panel.add(seleccionarImagenButton);
 
         JLabel imagenesSeleccionadasLabel = new JLabel("No se ha seleccionado ninguna imagen");
-        imagenesSeleccionadasLabel.setBounds(100, 384, 300, 25);
+        imagenesSeleccionadasLabel.setBounds(100, 470, 300, 25);
         panel.add(imagenesSeleccionadasLabel);
 
         JFileChooser fileChooser = new JFileChooser();
@@ -204,7 +215,7 @@ public class RegistrarProducto extends JInternalFrame{
         JButton registrarButton = new JButton("Crear");
         if(prov != "")
         	registrarButton.setText("Guardar Cambios");
-        registrarButton.setBounds(90, 420, 240, 25);
+        registrarButton.setBounds(90, 500, 240, 25);
         panel.add(registrarButton);
         
         getContentPane().add(panel);   
@@ -257,7 +268,7 @@ public class RegistrarProducto extends JInternalFrame{
             
             int Stock = 0;
             try {
-            	Stock = Integer.parseInt(referenciaField.getText());
+            	Stock = Integer.parseInt(stockField.getText());
             	
             } catch(NumberFormatException e1) {
             	JOptionPane.showMessageDialog(null, "El stock no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
@@ -271,7 +282,7 @@ public class RegistrarProducto extends JInternalFrame{
             }
             
             
-            if(prov == "") {
+            if(prov.isEmpty()) {
             	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
             }
             else {
@@ -289,7 +300,20 @@ public class RegistrarProducto extends JInternalFrame{
             	if(!s.verificarUnicidadProducto(catName, numRef, titulo)) {
             		JOptionPane.showMessageDialog(null, "El nombre o el numero de referencia ya existe", "Error", JOptionPane.ERROR_MESSAGE);
                 	
-                	s.eliminarPDesdeProveedor(proveedor, numRef);
+            		if(proveedor != null) {
+        				s.eliminarPDesdeProveedor(proveedor, numRef);
+        			}
+            		
+            		 tituloField.setText("");
+                     referenciaField.setText("");
+                     descripcionField.setText("");
+                     especificacionesArea.setText("");
+                     precioField.setText("");
+                     comboBoxModel.setSelectedItem(nombres[0]);
+                     tree.clearSelection();
+                     stockField.setText("");
+                     
+                     imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
                     return;
             	}
             	

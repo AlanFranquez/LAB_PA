@@ -573,5 +573,14 @@ public class Sistema implements ISistema {
     	p.agregarImagen(imagen);
     }
 
+	@Override
+	public void editarProducto(String titulo, int numero, String descripcion, float precio, List<File> imagenes)
+			throws ProductoException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+
 }
 
