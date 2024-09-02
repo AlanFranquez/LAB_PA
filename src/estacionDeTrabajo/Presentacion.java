@@ -53,6 +53,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import serverCentral.Categoria;
 import serverCentral.CategoriaException;
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
@@ -720,7 +721,12 @@ public class Presentacion {
                             detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                             
                             detallePanel.add(new JLabel("=================================================="));
-                            detallePanel.add(new JLabel("<html>Categorias de los productos: " + dt.getCategorias()));
+                            detallePanel.add(new JLabel("<html>Categorias de los productos: "));
+                            List<Categoria> listacats = dt.categoriasProducto();
+                            
+                            for(Categoria cc : listacats) {
+                            	detallePanel.add(new JLabel("- " + cc.getNombre()));
+                            }
                             List<File> imagenes = dt.getImagenes();
                             if (imagenes != null && !imagenes.isEmpty()) {
                                 for (File imagenFile : imagenes) {
@@ -913,8 +919,12 @@ public class Presentacion {
                                         detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
                                         detallePanel.add(new JLabel("=================================================="));
-                                        detallePanel.add(new JLabel("<html>Categorias de los productos: " + dt.getCategorias()));
+                                        detallePanel.add(new JLabel("<html>Categorias de los productos: "));
+                                        List<Categoria> listacats = dt.categoriasProducto();
                                         
+                                        for(Categoria cc : listacats) {
+                                        	detallePanel.add(new JLabel("- " + cc.getNombre()));
+                                        }
                                         
                                         ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                                         ventanaDetalleProducto.setVisible(true);
@@ -1026,8 +1036,13 @@ public class Presentacion {
                                 detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
                                         
-                                detallePanel.add(new JLabel("<html>Categorias: " + dt.getCategorias()));
+                                detallePanel.add(new JLabel("=================================================="));
+                                detallePanel.add(new JLabel("<html>Categorias de los productos: "));
+                                List<Categoria> listacats = dt.categoriasProducto();
                                 
+                                for(Categoria cc : listacats) {
+                                	detallePanel.add(new JLabel(" - " + cc.getNombre()));
+                                }
                                 
 
                                 ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);

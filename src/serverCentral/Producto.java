@@ -141,7 +141,9 @@ public class Producto {
 		for (Categoria cat : this.categorias.values()) {	
 			catStr = catStr + "<br>" + tab + cat.getNombre();				
 		}
+		
+		
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), this.categorias, this.getImagenes());
 	}
 }

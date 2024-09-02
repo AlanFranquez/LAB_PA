@@ -1,7 +1,10 @@
 package serverCentral;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DtProducto {
 	private String nombre, descripcion;
@@ -9,11 +12,11 @@ public class DtProducto {
 	private Integer numRef;
 	private String especs;
 	private Proveedor proveedor;
-	private String categorias;
+	Map<String, Categoria> categorias;
 	List<File> imagenes;
 	
 	// Constructor:
-	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<File> imagenes) {
+	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, Map<String, Categoria> cat, List<File> imagenes) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
@@ -51,9 +54,9 @@ public class DtProducto {
 		return especs;
 	}
 	
-	public String getCategorias() {
-		return categorias;
-	}
+	//public String getCategorias() {
+		//return categorias;
+	//}
 	
 	public void agregarImagen(File img) {
 		this.imagenes.add(img);
@@ -62,8 +65,7 @@ public class DtProducto {
 	public List<File> getImagenes() {
 		return this.imagenes;
 	}
-	
-/*
+
 	public List<Categoria> categoriasProducto() {
 	    List<Categoria> listacats = new ArrayList<>();
 	    
@@ -90,7 +92,6 @@ public class DtProducto {
 	    }
 	    
 	    return listacats;
-	}*/
-
+	}
 
 }
