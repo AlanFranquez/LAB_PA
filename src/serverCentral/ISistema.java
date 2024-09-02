@@ -106,5 +106,8 @@ public interface ISistema {
 	public void eliminarPDesdeProveedor(String proveedor, int numRef);
 	
 	public void agregarImagenesProducto(String cat, int num, File imagen);
+	
+	
+	public void editarProducto(String titulo, int numero, String descripcion, float precio, List<File> imagenes) throws ProductoException;
 
 }

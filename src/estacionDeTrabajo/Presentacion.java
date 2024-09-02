@@ -78,6 +78,7 @@ public class Presentacion {
     private static ISistema s = Factory.getSistema();
     private JFileChooser fileChooser;
     Calendar calendar = Calendar.getInstance();
+    private List<File> imagenesSeleccionadas = new ArrayList<>();
     
     /**
      * Launch the application.
@@ -807,10 +808,14 @@ public class Presentacion {
                 // Listener para selección de nodos
                 tree.addTreeSelectionListener((TreeSelectionListener) new TreeSelectionListener() {
                     public void valueChanged(TreeSelectionEvent event) {
+                    	System.out.print("1");
+                    	
+                    	
                         DefaultMutableTreeNode seleccionado = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-                        if(seleccionado == null) {
+                        System.out.print(seleccionado);
+                        
+                        if(seleccionado == null || seleccionado.getUserObject().toString() == "Cats") {
                         	 productosPanel.removeAll();
-                        	 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
                              productosPanel.add(new JLabel("Listado de Productos"));
                              List<DtProducto> listaPr = new ArrayList<>();
 							try {
@@ -821,6 +826,8 @@ public class Presentacion {
                              for (DtProducto dt : listaPr) {
                                  productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
                              }
+                            productosPanel.revalidate();
+                         	productosPanel.repaint();
                         	return;
                         }
                         String nombreCategoria = seleccionado.getUserObject().toString();
@@ -837,16 +844,17 @@ public class Presentacion {
                         		
                         	try {
 								prodsFiltrados = s.listarProductosPorCategoria(nombreCategoria);
+								productosPanel.removeAll();
+	                            productosPanel.add(new JLabel("Listado de Productos"));
+	                            for (DtProducto dt : prodsFiltrados) {
+	                                 productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
+	                             }
 							} catch (ProductoException e) {
 								JOptionPane.showMessageDialog(null, e.getMessage());
 								return;
 							}
                         	
-                        	productosPanel.removeAll();
-                            productosPanel.add(new JLabel("Listado de Productos"));
-                            for (DtProducto dt : prodsFiltrados) {
-                                 productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
-                             }
+                        	
                         		
                         	
                         }
@@ -876,8 +884,18 @@ public class Presentacion {
                                         // Disparar el evento deseado
                                     	String selection = (String) selectedNode.getUserObject();
                                     	String[] parts = selection.split(" - "); 
-                                    	int numRef = Integer.parseInt(parts[1]);
+                                    	int numRef = 0;
+                                    	
+                                    	try {
+                                    		numRef = Integer.parseInt(parts[1]);
+                                    	} catch(ArrayIndexOutOfBoundsException e2) {
+                                    		
+                                    		return;
+                                    	}
                                     	DtProducto dt = s.getDtProducto(numRef);
+                                    	
+                                    	System.out.print(numRef);
+                                    	System.out.print(parts.length);
                                     	
                                     	JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
                                         ventanaDetalleProducto.setSize(600, 400);
@@ -1020,9 +1038,14 @@ public class Presentacion {
                                 JButton modificarButton = new JButton("Modificar");
                                 modificarButton.setBounds(20, 540, 240, 25);
                                 
+                                
+                                
                                 modificarButton.addActionListener(new ActionListener() {
                                     public void actionPerformed(ActionEvent z) {
-                                        JInternalFrame modificarFrame = new JInternalFrame();
+                                    	
+                                    	
+                                    	
+                                    	JInternalFrame modificarFrame = new JInternalFrame();
 
                                         modificarFrame.setResizable(true);
                                         modificarFrame.setIconifiable(true);
@@ -1071,8 +1094,50 @@ public class Presentacion {
                                         JButton registrarButton = new JButton("Guardar Cambios");
                                         registrarButton.setBounds(88, 172, 240, 25);
                                         panel1.add(registrarButton);
+                                        
+                                        JLabel imagenesLabel = new JLabel("Imágenes:");
+                                        imagenesLabel.setBounds(20, 363, 100, 25);
+                                        panel1.add(imagenesLabel);
 
-                                        modificarFrame.getContentPane().add(panel1);  // Aquí se agrega "panel1" al "JInternalFrame"
+                                        JButton seleccionarImagenButton = new JButton("Seleccionar Imágenes");
+                                        seleccionarImagenButton.setBounds(100, 363, 200, 25);
+                                        panel1.add(seleccionarImagenButton);
+
+                                        JLabel imagenesSeleccionadasLabel = new JLabel("No se ha seleccionado ninguna imagen");
+                                        imagenesSeleccionadasLabel.setBounds(100, 384, 300, 25);
+                                        panel1.add(imagenesSeleccionadasLabel);
+                                        
+                                        JFileChooser fileChooser = new JFileChooser();
+                                        fileChooser.setMultiSelectionEnabled(true);
+                                        seleccionarImagenButton.addActionListener(new ActionListener() {
+                                            @Override
+                                            public void actionPerformed(ActionEvent e1) {
+                                                int returnValue = fileChooser.showOpenDialog(null);
+                                                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                                                    File[] archivosSeleccionados = fileChooser.getSelectedFiles();
+                                                    imagenesSeleccionadas.clear();
+                                                    StringBuilder imagenesNombres = new StringBuilder();
+                                                    
+                                                    for (File archivo : archivosSeleccionados) {
+                                                        String nombreArchivo = archivo.getName().toLowerCase();
+                                                        if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
+                                                            imagenesSeleccionadas.add(archivo);
+                                                            imagenesNombres.append(archivo.getName()).append("; ");
+                                                        } else {
+                                                            JOptionPane.showMessageDialog(null, "El archivo " + archivo.getName() + " no es válido. Seleccione archivos .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+                                                        }
+                                                    }
+                                                    
+                                                    if (imagenesSeleccionadas.isEmpty()) {
+                                                        imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
+                                                    } else {
+                                                        imagenesSeleccionadasLabel.setText("Imágenes seleccionadas: " + imagenesNombres.toString());
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        
+                                        modificarFrame.getContentPane().add(panel1);
                                         
                                         
                                         
@@ -1107,12 +1172,13 @@ public class Presentacion {
                                             	return;
                                             }
 
-                                            Sistema.getInstance().editarProducto(titulo, numRef, descripcion, precio);
+                                            try {
+												s.editarProducto(titulo, numRef, descripcion, precio, imagenesSeleccionadas);
+											} catch (ProductoException e) {
+												JOptionPane.showMessageDialog(null, e.getMessage());
+											}
 
-                                            tituloField.setText("");
-                                            referenciaField.setText("");
-                                            descripcionField.setText("");
-                                            precioField.setText("");
+                                            
                                         });
 
                                         modificarFrame.setVisible(true);

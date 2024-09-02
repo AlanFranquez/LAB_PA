@@ -420,22 +420,21 @@ public class Sistema implements ISistema {
     }
 
 
-    public int editarProducto(String titulo, int numero, String descripcion, float precio) {
+    public void editarProducto(String titulo, int numero, String descripcion, float precio, List<File> imagenes) throws ProductoException {
         Producto productoAEditar = obtenerProducto(numero, titulo);
-        if (productoAEditar == null) {
-            return 2; // Producto no encontrado
-        }
+        //if (productoAEditar == null) {
+          //  throw new ProductoException("No se encontró el producto");
+        //}
         
         if (!verificarNumero(numero, titulo, productoAEditar)) {
-            return 1; // Número o título duplicado
+        	throw new ProductoException("Ya existe un producto con este numero");
         }
         
         productoAEditar.setNombre(titulo);
         productoAEditar.setNumRef(numero);
         productoAEditar.setDescripcion(descripcion);
         productoAEditar.setPrecio(precio);
-        
-        return 0; // Producto editado con éxito
+        productoAEditar.agregarNuevasImagenes(imagenes);
     }
 
 

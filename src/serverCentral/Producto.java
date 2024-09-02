@@ -45,6 +45,12 @@ public class Producto {
 		return comentarios;
 	}
 	
+	
+	public void agregarNuevasImagenes(List<File> imagenes) {
+		this.imagenes = null;
+		this.imagenes = imagenes;
+	}
+	
 	public void agregarCategorias(Categoria cat) {
 		categorias.put(cat.getNombre(), cat);
 	}
