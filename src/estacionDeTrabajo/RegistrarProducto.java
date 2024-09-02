@@ -297,6 +297,14 @@ public class RegistrarProducto extends JInternalFrame{
             	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             	String catName = selectedNode.getUserObject().toString();
             	
+            	// Verificar categoria
+            	try {
+					s.comprobarCat(catName);
+				} catch (CategoriaException e) {
+					JOptionPane.showMessageDialog(null, "Tiene que ser una categoria existente");
+					return;
+				}
+            	
             	if(!s.verificarUnicidadProducto(catName, numRef, titulo)) {
             		JOptionPane.showMessageDialog(null, "El nombre o el numero de referencia ya existe", "Error", JOptionPane.ERROR_MESSAGE);
                 	
