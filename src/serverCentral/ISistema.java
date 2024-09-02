@@ -110,4 +110,8 @@ public interface ISistema {
 	
 	public void editarProducto(String titulo, int numero, String descripcion, float precio, List<File> imagenes) throws ProductoException;
 
+
+
+	public abstract void borrarProducto(int numRef, String titulo);
+
 }

@@ -33,6 +33,10 @@ public class DtProducto {
 		return this.proveedor.getNombre();
 	}
 	
+	public String getNicknameProveedor(){
+		return this.proveedor.getNick();
+	}
+	
 	public String getDescripcion() {
 		return descripcion;
 	}

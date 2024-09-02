@@ -649,7 +649,7 @@ public class Presentacion {
         JMenuItem mntmRegistrarProducto = new JMenuItem("Registrar Producto");
         mntmRegistrarProducto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	RegistrarProducto prod = new RegistrarProducto();
+            	RegistrarProducto prod = new RegistrarProducto("","",0);
             	desktopPane.add(prod);
             }
         });
@@ -1043,147 +1043,11 @@ public class Presentacion {
                                 modificarButton.addActionListener(new ActionListener() {
                                     public void actionPerformed(ActionEvent z) {
                                     	
+                                    	RegistrarProducto prod = new RegistrarProducto(dt.getNicknameProveedor(), dt.getNombre(), dt.getNumRef());
+                                    	desktopPane.add(prod);
+                                    	ventanaDetalleProducto.setVisible(false);
+                                    	ventanaProductos.setVisible(false);
                                     	
-                                    	
-                                    	JInternalFrame modificarFrame = new JInternalFrame();
-
-                                        modificarFrame.setResizable(true);
-                                        modificarFrame.setIconifiable(true);
-                                        modificarFrame.setMaximizable(true);
-                                        modificarFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-                                        modificarFrame.setClosable(true);
-                                        modificarFrame.setTitle("Modificar Producto");
-                                        modificarFrame.setBounds(10, 40, 360, 150);
-                                        modificarFrame.setSize(440, 257);
-
-                                        JPanel panel1 = new JPanel();
-                                        panel1.setLayout(null);  // Se cambió "panel" por "panel1"
-
-                                        JLabel tituloLabel = new JLabel("Título:");
-                                        tituloLabel.setBounds(20, 20, 80, 25);
-                                        panel1.add(tituloLabel);
-
-                                        JTextField tituloField = new JTextField(20);
-                                        tituloField.setBounds(100, 20, 200, 25);
-                                        panel1.add(tituloField);
-
-                                        JLabel referenciaLabel = new JLabel("Número de referencia:");
-                                        referenciaLabel.setBounds(20, 50, 150, 25);
-                                        panel1.add(referenciaLabel);
-
-                                        JTextField referenciaField = new JTextField(20);
-                                        referenciaField.setBounds(185, 50, 200, 25);
-                                        panel1.add(referenciaField);
-
-                                        JLabel descripcionLabel = new JLabel("Descripción:");
-                                        descripcionLabel.setBounds(20, 80, 100, 25);
-                                        panel1.add(descripcionLabel);
-
-                                        JTextField descripcionField = new JTextField(20);
-                                        descripcionField.setBounds(100, 80, 266, 25);
-                                        panel1.add(descripcionField);
-
-                                        JLabel precioLabel = new JLabel("Precio:");
-                                        precioLabel.setBounds(20, 115, 80, 25);
-                                        panel1.add(precioLabel);
-
-                                        JTextField precioField = new JTextField(10);
-                                        precioField.setBounds(100, 115, 100, 25);
-                                        panel1.add(precioField);
-
-                                        JButton registrarButton = new JButton("Guardar Cambios");
-                                        registrarButton.setBounds(88, 172, 240, 25);
-                                        panel1.add(registrarButton);
-                                        
-                                        JLabel imagenesLabel = new JLabel("Imágenes:");
-                                        imagenesLabel.setBounds(20, 363, 100, 25);
-                                        panel1.add(imagenesLabel);
-
-                                        JButton seleccionarImagenButton = new JButton("Seleccionar Imágenes");
-                                        seleccionarImagenButton.setBounds(100, 363, 200, 25);
-                                        panel1.add(seleccionarImagenButton);
-
-                                        JLabel imagenesSeleccionadasLabel = new JLabel("No se ha seleccionado ninguna imagen");
-                                        imagenesSeleccionadasLabel.setBounds(100, 384, 300, 25);
-                                        panel1.add(imagenesSeleccionadasLabel);
-                                        
-                                        JFileChooser fileChooser = new JFileChooser();
-                                        fileChooser.setMultiSelectionEnabled(true);
-                                        seleccionarImagenButton.addActionListener(new ActionListener() {
-                                            @Override
-                                            public void actionPerformed(ActionEvent e1) {
-                                                int returnValue = fileChooser.showOpenDialog(null);
-                                                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                                                    File[] archivosSeleccionados = fileChooser.getSelectedFiles();
-                                                    imagenesSeleccionadas.clear();
-                                                    StringBuilder imagenesNombres = new StringBuilder();
-                                                    
-                                                    for (File archivo : archivosSeleccionados) {
-                                                        String nombreArchivo = archivo.getName().toLowerCase();
-                                                        if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
-                                                            imagenesSeleccionadas.add(archivo);
-                                                            imagenesNombres.append(archivo.getName()).append("; ");
-                                                        } else {
-                                                            JOptionPane.showMessageDialog(null, "El archivo " + archivo.getName() + " no es válido. Seleccione archivos .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
-                                                        }
-                                                    }
-                                                    
-                                                    if (imagenesSeleccionadas.isEmpty()) {
-                                                        imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
-                                                    } else {
-                                                        imagenesSeleccionadasLabel.setText("Imágenes seleccionadas: " + imagenesNombres.toString());
-                                                    }
-                                                }
-                                            }
-                                        });
-                                        
-                                        modificarFrame.getContentPane().add(panel1);
-                                        
-                                        
-                                        
-                                        // Validar y registrar el producto en el sistema
-                                        registrarButton.addActionListener(b -> {
-                                            String titulo = tituloField.getText();
-                                            String descripcion = descripcionField.getText();
-                                            String precioStr = precioField.getText();
-                                            
-
-                                            if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || precioStr.isEmpty()) {
-                                                JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                                                return;
-                                            }
-                                            
-                                            int precio = 0;
-                                            
-                                            try {
-                                            	precio = Integer.parseInt(precioStr);
-                                            	
-                                            } catch(NumberFormatException e1) {
-                                            	JOptionPane.showMessageDialog(null, "El precio debe ser un numero", "Error", JOptionPane.ERROR_MESSAGE);
-                                            	return;
-                                            }
-                                            
-                                            int numRef = 0;
-                                            try {
-                                            	numRef = Integer.parseInt(referenciaField.getText());
-                                            	
-                                            } catch(NumberFormatException e1) {
-                                            	JOptionPane.showMessageDialog(null, "El numero de referencia no puede ser un string", "Error", JOptionPane.ERROR_MESSAGE);
-                                            	return;
-                                            }
-
-                                            try {
-												s.editarProducto(titulo, numRef, descripcion, precio, imagenesSeleccionadas);
-											} catch (ProductoException e) {
-												JOptionPane.showMessageDialog(null, e.getMessage());
-											}
-
-                                            
-                                        });
-
-                                        modificarFrame.setVisible(true);
-                                        modificarFrame.toFront();
-                                        desktopPane.add(modificarFrame);
                                     }
                                 });
 

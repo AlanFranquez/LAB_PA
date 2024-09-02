@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -117,8 +118,8 @@ public class Sistema implements ISistema {
     	}
     	return listaProveedor;
     }
-    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p, int stock) {
-        Proveedor proveedor = (Proveedor) usuarios.get(p);
+    public void agregarProducto(String titulo, int numRef, String descripcion, String especificaciones, int precio, String p, int stock) {    	
+    	Proveedor proveedor = (Proveedor) usuarios.get(p);
         Producto prod = new Producto(titulo, descripcion, precio, numRef, especificaciones, proveedor, stock);
         proveedor.agregarProd(prod);
     }
@@ -377,64 +378,35 @@ public class Sistema implements ISistema {
     }
     
     // CASO DE USO 8: MODIFICAR DATOS DE PRODUCTO
-    public boolean verificarNumero(int numero, String titulo, Producto productoAEditar) {
-        int cont = 0;
-        for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-            Categoria categoria = entry.getValue();
-            if (categoria instanceof Cat_Producto) {
-                Cat_Producto prodC = (Cat_Producto) categoria;
-                for (Entry<Integer, Producto> entry1 : prodC.getProductos().entrySet()) {
-                    Producto p = entry1.getValue();
-                    if (p.getNombre().equals(titulo) && p.getNumRef() == numero) {
-                        if (productoAEditar == null || !p.equals(productoAEditar)) {
-                            cont++;
-                        }
-                    }
-                }
-            }
-        }
-        return cont <= 1;
-    }
+    
 
     
-    public Producto obtenerProducto(int numero, String titulo) {
-        Map<String, Categoria> cats = categorias;
-        for (Map.Entry<String, Categoria> entry : cats.entrySet()) {
+    public void borrarProducto(int numero, String titulo) {
+    	Map<String, Categoria> cats = categorias;
+    	Iterator<Map.Entry<String, Categoria>> iterator = cats.entrySet().iterator();
 
-            Categoria categoria = entry.getValue();
+    	while (iterator.hasNext()) {
+    	    Map.Entry<String, Categoria> entry = iterator.next();
+    	    Categoria categoria = entry.getValue();
 
-            // Verificar si la categoría es una instancia de Cat_Producto
-            if (categoria instanceof Cat_Producto) {
-                Cat_Producto prodC = (Cat_Producto) categoria;
+    	    // Verificar si la categoría es una instancia de Cat_Producto
+    	    if (categoria instanceof Cat_Producto) {
+    	        Cat_Producto prodC = (Cat_Producto) categoria;
 
-                for (Entry<Integer, Producto> entry1 : prodC.getProductos().entrySet()) {
-                    Producto p = entry1.getValue();
-                    // Comparar el título del producto usando equals
-                    if (p.getNombre().equals(titulo) && p.getNumRef() == numero) {
-                        return p;
-                    }
-                }
-            }
-        }
-        return null; // Si no se encuentra el producto, devolver null
-    }
+    	        Iterator<Map.Entry<Integer, Producto>> prodIterator = prodC.getProductos().entrySet().iterator();
 
+    	        while (prodIterator.hasNext()) {
+    	            Map.Entry<Integer, Producto> prodEntry = prodIterator.next();
+    	            Producto p = prodEntry.getValue();
 
-    public void editarProducto(String titulo, int numero, String descripcion, float precio, List<File> imagenes) throws ProductoException {
-        Producto productoAEditar = obtenerProducto(numero, titulo);
-        //if (productoAEditar == null) {
-          //  throw new ProductoException("No se encontró el producto");
-        //}
-        
-        if (!verificarNumero(numero, titulo, productoAEditar)) {
-        	throw new ProductoException("Ya existe un producto con este numero");
-        }
-        
-        productoAEditar.setNombre(titulo);
-        productoAEditar.setNumRef(numero);
-        productoAEditar.setDescripcion(descripcion);
-        productoAEditar.setPrecio(precio);
-        productoAEditar.agregarNuevasImagenes(imagenes);
+    	            // Comparar el título del producto usando equals y el número de referencia
+    	            if (p.getNombre().equals(titulo) && p.getNumRef() == numero) {
+    	                // Remover el producto del mapa
+    	                prodIterator.remove();
+    	            }
+    	        }
+    	    }
+    	}
     }
 
 

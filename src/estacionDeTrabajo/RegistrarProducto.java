@@ -38,19 +38,23 @@ public class RegistrarProducto extends JInternalFrame{
 	private File imagenSeleccionada;
 	private List<File> imagenesSeleccionadas = new ArrayList<>();
 	
-	public RegistrarProducto() {
+	public RegistrarProducto(String prov, String prodDel, int numRefDel) {
 		setResizable(true);
         setIconifiable(true);
         setMaximizable(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setClosable(true);
-        setTitle("Registrar Producto");
+        if(prov == "")
+        	setTitle("Registrar Producto");
+        else
+        	setTitle("Modificar Producto");
         setBounds(10, 40, 360, 150);
         setSize(440, 482);
 
         JPanel panel = new JPanel();
         panel.setLayout(null);
-
+        
+        
         JLabel tituloLabel = new JLabel("Título:");
         tituloLabel.setBounds(20, 20, 80, 25);
         panel.add(tituloLabel);
@@ -93,7 +97,7 @@ public class RegistrarProducto extends JInternalFrame{
         JTextField precioField = new JTextField(10);
         precioField.setBounds(100, 205, 100, 25);
         panel.add(precioField);
-
+        
         JLabel proveedorLabel = new JLabel("Proveedor:");
         proveedorLabel.setBounds(20, 235, 100, 25);
         panel.add(proveedorLabel);
@@ -111,6 +115,11 @@ public class RegistrarProducto extends JInternalFrame{
         padresCategorias.setBounds(100, 235, 160, 25);
         padresCategorias.setEnabled(true);
         panel.add(padresCategorias);
+        
+        if(prov != "") {
+        	proveedorLabel.setVisible(false);
+        	padresCategorias.setVisible(false);
+        }
         
         
         JLabel lblCategoria = new JLabel("Categoria:");
@@ -193,6 +202,8 @@ public class RegistrarProducto extends JInternalFrame{
         
         
         JButton registrarButton = new JButton("Crear");
+        if(prov != "")
+        	registrarButton.setText("Guardar Cambios");
         registrarButton.setBounds(90, 420, 240, 25);
         panel.add(registrarButton);
         
@@ -200,16 +211,28 @@ public class RegistrarProducto extends JInternalFrame{
         
         // Validar y registrar el producto en el sistema
         registrarButton.addActionListener(b -> {
-            String proveedor = (String) comboBoxModel.getSelectedItem();
+        	String proveedor = (String) comboBoxModel.getSelectedItem();
+        	if(prov != "") {
+        		proveedor = null;
+        	}
             String titulo = tituloField.getText();
             String descripcion = descripcionField.getText();
             String especificaciones = especificacionesArea.getText();
             String precioStr = precioField.getText();
             
-            if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
-            	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-            	return;
+            if(prov == "") {
+            	if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
+                	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                	return;
+                }
             }
+            else {
+            	if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty()) {
+                	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
+                	return;
+                }
+            }
+            
             
            
             
@@ -248,8 +271,14 @@ public class RegistrarProducto extends JInternalFrame{
             }
             
             
-            
-            s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
+            if(prov == "") {
+            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
+            }
+            else {
+            	s.borrarProducto(numRefDel, prodDel);
+            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, prov, Stock);
+            }
+            	
             
             
             
@@ -271,24 +300,28 @@ public class RegistrarProducto extends JInternalFrame{
                     return;
                 }
                 
-                
-                
-                try {
-                	s.agregarProductoCategoria(catName, numRef);
-                	
-                	// Agregar imgs
-                    
-                    for(File imgs: imagenesSeleccionadas) {
-                    	s.agregarImagenesProducto(catName, numRef, imgs);
+
+                	try {
+                    	s.agregarProductoCategoria(catName, numRef);
+                    	
+                    	// Agregar imgs
+                        
+                        for(File imgs: imagenesSeleccionadas) {
+                        	s.agregarImagenesProducto(catName, numRef, imgs);
+                        }
+                    	
+                    } catch(CategoriaException e1) {
+                    	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    	return;
                     }
-                	
-                } catch(CategoriaException e1) {
-                	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                	return;
                 }
-            }
-            
-            JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
+                
+                
+
+            if(prov == "")
+            	JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
+            else
+            	JOptionPane.showMessageDialog(null, "Producto modificado con éxito.");
             
             tituloField.setText("");
             referenciaField.setText("");
@@ -298,6 +331,8 @@ public class RegistrarProducto extends JInternalFrame{
             comboBoxModel.setSelectedItem(nombres[0]);
             tree.clearSelection();
             imagenesSeleccionadasLabel.setText("No se ha seleccionado ninguna imagen");
+            setVisible(false);
+            
         });
         
         getContentPane().add(panel);
