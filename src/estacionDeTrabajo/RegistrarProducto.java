@@ -193,11 +193,12 @@ public class RegistrarProducto extends JInternalFrame{
                     for (File archivo : archivosSeleccionados) {
                     	System.out.println(archivo.getName());
                         String nombreArchivo = archivo.getName().toLowerCase();
-                        if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
+                        if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")|| nombreArchivo.endsWith(".jpeg")) {
                             imagenesSeleccionadas.add(archivo);
                             imagenesNombres.append(archivo.getName()).append("; ");
                         } else {
                             JOptionPane.showMessageDialog(null, "El archivo " + archivo.getName() + " no es válido. Seleccione archivos .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
+                            return;
                         }
                     }
                     
@@ -291,19 +292,20 @@ public class RegistrarProducto extends JInternalFrame{
             }
             	
             
-            
-            
             for (TreePath path : selectedPaths) {
             	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             	String catName = selectedNode.getUserObject().toString();
-            	
-            	// Verificar categoria
             	try {
 					s.comprobarCat(catName);
-				} catch (CategoriaException e) {
-					JOptionPane.showMessageDialog(null, "Tiene que ser una categoria existente");
+				} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, "Todas las categorias deben ser válidas");
 					return;
-				}
+				}	
+            }
+            
+            for (TreePath path : selectedPaths) {
+            	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
+            	String catName = selectedNode.getUserObject().toString();            	
             	
             	if(!s.verificarUnicidadProducto(catName, numRef, titulo)) {
             		JOptionPane.showMessageDialog(null, "El nombre o el numero de referencia ya existe", "Error", JOptionPane.ERROR_MESSAGE);

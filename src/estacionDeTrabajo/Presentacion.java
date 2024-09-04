@@ -1056,18 +1056,11 @@ public class Presentacion {
                                  DtProducto dt = s.getDtProducto(numRef);
                                     	
                                 JInternalFrame ventanaDetalleProducto = new JInternalFrame("Detalle de Producto", true, true, true, true);
-                                ventanaDetalleProducto.setSize(600, 400);
+                                ventanaDetalleProducto.setSize(600, 530);
                                 ventanaDetalleProducto.setLayout(new BorderLayout());
 
                                 JPanel detallePanel = new JPanel();
                                 detallePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-                                //detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                                //detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                                //detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                                //detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                                //detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
-                                //detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
-                                
                                 
                                 detallePanel.add(createLabelValuePair("Número de Referencia:", dt.getNumRef().toString()));
                                 detallePanel.add(createLabelValuePair("Nombre:", dt.getNombre()));
