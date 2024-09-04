@@ -299,6 +299,7 @@ public class Sistema implements ISistema {
     			Proveedor p = (Proveedor) user;
     			Producto prod = p.obtenerProd(numRef);
     			if(prod != null) {
+    				prod.setStock(prod.getStock() - cant);
     				ordenes.get(ordenes.size()).addItem(prod, cant);
     			}
     		}
