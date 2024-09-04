@@ -191,7 +191,6 @@ public class RegistrarProducto extends JInternalFrame{
                     StringBuilder imagenesNombres = new StringBuilder();
                     
                     for (File archivo : archivosSeleccionados) {
-                    	System.out.println(archivo.getName() + " - " + imagenesSeleccionadas.size());
                         String nombreArchivo = archivo.getName().toLowerCase();
                         if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")|| nombreArchivo.endsWith(".jpeg")) {
                             imagenesSeleccionadas.add(archivo);
@@ -303,6 +302,7 @@ public class RegistrarProducto extends JInternalFrame{
 				}	
             }
             
+            boolean images = false;
             for (TreePath path : selectedPaths) {
             	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
             	String catName = selectedNode.getUserObject().toString();            	
@@ -334,19 +334,14 @@ public class RegistrarProducto extends JInternalFrame{
                     return;
                 }
                 
-                System.out.println(" - " + imagenesSeleccionadas.size());
                 	try {
                     	s.agregarProductoCategoria(catName, numRef);
-                    	
-                    	// Agregar imgs
-                    	//int count = 0;
                         for(File imgs: imagenesSeleccionadas) {
-                        	//if(count < imagenesSeleccionadas.size() / 2) {
+                        	if(! images) {
                         		s.agregarImagenesProducto(catName, numRef, imgs);
-                        	//	count ++;
-                        		System.out.print(true);
-                        //	}
+                        	}
                         }
+                        images = true;
                     	
                     } catch(CategoriaException e1) {
                     	JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
