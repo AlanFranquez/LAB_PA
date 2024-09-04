@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -729,18 +730,28 @@ public class Presentacion {
                             }
                             List<File> imagenes = dt.getImagenes();
                             if (imagenes != null && !imagenes.isEmpty()) {
+                            	JPanel imagePanel = new JPanel();
+                                imagePanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 columnas, espaciado de 10px
+
                                 for (File imagenFile : imagenes) {
                                     try {
                                         ImageIcon imageIcon = new ImageIcon(imagenFile.getAbsolutePath());
                                         Image imagenAjuste = imageIcon.getImage();
-                                        Image reajuste = imagenAjuste.getScaledInstance(75, 75, 0);
+                                        Image reajuste = imagenAjuste.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
                                         ImageIcon imagenIconAjustada = new ImageIcon(reajuste);
                                         JLabel imageLabel = new JLabel(imagenIconAjustada);
-                                        detallePanel.add(imageLabel);
+                                        imagePanel.add(imageLabel);
                                     } catch (Exception ex) {
                                         ex.printStackTrace();
                                     }
                                 }
+
+                                JScrollPane scrollPane = new JScrollPane(imagePanel);
+                                scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                                scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                                scrollPane.setPreferredSize(new Dimension(550, 250));
+
+                                detallePanel.add(scrollPane);
                             }
                             
                             ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
@@ -925,6 +936,31 @@ public class Presentacion {
                                         for(Categoria cc : listacats) {
                                         	detallePanel.add(new JLabel("- " + cc.getNombre()));
                                         }
+                                        List<File> imagenes = dt.getImagenes();
+                                        if (imagenes != null && !imagenes.isEmpty()) {
+                                        	JPanel imagePanel = new JPanel();
+                                            imagePanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 columnas, espaciado de 10px
+
+                                            for (File imagenFile : imagenes) {
+                                                try {
+                                                    ImageIcon imageIcon = new ImageIcon(imagenFile.getAbsolutePath());
+                                                    Image imagenAjuste = imageIcon.getImage();
+                                                    Image reajuste = imagenAjuste.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
+                                                    ImageIcon imagenIconAjustada = new ImageIcon(reajuste);
+                                                    JLabel imageLabel = new JLabel(imagenIconAjustada);
+                                                    imagePanel.add(imageLabel);
+                                                } catch (Exception ex) {
+                                                    ex.printStackTrace();
+                                                }
+                                            }
+
+                                            JScrollPane scrollPane = new JScrollPane(imagePanel);
+                                            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                                            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                                            scrollPane.setPreferredSize(new Dimension(550, 250));
+
+                                            detallePanel.add(scrollPane);
+                                        }
                                         
                                         ventanaDetalleProducto.getContentPane().add(detallePanel, BorderLayout.CENTER);
                                         ventanaDetalleProducto.setVisible(true);
@@ -1042,6 +1078,31 @@ public class Presentacion {
                                 
                                 for(Categoria cc : listacats) {
                                 	detallePanel.add(new JLabel(" - " + cc.getNombre()));
+                                }
+                                List<File> imagenes = dt.getImagenes();
+                                if (imagenes != null && !imagenes.isEmpty()) {
+                                	JPanel imagePanel = new JPanel();
+                                    imagePanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 columnas, espaciado de 10px
+
+                                    for (File imagenFile : imagenes) {
+                                        try {
+                                            ImageIcon imageIcon = new ImageIcon(imagenFile.getAbsolutePath());
+                                            Image imagenAjuste = imageIcon.getImage();
+                                            Image reajuste = imagenAjuste.getScaledInstance(200, 100, Image.SCALE_SMOOTH);
+                                            ImageIcon imagenIconAjustada = new ImageIcon(reajuste);
+                                            JLabel imageLabel = new JLabel(imagenIconAjustada);
+                                            imagePanel.add(imageLabel);
+                                        } catch (Exception ex) {
+                                            ex.printStackTrace();
+                                        }
+                                    }
+
+                                    JScrollPane scrollPane = new JScrollPane(imagePanel);
+                                    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+                                    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+                                    scrollPane.setPreferredSize(new Dimension(550, 250));
+
+                                    detallePanel.add(scrollPane);
                                 }
                                 
 
