@@ -111,20 +111,35 @@ public class Presentacion {
                     s.agregarCategoriaConProductos("Tecno");
                     s.asignarlePadreACategoriaProds("Living", "Tecno");
                     s.agregarCategoriaConProductos("Otros");
-                    
+                    s.agregarCategoriaConProductos("Bazar");
                     // SOlo una prueba
                     
                     
                    
-                    Proveedor prov = new Proveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
-                    s.agregarProveedor("Bellizzi", "isracaballero@gmail.com", "Israel", "Bellizzi", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
-                    s.agregarImagenUsuario("Bellizzi", new ImageIcon("./imagenes/p1.jpg"));
+                    Proveedor prov = new Proveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
+                    s.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
+                    s.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com");
+                    
+                    s.agregarImagenUsuario("Perez", new ImageIcon("./imagenes/p1.jpg"));
                     
                     Producto p1 = new Producto("Pelota", "Pelota inflable ideal", 120, 1,"Lalala", prov, 2);
-                    s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Lalala", 120, "Bellizzi", 2);
+                    s.agregarProducto("Pelota", 1, "Pelota inflable ideal", "Increible", 120, "Perez", 2);
+                    s.agregarProducto("Cargador", 2, "Cargador tipo c", "Muy bueno", 220, "Perez", 20);
+                    s.agregarProducto("Sillon Comodo", 3, "Sillon comodo para todos los hogares", "Muy bueno", 330, "Jorge", 25);
+                    
                     s.agregarProductoCategoria("Tecno", 1);
                     s.agregarProductoCategoria("Otros", 1);
-                    s.agregarProducto("Cargador", 2, "Cargador tipo c", "Lalala", 220, "Bellizzi", 20);
+                    s.agregarProductoCategoria("Tecno", 2);
+                    s.agregarProductoCategoria("Bazar", 3);
+                    s.agregarImagenesProducto("Tecno", 2, new File("./imagenes/cargador1.jpg"));
+                    s.agregarImagenesProducto("Tecno", 2, new File("./imagenes/cargador2.jpg"));
+                    
+                    s.agregarImagenesProducto("Tecno", 1, new File("./imagenes/pelota1.jpg"));
+                    s.agregarImagenesProducto("Tecno", 1, new File("./imagenes/pelota2.jpg"));
+                    
+                    s.agregarImagenesProducto("Bazar", 3, new File("./imagenes/s1.jpg"));
+                    s.agregarImagenesProducto("Bazar", 3, new File("./imagenes/s2.jpg"));
+                    
                     s.agregarProductoCategoria("Tecno", 2);
                     OrdenDeCompra o1 = new OrdenDeCompra(1);
                     o1.addItem(p1, 3);
@@ -725,7 +740,7 @@ public class Presentacion {
                             detallePanel.add(createLabelValuePair("Especificaciones:", dt.getEspecs()));
                             detallePanel.add(createLabelValuePair("Precio: ", String.valueOf(dt.getPrecio())));
                             detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
-                            
+                            detallePanel.add(createLabelValuePair("Stock: ", String.valueOf(dt.getStock()))); 
                             detallePanel.add(new JLabel("=================================================="));
                             detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
 
@@ -933,6 +948,8 @@ public class Presentacion {
                                         detallePanel.add(createLabelValuePair("Precio: ", String.valueOf(dt.getPrecio())));
                                         detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
                                         
+                                        detallePanel.add(createLabelValuePair("Stock: ", String.valueOf(dt.getStock()))); 
+                                        
                                         detallePanel.add(new JLabel("=============================================================\n"));
                                         detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
                                         List<File> imagenes = dt.getImagenes();
@@ -1068,7 +1085,8 @@ public class Presentacion {
                                 detallePanel.add(createLabelValuePair("Especificaciones:", dt.getEspecs()));
                                 detallePanel.add(createLabelValuePair("Precio: ", String.valueOf(dt.getPrecio())));
                                 detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
-                                        
+                               
+                                detallePanel.add(createLabelValuePair("Stock: ", String.valueOf(dt.getStock())));         
                                         
                                 detallePanel.add(new JLabel("=================================================="));
                                 detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
