@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -711,15 +712,21 @@ public class Presentacion {
                             ventanaDetalleProducto.setLayout(new BorderLayout());
 
                             JPanel detallePanel = new JPanel();
-                            detallePanel.setLayout(new BoxLayout(detallePanel, BoxLayout.Y_AXIS));
+                            detallePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                            //detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
+                            //detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
+                            //detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
+                            //detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
+                            //detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
+                            //detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                             
-                            detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                            detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                            detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                            detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                            detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
                             
-                            detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
+                            detallePanel.add(createLabelValuePair("Número de Referencia:", dt.getNumRef().toString()));
+                            detallePanel.add(createLabelValuePair("Nombre:", dt.getNombre()));
+                            detallePanel.add(createLabelValuePair("Descripción:", dt.getDescripcion()));
+                            detallePanel.add(createLabelValuePair("Especificaciones:", dt.getEspecs()));
+                            detallePanel.add(createLabelValuePair("Precio: ", String.valueOf(dt.getPrecio())));
+                            detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
                             
                             detallePanel.add(new JLabel("=================================================="));
                             detallePanel.add(new JLabel("<html>Categorias de los productos: "));
@@ -731,7 +738,7 @@ public class Presentacion {
                             List<File> imagenes = dt.getImagenes();
                             if (imagenes != null && !imagenes.isEmpty()) {
                             	JPanel imagePanel = new JPanel();
-                                imagePanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 columnas, espaciado de 10px
+                                imagePanel.setLayout(new GridLayout(0, 2, 10, 10));
 
                                 for (File imagenFile : imagenes) {
                                     try {
@@ -919,15 +926,21 @@ public class Presentacion {
                                         ventanaDetalleProducto.setLayout(new BorderLayout());
 
                                         JPanel detallePanel = new JPanel();
-                                        detallePanel.setLayout(new BoxLayout(detallePanel, BoxLayout.Y_AXIS));
+                                        detallePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                                        //detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
+                                        //detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
+                                        //detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
+                                        //detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
+                                        //detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
+                                        //detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
                                         
-                                        detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                                        detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                                        detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                                        detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                                        detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
                                         
-                                        detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
+                                        detallePanel.add(createLabelValuePair("Número de Referencia:", dt.getNumRef().toString()));
+                                        detallePanel.add(createLabelValuePair("Nombre:", dt.getNombre()));
+                                        detallePanel.add(createLabelValuePair("Descripción:", dt.getDescripcion()));
+                                        detallePanel.add(createLabelValuePair("Especificaciones:", dt.getEspecs()));
+                                        detallePanel.add(createLabelValuePair("Precio: ", String.valueOf(dt.getPrecio())));
+                                        detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
                                         
                                         detallePanel.add(new JLabel("=================================================="));
                                         detallePanel.add(new JLabel("<html>Categorias de los productos: "));
@@ -939,7 +952,7 @@ public class Presentacion {
                                         List<File> imagenes = dt.getImagenes();
                                         if (imagenes != null && !imagenes.isEmpty()) {
                                         	JPanel imagePanel = new JPanel();
-                                            imagePanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 columnas, espaciado de 10px
+                                            imagePanel.setLayout(new GridLayout(0, 2, 10, 10)); // 3 columnas, espaciado de 10px
 
                                             for (File imagenFile : imagenes) {
                                                 try {
@@ -1061,15 +1074,21 @@ public class Presentacion {
                                 ventanaDetalleProducto.setLayout(new BorderLayout());
 
                                 JPanel detallePanel = new JPanel();
-                                detallePanel.setLayout(new BoxLayout(detallePanel, BoxLayout.Y_AXIS));
-                                        
-                                detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                                detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                                detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                                detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                                detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
-                                        
-                                detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
+                                detallePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+                                //detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
+                                //detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
+                                //detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
+                                //detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
+                                //detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
+                                //detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
+                                
+                                
+                                detallePanel.add(createLabelValuePair("Número de Referencia:", dt.getNumRef().toString()));
+                                detallePanel.add(createLabelValuePair("Nombre:", dt.getNombre()));
+                                detallePanel.add(createLabelValuePair("Descripción:", dt.getDescripcion()));
+                                detallePanel.add(createLabelValuePair("Especificaciones:", dt.getEspecs()));
+                                detallePanel.add(createLabelValuePair("Precio: ", String.valueOf(dt.getPrecio())));
+                                detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
                                         
                                         
                                 detallePanel.add(new JLabel("=================================================="));
@@ -1082,7 +1101,7 @@ public class Presentacion {
                                 List<File> imagenes = dt.getImagenes();
                                 if (imagenes != null && !imagenes.isEmpty()) {
                                 	JPanel imagePanel = new JPanel();
-                                    imagePanel.setLayout(new GridLayout(0, 3, 10, 10)); // 3 columnas, espaciado de 10px
+                                    imagePanel.setLayout(new GridLayout(0, 2, 10, 10)); // 3 columnas, espaciado de 10px
 
                                     for (File imagenFile : imagenes) {
                                         try {
@@ -1401,5 +1420,20 @@ public class Presentacion {
         int x = (screenSize.width - frameSize.width) / 2;
         int y = (screenSize.height - frameSize.height) / 2;
         frame.setLocation(x, y);
+    }
+    
+    private JPanel createLabelValuePair(String labelText, String valueText) {
+    	JPanel pairPanel = new JPanel();
+        pairPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JLabel label = new JLabel(labelText);
+
+       
+        JTextField textField = new JTextField(valueText);
+        textField.setEditable(false);
+        textField.setPreferredSize(new Dimension(200, 20)); 
+        pairPanel.add(label);
+        pairPanel.add(textField);
+
+        return pairPanel;
     }
 }
