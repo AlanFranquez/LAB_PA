@@ -112,7 +112,7 @@ public class Presentacion {
                     s.asignarlePadreACategoriaProds("Living", "Tecno");
                     s.agregarCategoriaConProductos("Otros");
                     s.agregarCategoriaConProductos("Bazar");
-                    // SOlo una prueba
+
                     
                     
                    
@@ -198,7 +198,7 @@ public class Presentacion {
         menuBar.add(mnProductos);
         menuBar.add(mnUsuarios);
         menuBar.add(mnOrdenes);
-        
+
         
 
         // Crear opción "Registrar Usuario"
@@ -724,7 +724,7 @@ public class Presentacion {
 
                 JPanel productosPanel = new JPanel();
                 
-                // lo pasare a una funcion, 1 argumento lista P
+                
                 productosPanel.setLayout(new BoxLayout(productosPanel, BoxLayout.Y_AXIS));
                 productosPanel.add(new JLabel("Listado de Productos"));
                 for (DtProducto dt : listaP) {
