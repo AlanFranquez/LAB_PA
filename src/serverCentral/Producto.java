@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class Producto {
-	private Map<String, Categoria> categorias;
+	private Map<String, Cat_Producto> categorias;
 	private Comentario[] comentarios;
 	private Proveedor proveedor;
 	
@@ -51,14 +52,14 @@ public class Producto {
 		this.imagenes = imagenes;
 	}
 	
-	public void agregarCategorias(Categoria cat) {
+	public void agregarCategorias(Cat_Producto cat) {
 		categorias.put(cat.getNombre(), cat);
 	}
 	public void eliminarCategorias() {
 		categorias.clear();
 	}
 	
-	public Map<String, Categoria> getCategorias() {
+	public Map<String, Cat_Producto> getCategorias() {
 		return this.categorias;
 	}
 	
@@ -111,7 +112,7 @@ public class Producto {
     	int contador = 0;
     	String[] arrString = new String[contador];
     		
-    	for(Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
+    	for(Entry<String, Cat_Producto> entry : this.categorias.entrySet()) {
     		
     		Categoria c = entry.getValue();
     		Cat_Producto cProducto = (Cat_Producto) c;
@@ -138,12 +139,15 @@ public class Producto {
 		if(this.categorias.isEmpty()) {
 			catStr = "El producto no tiene categorias asignadas";
 		}
-		for (Categoria cat : this.categorias.values()) {	
-			catStr = catStr + "<br>" + tab + cat.getNombre();				
+		for (Cat_Producto cat : this.categorias.values()) {	
+			catStr = catStr + "<br>" + tab + cat.getNombre();
+			Cat_Padre cPadre = cat.getPadre();
+            while (cPadre != null) {
+            	catStr = catStr + " -> " + cPadre.getNombre();
+                cPadre = cPadre.traerPadre();
+            }
 		}
-		
-		
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), this.categorias, this.getImagenes());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes());
 	}
 }

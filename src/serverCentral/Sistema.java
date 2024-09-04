@@ -432,6 +432,7 @@ public class Sistema implements ISistema {
     
     public List<DtProducto> listarALLProductos() throws ProductoException {
     	List<DtProducto> listaProductos = new ArrayList<>();
+    	List<Integer> numRefs = new ArrayList<Integer>();
     	
     	for(Map.Entry<String, Categoria> entry : this.categorias.entrySet()) {
     		Categoria c = entry.getValue();
@@ -446,7 +447,11 @@ public class Sistema implements ISistema {
     			}
     			
     			for(DtProducto dt: listaPerProducto) {
-    				listaProductos.add(dt);
+    				if(!numRefs.contains(dt.getNumRef())) {
+                		numRefs.add(dt.getNumRef());
+                		listaProductos.add(dt);
+                	}
+    				
     			}
     		}
     	}
@@ -535,7 +540,7 @@ public class Sistema implements ISistema {
     }
     
     public boolean comprobarCat(String cat) throws CategoriaException {
-    	if(this.categorias.get(cat) == null) {
+    	if((Cat_Producto) this.categorias.get(cat) == null) {
     		throw new CategoriaException("Esta categoria no existe");
     	}
     	

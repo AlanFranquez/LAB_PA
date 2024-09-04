@@ -17,6 +17,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,7 +57,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.toedter.calendar.JDateChooser;
 
-import serverCentral.Categoria;
 import serverCentral.CategoriaException;
 import serverCentral.DTCliente;
 import serverCentral.DTFecha;
@@ -69,7 +69,6 @@ import serverCentral.OrdenDeCompra;
 import serverCentral.Producto;
 import serverCentral.ProductoException;
 import serverCentral.Proveedor;
-import serverCentral.Sistema;
 import serverCentral.Usuario;
 import serverCentral.UsuarioRepetidoException;
 
@@ -82,7 +81,6 @@ public class Presentacion {
     private static ISistema s = Factory.getSistema();
     private JFileChooser fileChooser;
     Calendar calendar = Calendar.getInstance();
-    private List<File> imagenesSeleccionadas = new ArrayList<>();
     
     /**
      * Launch the application.
@@ -264,9 +262,11 @@ public class Presentacion {
                 panel.add(webField);
                 
              // JCalendar     
+                JLabel dateLabel = new JLabel("Fecha nacimiento: ");
+                dateLabel.setBounds(20, 300, 80, 25);
+                panel.add(dateLabel);
                 JDateChooser chooser = new JDateChooser();
-                chooser.setBounds(20, 300, 80, 25);
-                panel.add(new JLabel("Fecha nacimiento: "));
+                chooser.setBounds(100, 300, 80, 25);
                 panel.add(chooser);
                 
                 
@@ -391,6 +391,10 @@ public class Presentacion {
                         
 
                         DTFecha fechaNacimiento = new DTFecha(dia, mes, anio);
+                        if(anio == LocalDateTime.now().getYear()) {
+                        	JOptionPane.showMessageDialog(null, "Ingrese su fecha de nacimiento");
+                        	return;
+                        }
                         
                         if(esProveedor) {
                         	try {
@@ -714,13 +718,6 @@ public class Presentacion {
 
                             JPanel detallePanel = new JPanel();
                             detallePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-                            //detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                            //detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                            //detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                            //detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                            //detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
-                            //detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
-                            
                             
                             detallePanel.add(createLabelValuePair("Número de Referencia:", dt.getNumRef().toString()));
                             detallePanel.add(createLabelValuePair("Nombre:", dt.getNombre()));
@@ -730,12 +727,8 @@ public class Presentacion {
                             detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
                             
                             detallePanel.add(new JLabel("=================================================="));
-                            detallePanel.add(new JLabel("<html>Categorias de los productos: "));
-                            List<Categoria> listacats = dt.categoriasProducto();
-                            
-                            for(Categoria cc : listacats) {
-                            	detallePanel.add(new JLabel("- " + cc.getNombre()));
-                            }
+                            detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
+
                             List<File> imagenes = dt.getImagenes();
                             if (imagenes != null && !imagenes.isEmpty()) {
                             	JPanel imagePanel = new JPanel();
@@ -857,6 +850,7 @@ public class Presentacion {
                         }
                         String nombreCategoria = seleccionado.getUserObject().toString();
                         List<DtProducto> prodsFiltrados = new ArrayList<>();
+                        List<Integer> numRefs = new ArrayList<Integer>();
                         
                         if(!s.esPadre(nombreCategoria)) {
                         	
@@ -872,7 +866,10 @@ public class Presentacion {
 								productosPanel.removeAll();
 	                            productosPanel.add(new JLabel("Listado de Productos"));
 	                            for (DtProducto dt : prodsFiltrados) {
-	                                 productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
+	                            	if(!numRefs.contains(dt.getNumRef())) {
+	                            		numRefs.add(dt.getNumRef());
+	                            		productosPanel.add(new JLabel(dt.getNombre() + " - " + dt.getPrecio()));
+	                            	}
 	                             }
 							} catch (ProductoException e) {
 								JOptionPane.showMessageDialog(null, e.getMessage());
@@ -928,13 +925,6 @@ public class Presentacion {
 
                                         JPanel detallePanel = new JPanel();
                                         detallePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-                                        //detallePanel.add(new JLabel("Numero de Referencia: " + dt.getNumRef()));
-                                        //detallePanel.add(new JLabel("Nombre: " + dt.getNombre()));
-                                        //detallePanel.add(new JLabel("Descripción: " + dt.getDescripcion()));
-                                        //detallePanel.add(new JLabel("Especificaciones: " + dt.getEspecs()));
-                                        //detallePanel.add(new JLabel("Precio: " + dt.getPrecio()));
-                                        //detallePanel.add(new JLabel("Proveedor: " + dt.getNombreProveedor()));
-                                        
                                         
                                         detallePanel.add(createLabelValuePair("Número de Referencia:", dt.getNumRef().toString()));
                                         detallePanel.add(createLabelValuePair("Nombre:", dt.getNombre()));
@@ -944,12 +934,7 @@ public class Presentacion {
                                         detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
                                         
                                         detallePanel.add(new JLabel("=============================================================\n"));
-                                        detallePanel.add(new JLabel("<html>Categorias de los productos: "));
-                                        List<Categoria> listacats = dt.categoriasProducto();
-                                        
-                                        for(Categoria cc : listacats) {
-                                        	detallePanel.add(new JLabel("- " + cc.getNombre()));
-                                        }
+                                        detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
                                         List<File> imagenes = dt.getImagenes();
                                         if (imagenes != null && !imagenes.isEmpty()) {
                                         	JPanel imagePanel = new JPanel();
@@ -1004,7 +989,7 @@ public class Presentacion {
         mntmModificarProductos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JInternalFrame ventanaProductos = new JInternalFrame("Modificar Productos", true, true, true, true);
-                ventanaProductos.setSize(400, 600);
+                ventanaProductos.setSize(400, 900);
                 ventanaProductos.setLayout(new BorderLayout());
 
                 JPanel panel = new JPanel();
@@ -1093,12 +1078,8 @@ public class Presentacion {
                                         
                                         
                                 detallePanel.add(new JLabel("=================================================="));
-                                detallePanel.add(new JLabel("<html>Categorias de los productos: "));
-                                List<Categoria> listacats = dt.categoriasProducto();
-                                
-                                for(Categoria cc : listacats) {
-                                	detallePanel.add(new JLabel(" - " + cc.getNombre()));
-                                }
+                                detallePanel.add(new JLabel("<html><br />Categorias de los productos: " + dt.getCategorias()));
+
                                 List<File> imagenes = dt.getImagenes();
                                 if (imagenes != null && !imagenes.isEmpty()) {
                                 	JPanel imagePanel = new JPanel();
@@ -1132,7 +1113,7 @@ public class Presentacion {
                                 desktopPane.add(ventanaDetalleProducto);
                                 ventanaDetalleProducto.setLocation(150, 150);
                                 JButton modificarButton = new JButton("Modificar");
-                                modificarButton.setBounds(20, 540, 240, 25);
+                                modificarButton.setBounds(20, 800, 240, 25);
                                 
                                 
                                 

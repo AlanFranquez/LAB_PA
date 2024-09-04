@@ -35,7 +35,6 @@ import serverCentral.ISistema;
 @SuppressWarnings("serial")
 public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
-	private File imagenSeleccionada;
 	private List<File> imagenesSeleccionadas = new ArrayList<>();
 	
 	public RegistrarProducto(String prov, String prodDel, int numRefDel) {
@@ -192,6 +191,7 @@ public class RegistrarProducto extends JInternalFrame{
                     StringBuilder imagenesNombres = new StringBuilder();
                     
                     for (File archivo : archivosSeleccionados) {
+                    	System.out.println(archivo.getName());
                         String nombreArchivo = archivo.getName().toLowerCase();
                         if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")) {
                             imagenesSeleccionadas.add(archivo);
