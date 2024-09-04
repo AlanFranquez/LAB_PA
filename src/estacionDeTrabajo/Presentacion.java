@@ -657,7 +657,7 @@ public class Presentacion {
         JMenuItem mntmRegistrarProducto = new JMenuItem("Registrar Producto");
         mntmRegistrarProducto.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	RegistrarProducto prod = new RegistrarProducto("","",0);
+            	RegistrarProducto prod = new RegistrarProducto(null);
             	desktopPane.add(prod);
             }
         });
@@ -1113,7 +1113,7 @@ public class Presentacion {
                                 modificarButton.addActionListener(new ActionListener() {
                                     public void actionPerformed(ActionEvent z) {
                                     	
-                                    	RegistrarProducto prod = new RegistrarProducto(dt.getNicknameProveedor(), dt.getNombre(), dt.getNumRef());
+                                    	RegistrarProducto prod = new RegistrarProducto(dt);
                                     	desktopPane.add(prod);
                                     	
                                     	 ventanaDetalleProducto.setVisible(false);

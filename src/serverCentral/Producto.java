@@ -14,7 +14,7 @@ public class Producto {
 	
 	private String nombre, descripcion;
 	private float precio;
-	private Integer numRef;
+	private Integer numRef, stock;
 	private String especificaciones;
 	private List<File> imagenes;
 	
@@ -24,6 +24,7 @@ public class Producto {
 		this.descripcion = descripcion;
 		this.precio = precio;
 		this.numRef = numRef;
+		this.stock = stock;
 		this.especificaciones = especificaciones;
 		this.categorias = new HashMap<>();
 		this.proveedor = prov;
@@ -96,6 +97,13 @@ public class Producto {
 		this.numRef = numRef;
 	}
 	
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
 	public Proveedor getProveedor() {
 		return proveedor;
 	}
@@ -148,6 +156,6 @@ public class Producto {
             }
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock());
 	}
 }

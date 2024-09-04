@@ -152,6 +152,11 @@ public class CrearOrdenCompra extends JInternalFrame{
                 	String[] parts = selection.split(" - "); 
                 	int numRef = Integer.parseInt(parts[1]);
                 	
+                	if (s.obtenerStockProducto(numRef) < cant) {
+                		JOptionPane.showMessageDialog(null, "La solicitud excede el stock disponible", "Error", JOptionPane.ERROR_MESSAGE);
+                    	return;
+                	}
+                	
                 	model.addRow(new Object[]{numRef, cant});
                 	cantidad.setText("");
                 }
@@ -190,7 +195,6 @@ public class CrearOrdenCompra extends JInternalFrame{
             		return;
             	}
             	
-            	System.out.println("  )" + numRef);
             	s.agregarProducto(numRef, cant);
             }
             s.asignarOrdenCliente(cliente);

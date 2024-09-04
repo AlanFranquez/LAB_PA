@@ -29,6 +29,7 @@ import javax.swing.tree.TreeSelectionModel;
 
 import serverCentral.CategoriaException;
 import serverCentral.DTProveedor;
+import serverCentral.DtProducto;
 import serverCentral.Factory;
 import serverCentral.ISistema;
 
@@ -37,13 +38,14 @@ public class RegistrarProducto extends JInternalFrame{
 	private static ISistema s = Factory.getSistema();
 	private List<File> imagenesSeleccionadas = new ArrayList<>();
 	
-	public RegistrarProducto(String prov, String prodDel, int numRefDel) {
+	public RegistrarProducto(DtProducto prod) {
 		setResizable(true);
         setIconifiable(true);
         setMaximizable(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         setClosable(true);
-        if(prov == "")
+        
+        if(prod == null)
         	setTitle("Registrar Producto");
         else
         	setTitle("Modificar Producto");
@@ -60,16 +62,18 @@ public class RegistrarProducto extends JInternalFrame{
 
         JTextField tituloField = new JTextField(20);
         tituloField.setBounds(100, 20, 200, 25);
+        if(prod != null)
+        	tituloField.setText(prod.getNombre());
         panel.add(tituloField);
 
         JLabel referenciaLabel = new JLabel("Número de referencia:");
         referenciaLabel.setBounds(20, 50, 150, 25);
-        panel.add(referenciaLabel);
-
-        
+        panel.add(referenciaLabel);        
         
         JTextField referenciaField = new JTextField(20);
         referenciaField.setBounds(185, 50, 200, 25);
+        if(prod != null)
+        	referenciaField.setText(prod.getNumRef().toString());
         panel.add(referenciaField);
         
         JLabel stockLabel = new JLabel("Número de Stock:");
@@ -77,9 +81,10 @@ public class RegistrarProducto extends JInternalFrame{
         panel.add(stockLabel);
 
         
-        
         JTextField stockField = new JTextField(20);
         stockField.setBounds(185, 80, 200, 25);
+        if(prod != null)
+        	stockField.setText(prod.getStock().toString());
         panel.add(stockField);
 
         JLabel descripcionLabel = new JLabel("Descripción:");
@@ -88,6 +93,8 @@ public class RegistrarProducto extends JInternalFrame{
 
         JTextField descripcionField = new JTextField(20);
         descripcionField.setBounds(100, 120, 266, 25);
+        if(prod != null)
+        	descripcionField.setText(prod.getDescripcion());
         panel.add(descripcionField);
 
         JLabel especificacionesLabel = new JLabel("Especificaciones:");
@@ -97,6 +104,8 @@ public class RegistrarProducto extends JInternalFrame{
         JTextArea especificacionesArea = new JTextArea();
         especificacionesArea.setBounds(20, 170, 394, 64);
         especificacionesArea.setLineWrap(true);
+        if(prod != null)
+        	especificacionesArea.setText(prod.getEspecs());
         panel.add(especificacionesArea);
         
 
@@ -106,6 +115,8 @@ public class RegistrarProducto extends JInternalFrame{
 
         JTextField precioField = new JTextField(10);
         precioField.setBounds(100, 250, 100, 25);
+        if(prod != null)
+        	precioField.setText(String.valueOf((int)prod.getPrecio()));
         panel.add(precioField);
         
         JLabel proveedorLabel = new JLabel("Proveedor:");
@@ -126,9 +137,11 @@ public class RegistrarProducto extends JInternalFrame{
         padresCategorias.setEnabled(true);
         panel.add(padresCategorias);
         
-        if(prov != "") {
-        	proveedorLabel.setVisible(false);
+        if(prod != null) {
         	padresCategorias.setVisible(false);
+        	JLabel proveedor = new JLabel(prod.getNicknameProveedor());
+        	proveedor.setBounds(100, 290, 160, 25);
+            panel.add(proveedor);
         }
         
         
@@ -214,7 +227,7 @@ public class RegistrarProducto extends JInternalFrame{
         
         
         JButton registrarButton = new JButton("Crear");
-        if(prov != "")
+        if(prod != null)
         	registrarButton.setText("Guardar Cambios");
         registrarButton.setBounds(90, 500, 240, 25);
         panel.add(registrarButton);
@@ -224,7 +237,7 @@ public class RegistrarProducto extends JInternalFrame{
         // Validar y registrar el producto en el sistema
         registrarButton.addActionListener(b -> {
         	String proveedor = (String) comboBoxModel.getSelectedItem();
-        	if(prov != "") {
+        	if(prod != null) {
         		proveedor = null;
         	}
             String titulo = tituloField.getText();
@@ -232,7 +245,7 @@ public class RegistrarProducto extends JInternalFrame{
             String especificaciones = especificacionesArea.getText();
             String precioStr = precioField.getText();
             
-            if(prov == "") {
+            if(prod == null) {
             	if (titulo.isEmpty() || referenciaField.getText().isEmpty() || descripcion.isEmpty() || especificaciones.isEmpty() || precioStr.isEmpty() || proveedor.isEmpty()) {
                 	JOptionPane.showMessageDialog(null, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                 	return;
@@ -283,11 +296,11 @@ public class RegistrarProducto extends JInternalFrame{
             }
             
             
-            if(prov.isEmpty()) {
+            if(prod == null) {
             	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
             }else {
-            	s.borrarProducto(numRefDel, prodDel);
-            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, prov, Stock);
+            	s.borrarProducto(prod.getNumRef(), prod.getNombre());
+            	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, prod.getNicknameProveedor(), Stock);
             }
             	
             
@@ -351,7 +364,7 @@ public class RegistrarProducto extends JInternalFrame{
                 
                 
 
-            if(prov == "")
+            if(prod == null)
             	JOptionPane.showMessageDialog(null, "Producto registrado con éxito.");
             else
             	JOptionPane.showMessageDialog(null, "Producto modificado con éxito.");

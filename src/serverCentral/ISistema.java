@@ -114,4 +114,7 @@ public interface ISistema {
 
 	public abstract void borrarProducto(int numRef, String titulo);
 
+
+	public abstract Integer obtenerStockProducto(int numRef);
+
 }

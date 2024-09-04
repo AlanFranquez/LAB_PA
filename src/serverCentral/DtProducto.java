@@ -3,25 +3,38 @@ package serverCentral;
 import java.io.File;
 import java.util.List;
 
+/**
+ * String nombre, descripcion, especificaciones, categorias
+ * <br />
+ * String nickProveedor, nomProveedor
+ * <br />
+ * float precio
+ * <br />
+ * Integer numRef, stock
+ * <br />
+ * List <File> imagenes
+ */
 public class DtProducto {
 	private String nombre, descripcion;
 	private float precio;
-	private Integer numRef;
+	private Integer numRef, stock;
 	private String especs;
-	private Proveedor proveedor;
+	private String nickProveedor, nomProveedor;
 	private String categorias;
 	List<File> imagenes;
 	
 	// Constructor:
-	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<File> imagenes) {
+	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<File> imagenes, Integer stock) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
 		this.numRef = numRef;
 		this.especs = especs;
-		this.proveedor = prov;
+		this.nickProveedor = prov.getNick();
+		this.nomProveedor = prov.getNombre();
 		this.categorias = cat;
 		this.imagenes = imagenes;
+		this.stock = stock;
 	}
 	
 	// Getters:
@@ -30,11 +43,11 @@ public class DtProducto {
 	}
 	
 	public String getNombreProveedor() {
-		return this.proveedor.getNombre();
+		return this.nomProveedor;
 	}
 	
 	public String getNicknameProveedor(){
-		return this.proveedor.getNick();
+		return this.nickProveedor;
 	}
 	
 	public String getDescripcion() {
@@ -46,7 +59,9 @@ public class DtProducto {
 	public Integer getNumRef() {
 		return numRef;
 	}
-	
+	public Integer getStock() {
+		return stock;
+	}
 	public String getEspecs() {
 		return especs;
 	}
