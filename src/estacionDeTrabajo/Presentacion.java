@@ -465,6 +465,7 @@ public class Presentacion {
         });
         
         
+        
 
         // Crear opción "Mostrar Clientes"
         JMenuItem mntmMostrarClientes = new JMenuItem("Mostrar clientes");
@@ -476,7 +477,7 @@ public class Presentacion {
         
         
 
-        mnCasosDeUso.add(mntmMostrarClientes);
+        
         
         
         // Alta Categoria
@@ -655,8 +656,8 @@ public class Presentacion {
                 ventanaSecundaria.setLocation(0, 0);
         	}
         });
-        mnCasosDeUso.add(mntmAltaCategoria);
-        mnCasosDeUso.add(mntmRegistrarUsuario);
+        
+        
         
         
         JMenuItem mntmMostrarOrden = new JMenuItem("Mostrar Ordenes");
@@ -667,7 +668,7 @@ public class Presentacion {
         	}
         });
         
-        mnCasosDeUso.add(mntmMostrarOrden);
+        
         
         JMenuItem mntmRegistrarProducto = new JMenuItem("Registrar Producto");
         mntmRegistrarProducto.addActionListener(new ActionListener() {
@@ -676,7 +677,7 @@ public class Presentacion {
             	desktopPane.add(prod);
             }
         });
-        mnCasosDeUso.add(mntmRegistrarProducto);
+        
         
         JMenuItem mntmOrdenCompra = new JMenuItem("Generar orden compra");
         mntmOrdenCompra.addActionListener(new ActionListener() {
@@ -685,13 +686,13 @@ public class Presentacion {
                 	desktopPane.add(compra);
             	}
             });
-        mnCasosDeUso.add(mntmOrdenCompra);
+        
         
 
         
         //Opcion Mostrar Proveedor
         JMenuItem mntmMostrarProveedor = new JMenuItem("Mostrar Proveedor");
-        mnCasosDeUso.add(mntmMostrarProveedor);
+        
     	mntmMostrarProveedor.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
             MostrarProveedor();
@@ -999,7 +1000,7 @@ public class Presentacion {
             }
         });
 		
-        mnCasosDeUso.add(mntmListarProductos);
+        
         
         
         JMenuItem mntmModificarProductos = new JMenuItem("Modificar Productos");
@@ -1167,7 +1168,19 @@ public class Presentacion {
             	desktopPane.add(cancelar);
             }
         });
+        
+        
+        
+        mnCasosDeUso.add(mntmRegistrarUsuario);
+        mnCasosDeUso.add(mntmRegistrarProducto);
+        mnCasosDeUso.add(mntmAltaCategoria);
+        mnCasosDeUso.add(mntmOrdenCompra);
+        mnCasosDeUso.add(mntmMostrarClientes);
+        mnCasosDeUso.add(mntmMostrarProveedor);
+        mnCasosDeUso.add(mntmModificarProductos);
+        mnCasosDeUso.add(mntmListarProductos);
         mnCasosDeUso.add(mntmCancelarOrden);
+        mnCasosDeUso.add(mntmMostrarOrden);
     
     }
 
