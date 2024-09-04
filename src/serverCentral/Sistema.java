@@ -41,21 +41,16 @@ public class Sistema implements ISistema {
     public boolean verificarUnicidad(String nick, String correo) {
     	Usuario u = this.usuarios.get(nick);
         if (u != null) {
-       
             if (u.getCorreo().equals(correo)) {
                 return false;
             }
         }
-        
         for (Usuario usuario : this.usuarios.values()) {
             if (usuario.getCorreo().equals(correo)) {
                 return false;
             }
         }
-        
         return true;
-    	
-    	
     }
     public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
@@ -146,23 +141,6 @@ public class Sistema implements ISistema {
      	 	}
      	return rama;
      }
-    public boolean existeNombre(String nombre, int num) {
-    	Map<String, Categoria> categorias = this.categorias;
-    	for (Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria categ = entry.getValue();
-    		if (categ instanceof Cat_Producto) {
-    			Cat_Producto pcast = (Cat_Producto) categ;
-    			Map<Integer, Producto> productos = pcast.getProductos();
-    			for (Map.Entry<Integer, Producto> entry2 : productos.entrySet()) {
-    				Producto prod = entry2.getValue();
-    				if (prod.getNombre().equals(nombre) || prod.getNumRef() == num) {
-    					return true;
-    				}
-    			}
-    		}
-    	}
-    	return false;
-    }
     public boolean esPadre(String nombre) {
     	Categoria cat = categorias.get(nombre);
     	return (cat instanceof Cat_Padre);
@@ -522,26 +500,6 @@ public class Sistema implements ISistema {
     	return or.crearDT();
     	
     }
-    
-    
-    
-    // NO SE DÓNDE SE USARÍAN:
-    
-    // Listar solo categorias padres
-    public List <DTCat_Padre> listarSoloPadres() {
-    	List <DTCat_Padre> listarPadres = new ArrayList<>();
-    	for(Map.Entry<String, Categoria> entry : categorias.entrySet()) {
-    		Categoria cat = entry.getValue();
-    		
-    		if(cat.getTipo() == "Padre") {
-    			Cat_Padre catPadre = (Cat_Padre) cat;
-    			listarPadres.add(catPadre.crearDT());
-    		}
-    	}
-    	return listarPadres;
-    }
-
- // Para probar lo de mostrar Ordenes
 
     public void addOrdenes(OrdenDeCompra o, String nickUsuario) {
     	Usuario us = this.usuarios.get(nickUsuario);
@@ -557,24 +515,7 @@ public class Sistema implements ISistema {
     	}
     	
     	return true;
-    }
-    
-    public DTProveedor traerProveedorProducto(int numKey) {
-        for (Map.Entry<String, Usuario> entry : this.usuarios.entrySet()) {
-            Usuario u = entry.getValue();
-            
-            if (u instanceof Proveedor) {
-                Proveedor proveedorBuscado = (Proveedor) u;
-                DTProveedor provDT = proveedorBuscado.crearDt();
-                if (provDT.existeProd(numKey)) {
-                    return provDT;
-                }
-            }
-        }
-        
-        return null;
-    }
-    
+    } 
     
     public void eliminarPDesdeProveedor(String proveedor, int numRef) {
     	Proveedor prov = (Proveedor) this.usuarios.get(proveedor);

@@ -8,8 +8,6 @@ import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 public interface ISistema {
-    public abstract boolean verificarUnicidad(String nick, String correo);
- 
     public abstract boolean validarCorreo(String correo);
     
     public abstract void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException;
@@ -24,8 +22,6 @@ public interface ISistema {
     
     public abstract boolean existeCategoria(String nombre);
     
-    public abstract List <DTCat_Padre> listarSoloPadres();
-    
     public abstract List <String> listarSoloNombresPadresCat();
     
     public abstract void agregarCategoria(String nombre) throws CategoriaException;
@@ -38,7 +34,7 @@ public interface ISistema {
     
     public abstract List<DTOrdenDeCompra> listarOrdenes();
     
-    public abstract boolean existenOrdenesParaListar() ;
+    public abstract boolean existenOrdenesParaListar();
 
 	public abstract DefaultMutableTreeNode arbolCategorias();
 
@@ -49,8 +45,6 @@ public interface ISistema {
     public abstract void addOrdenes(OrdenDeCompra o, String nickUsuario);
 
 	public abstract void agregarProductoCategoria(String catName, int numRef) throws CategoriaException;
-
-	public abstract boolean existeNombre(String cliente, int num);
 
 	public abstract boolean esPadre(String catName);
 
@@ -66,8 +60,6 @@ public interface ISistema {
 	public abstract List<DtProducto> listarProductosPorCategoria(String cat) throws ProductoException;
 	
 	public boolean comprobarCat(String cat) throws CategoriaException;
-	
-	public abstract DTProveedor traerProveedorProducto(int numKey);
 
 	public abstract void asignarOrdenCliente(String cliente);
 
@@ -90,5 +82,4 @@ public interface ISistema {
 	public abstract void borrarProducto(int numRef, String titulo);
 
 	public abstract Integer obtenerStockProducto(int numRef);
-
 }
