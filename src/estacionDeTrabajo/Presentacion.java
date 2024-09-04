@@ -1,6 +1,7 @@
 package estacionDeTrabajo;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -942,7 +943,7 @@ public class Presentacion {
                                         detallePanel.add(createLabelValuePair("Precio: ", String.valueOf(dt.getPrecio())));
                                         detallePanel.add(createLabelValuePair("Proveedor:", dt.getNombreProveedor()));
                                         
-                                        detallePanel.add(new JLabel("=================================================="));
+                                        detallePanel.add(new JLabel("=============================================================\n"));
                                         detallePanel.add(new JLabel("<html>Categorias de los productos: "));
                                         List<Categoria> listacats = dt.categoriasProducto();
                                         
@@ -1426,13 +1427,16 @@ public class Presentacion {
     	JPanel pairPanel = new JPanel();
         pairPanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         JLabel label = new JLabel(labelText);
+        
 
        
         JTextField textField = new JTextField(valueText);
         textField.setEditable(false);
         textField.setPreferredSize(new Dimension(200, 20)); 
+        textField.setBackground(Color.WHITE);
         pairPanel.add(label);
         pairPanel.add(textField);
+        
 
         return pairPanel;
     }
