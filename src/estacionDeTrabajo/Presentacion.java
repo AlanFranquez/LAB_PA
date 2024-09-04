@@ -192,8 +192,12 @@ public class Presentacion {
         frame.setJMenuBar(menuBar);
 
         // Crear menú "Casos de Uso"
-        JMenu mnCasosDeUso = new JMenu("Casos de Uso");
-        menuBar.add(mnCasosDeUso);
+        JMenu mnProductos = new JMenu("Productos");
+        JMenu mnUsuarios = new JMenu("Usuarios");
+        JMenu mnOrdenes = new JMenu("Ordenes");
+        menuBar.add(mnProductos);
+        menuBar.add(mnUsuarios);
+        menuBar.add(mnOrdenes);
         
         
 
@@ -1159,7 +1163,7 @@ public class Presentacion {
             }
         });
 
-        mnCasosDeUso.add(mntmModificarProductos);
+        
         
         JMenuItem mntmCancelarOrden = new JMenuItem("Cancelar Orden de Compra");
         mntmCancelarOrden.addActionListener(new ActionListener() {
@@ -1171,16 +1175,19 @@ public class Presentacion {
         
         
         
-        mnCasosDeUso.add(mntmRegistrarUsuario);
-        mnCasosDeUso.add(mntmRegistrarProducto);
-        mnCasosDeUso.add(mntmAltaCategoria);
-        mnCasosDeUso.add(mntmOrdenCompra);
-        mnCasosDeUso.add(mntmMostrarClientes);
-        mnCasosDeUso.add(mntmMostrarProveedor);
-        mnCasosDeUso.add(mntmModificarProductos);
-        mnCasosDeUso.add(mntmListarProductos);
-        mnCasosDeUso.add(mntmCancelarOrden);
-        mnCasosDeUso.add(mntmMostrarOrden);
+        mnUsuarios.add(mntmRegistrarUsuario);
+        mnProductos.add(mntmRegistrarProducto);
+        mnProductos.add(mntmAltaCategoria);
+        mnOrdenes.add(mntmOrdenCompra);
+        mnUsuarios.add(mntmMostrarClientes);
+        mnUsuarios.add(mntmMostrarProveedor);
+        mnProductos.add(mntmModificarProductos);
+        mnProductos.add(mntmListarProductos);
+        mnOrdenes.add(mntmCancelarOrden);
+        mnOrdenes.add(mntmMostrarOrden);
+        
+        
+
     
     }
 
