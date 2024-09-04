@@ -191,12 +191,13 @@ public class RegistrarProducto extends JInternalFrame{
                     StringBuilder imagenesNombres = new StringBuilder();
                     
                     for (File archivo : archivosSeleccionados) {
-                    	System.out.println(archivo.getName());
+                    	System.out.println(archivo.getName() + " - " + imagenesSeleccionadas.size());
                         String nombreArchivo = archivo.getName().toLowerCase();
                         if (nombreArchivo.endsWith(".jpg") || nombreArchivo.endsWith(".png")|| nombreArchivo.endsWith(".jpeg")) {
                             imagenesSeleccionadas.add(archivo);
                             imagenesNombres.append(archivo.getName()).append("; ");
                         } else {
+                        	imagenesSeleccionadas.clear();
                             JOptionPane.showMessageDialog(null, "El archivo " + archivo.getName() + " no es válido. Seleccione archivos .jpg o .png", "Archivo no válido", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
@@ -248,7 +249,7 @@ public class RegistrarProducto extends JInternalFrame{
             
            
             
-            int precio = 0;
+            int precio;
             
             try {
             	precio = Integer.parseInt(precioStr);
@@ -258,7 +259,7 @@ public class RegistrarProducto extends JInternalFrame{
             	return;
             }
             
-            int numRef = 0;
+            int numRef;
             try {
             	numRef = Integer.parseInt(referenciaField.getText());
             	
@@ -267,7 +268,7 @@ public class RegistrarProducto extends JInternalFrame{
             	return;
             }
             
-            int Stock = 0;
+            int Stock;
             try {
             	Stock = Integer.parseInt(stockField.getText());
             	
@@ -285,8 +286,7 @@ public class RegistrarProducto extends JInternalFrame{
             
             if(prov.isEmpty()) {
             	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, proveedor, Stock);
-            }
-            else {
+            }else {
             	s.borrarProducto(numRefDel, prodDel);
             	s.agregarProducto(titulo, numRef, descripcion,especificaciones, precio, prov, Stock);
             }
@@ -334,14 +334,18 @@ public class RegistrarProducto extends JInternalFrame{
                     return;
                 }
                 
-
+                System.out.println(" - " + imagenesSeleccionadas.size());
                 	try {
                     	s.agregarProductoCategoria(catName, numRef);
                     	
                     	// Agregar imgs
-                        
+                    	//int count = 0;
                         for(File imgs: imagenesSeleccionadas) {
-                        	s.agregarImagenesProducto(catName, numRef, imgs);
+                        	//if(count < imagenesSeleccionadas.size() / 2) {
+                        		s.agregarImagenesProducto(catName, numRef, imgs);
+                        	//	count ++;
+                        		System.out.print(true);
+                        //	}
                         }
                     	
                     } catch(CategoriaException e1) {
