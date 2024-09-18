@@ -10,7 +10,7 @@ public class Cliente extends Usuario {
     
     // Constructor
     public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) {
-        super(nombre, nick, apellido, correo, fecha, "cliente");
+        super(nombre, nick, apellido, correo, fecha, "cliente", contrasena);
         this.listaCompras = new HashMap<>();
         this.listaComentarios = new HashMap<>();
     }
