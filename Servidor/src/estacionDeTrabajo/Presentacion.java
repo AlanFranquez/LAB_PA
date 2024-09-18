@@ -323,6 +323,22 @@ public class Presentacion {
                 registrarButton.setBounds(20, 540, 240, 25);
                 panel.add(registrarButton);
                 
+                JLabel contraseniaLabel = new JLabel("Contraseña:");
+                contraseniaLabel.setBounds(20, 580, 80, 25);
+                panel.add(contraseniaLabel);
+
+                JTextField contraseniaField = new JTextField(20);
+                contraseniaField.setBounds(100, 580, 160, 25);
+                panel.add(contraseniaField);
+                
+                JLabel confContraseniaLabel = new JLabel("Confirmar Contraseña:");
+                confContraseniaLabel.setBounds(20, 580, 80, 25);
+                panel.add(confContraseniaLabel);
+
+                JTextField confContraseniaField = new JTextField(20);
+                confContraseniaField.setBounds(100, 580, 160, 25);
+                panel.add(confContraseniaField);
+                
              // Inicializar JFileChooser
                 fileChooser = new JFileChooser();
 
@@ -380,6 +396,12 @@ public class Presentacion {
                         String compania = companiaField.getText();
                         String web = webField.getText();
                         
+                        String contra = contraseniaField.getText();
+                        String confContra = confContraseniaField.getText();
+                        
+                       
+                        
+                        
                         
                        int dia, mes, anio;
                         if(calendar.getTime() != null) {
@@ -393,7 +415,7 @@ public class Presentacion {
                          
                         
                         
-                        if(nickname.isEmpty() || correo.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
+                        if(contra.isEmpty() || confContra.isEmpty() || nickname.isEmpty() || correo.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
                         	JOptionPane.showMessageDialog(null, "Hay campos vacios.");
                         	return;
                         	
@@ -405,6 +427,10 @@ public class Presentacion {
                         if(!s.validarCorreo(correo)) {
                         	JOptionPane.showMessageDialog(null, "Mal formato de correo");
                         	return;
+                        }
+                        
+                        if(contra != confContra) {
+                        	JOptionPane.showMessageDialog(null, "Ambas contraseñas deben coincidir");
                         }
                         
                         
