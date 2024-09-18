@@ -83,5 +83,16 @@ border-radius: 8px;
 	color: white;
 }
 
+.boton-Reg:disabled {
+  background-color: grey;
+  color: white;
+  cursor: not-allowed;
+}
+.boton-Reg:not(:disabled) {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
 
 
