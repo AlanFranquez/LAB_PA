@@ -10,9 +10,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public interface ISistema {
     public abstract boolean validarCorreo(String correo);
     
-    public abstract void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException;
+    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, String contra, String confContra) throws UsuarioRepetidoException;
     
-    public abstract void agregarCliente(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento) throws UsuarioRepetidoException;
+    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException;
     
     public abstract void agregarImagenUsuario(String nick, ImageIcon imageIcon);
     

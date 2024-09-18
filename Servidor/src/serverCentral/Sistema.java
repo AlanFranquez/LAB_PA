@@ -52,7 +52,7 @@ public class Sistema implements ISistema {
         }
         return true;
     }
-    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, string contra, string confContra) throws UsuarioRepetidoException {
+    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
     		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
     	}
@@ -61,7 +61,7 @@ public class Sistema implements ISistema {
     	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link, contra);
     	usuarios.put(nick, nuevoProveedor);
     }
-    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, string contra, string confContra) throws UsuarioRepetidoException {
+    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
     		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
     	}

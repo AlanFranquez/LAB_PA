@@ -8,7 +8,7 @@ public class Usuario {
     private ImageIcon imagen;
     
     // Constructor:
-    public Usuario(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String tipo,string contrasena) {
+    public Usuario(String nombre, String nick, String apellido, String correo, DTFecha nacimiento, String tipo, String contrasena) {
         this.nombre = nombre;
         this.nick = nick;
         this.apellido = apellido;
@@ -37,7 +37,7 @@ public class Usuario {
     public DTFecha getNacimiento(){
         return nacimiento;
     }
-    public DTFecha getContrasena(){
+    public String getContrasena(){
         return contrasena;
     }
     public ImageIcon getImagen() {
@@ -60,7 +60,7 @@ public class Usuario {
     public void setNacimiento(DTFecha nacimiento){
         this.nacimiento = nacimiento;
     }
-    public void setContrasena(DTFecha contra){
+    public void setContrasena(String contra){
         this.contrasena = contra;
     }
     public void setImagen(ImageIcon imagen) { 
