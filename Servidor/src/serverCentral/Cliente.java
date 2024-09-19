@@ -9,8 +9,8 @@ public class Cliente extends Usuario {
     private Map<Integer, Comentario> listaComentarios;
     
     // Constructor
-    public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) {
-        super(nombre, nick, apellido, correo, fecha, "cliente");
+    public Cliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contrasena) {
+        super(nombre, nick, apellido, correo, fecha, "cliente", contrasena);
         this.listaCompras = new HashMap<>();
         this.listaComentarios = new HashMap<>();
     }

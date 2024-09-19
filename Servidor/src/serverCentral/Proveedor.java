@@ -6,8 +6,8 @@ public class Proveedor extends Usuario {
     private Map<Integer, Producto> listaProductos;  
     private String compania, link;
     // Constructor:
-    public Proveedor(String nom, String nick, String ape, String correo, DTFecha nacimiento, String comp, String link) {
-        super(nom, nick, ape, correo, nacimiento, "proveedor");
+    public Proveedor(String nom, String nick, String ape, String correo, DTFecha nacimiento, String comp, String link, String contrasena) {
+        super(nom, nick, ape, correo, nacimiento, "proveedor", contrasena);
         this.compania = comp;
         this.link = link;
         this.listaProductos = new HashMap<>();

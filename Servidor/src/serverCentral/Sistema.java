@@ -52,19 +52,23 @@ public class Sistema implements ISistema {
         }
         return true;
     }
-    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link) throws UsuarioRepetidoException {
+    public void agregarProveedor(String nick, String correo, String nombre, String apellido, DTFecha fechaNacimiento, String compania, String link, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
     		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
     	}
-    	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link);
+    	if(!contra.equals(confContra))
+    		throw new UsuarioRepetidoException("Contraseñas Diferentes");
+    	Proveedor nuevoProveedor = new Proveedor(nombre, nick, apellido, correo, fechaNacimiento, compania, link, contra);
     	usuarios.put(nick, nuevoProveedor);
     }
-    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha) throws UsuarioRepetidoException {
+    public void agregarCliente(String nombre, String nick, String apellido, String correo, DTFecha fecha, String contra, String confContra) throws UsuarioRepetidoException {
     	if (!verificarUnicidad(nick, correo)) {
     		throw new UsuarioRepetidoException("Ya existe un usuario con nick: " + nick + " o email: " + correo);
     	}
+    	if(!contra.equals(confContra))
+    		throw new UsuarioRepetidoException("Contraseñas Diferentes");
 
-    	Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha);
+    	Cliente nuevoCliente = new Cliente(nombre, nick, apellido, correo, fecha, contra);
     	usuarios.put(nick, nuevoCliente);
     }
     public void agregarImagenUsuario(String nick, ImageIcon imagen) {

@@ -96,9 +96,9 @@ public class Presentacion {
                     DTFecha fecha2 = new DTFecha(15, 6, 1985);
                     DTFecha fecha3 = new DTFecha(5, 6, 1990);
 
-                    s.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1);
-                    s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2);
-                    s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1);
+                    s.agregarCliente("Juan", "Juan123", "Perez", "Juan@gmail.com", fecha1, "123", "123");
+                    s.agregarCliente("Alberto", "albert1341", "Hernandez", "Ahernandez@gmail.com", fecha2, "123", "123");
+                    s.agregarCliente("Maria", "agusmari", "Agustina", "mariaagustina@gmail.com", fecha1, "123", "123");
 
                     s.agregarImagenUsuario("Juan123", new ImageIcon("./imagenes/p1.jpg"));
                     s.agregarImagenUsuario("albert1341", new ImageIcon("./imagenes/p2.jpg"));
@@ -116,9 +116,9 @@ public class Presentacion {
                     
                     
                    
-                    Proveedor prov = new Proveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
-                    s.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com");
-                    s.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com");
+                    Proveedor prov = new Proveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123");
+                    s.agregarProveedor("Perez", "AndresPerez@gmail.com", "Andres", "Perez", fecha3 ,"Bamboo.inc" , "www.bamboo.com", "123", "123");
+                    s.agregarProveedor("Jorge", "Jorge@gmail.com", "Jorge", "Urrutia", fecha3 ,"Google.inc" , "www.google.com", "123", "123");
                     
                     s.agregarImagenUsuario("Perez", new ImageIcon("./imagenes/p1.jpg"));
                     
@@ -306,6 +306,22 @@ public class Presentacion {
                         }
                     }
                 });
+                
+                JLabel contraseniaLabel = new JLabel("Contraseña:");
+                contraseniaLabel.setBounds(20, 340, 80, 25);
+                panel.add(contraseniaLabel);
+
+                JTextField contraseniaField = new JTextField(20);
+                contraseniaField.setBounds(100, 340, 160, 25);
+                panel.add(contraseniaField);
+                
+                JLabel confContraseniaLabel = new JLabel("Confirmar Contraseña:");
+                confContraseniaLabel.setBounds(20, 380, 80, 25);
+                panel.add(confContraseniaLabel);
+
+                JTextField confContraseniaField = new JTextField(20);
+                confContraseniaField.setBounds(100, 380, 160, 25);
+                panel.add(confContraseniaField);
             
 
                 JButton seleccionarImagenButton = new JButton("Seleccionar Imagen");
@@ -322,6 +338,8 @@ public class Presentacion {
                 JButton registrarButton = new JButton("Registrar");
                 registrarButton.setBounds(20, 540, 240, 25);
                 panel.add(registrarButton);
+                
+                
                 
              // Inicializar JFileChooser
                 fileChooser = new JFileChooser();
@@ -380,6 +398,12 @@ public class Presentacion {
                         String compania = companiaField.getText();
                         String web = webField.getText();
                         
+                        String contra = contraseniaField.getText();
+                        String confContra = confContraseniaField.getText();
+                        
+                       
+                        
+                        
                         
                        int dia, mes, anio;
                         if(calendar.getTime() != null) {
@@ -393,7 +417,7 @@ public class Presentacion {
                          
                         
                         
-                        if(nickname.isEmpty() || correo.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
+                        if(contra.isEmpty() || confContra.isEmpty() || nickname.isEmpty() || correo.isEmpty() || nombre.isEmpty() || apellido.isEmpty()) {
                         	JOptionPane.showMessageDialog(null, "Hay campos vacios.");
                         	return;
                         	
@@ -406,6 +430,7 @@ public class Presentacion {
                         	JOptionPane.showMessageDialog(null, "Mal formato de correo");
                         	return;
                         }
+                     
                         
                         
 
@@ -417,7 +442,7 @@ public class Presentacion {
                         
                         if(esProveedor) {
                         	try {
-								s.agregarProveedor(nickname, correo, nombre, apellido, fechaNacimiento, compania, web);
+								s.agregarProveedor(nickname, correo, nombre, apellido, fechaNacimiento, compania, web, contra, confContra);
 								
 							} catch (UsuarioRepetidoException e) {
 								JOptionPane.showMessageDialog(null,e.getMessage());
@@ -433,7 +458,7 @@ public class Presentacion {
                         	
                         } else {
                         	try {
-								s.agregarCliente(nombre, nickname, apellido, correo, fechaNacimiento);
+								s.agregarCliente(nombre, nickname, apellido, correo, fechaNacimiento, contra, confContra);
 							
 							} catch (UsuarioRepetidoException e) {
 								JOptionPane.showMessageDialog(null,e.getMessage());
@@ -454,6 +479,8 @@ public class Presentacion {
                         tipoUsuarioComboBox.setSelectedIndex(0);
                         companiaField.setText("");
                         webField.setText("");
+                        contraseniaField.setText("");
+                        confContraseniaField.setText("");
               //          chooser.setCalendar(null);
                   
                     }
