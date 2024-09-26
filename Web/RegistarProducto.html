@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro de Producto</title>
-    <link href="./RegistrarProducto.css" rel="stylesheet" />
-    <link href="./BarraNav.css" rel="stylesheet" /> <!-- Asegúrate de incluir el CSS de BarraNav -->
+    <link href="./RegistarProducto.css" rel="stylesheet" />
 </head>
 <body>
-    <div id="barra-nav"></div> <!-- Contenedor para la barra de navegación -->
 
-    <div class="container" style="margin-top: 80px;"> <!-- Ajusta el margen superior -->
+    <!-- Contenedor donde se insertará BarraNav.html -->
+    <div id="barra-nav"></div>
+
+    <div class="container">
         <form class="product-form">
             <h2>Registro de Producto</h2>
 
@@ -36,12 +37,6 @@
                 <option value="televisores">Televisores</option>
                 <option value="oficina">Oficina</option>
             </select>
-
-            <div class="checkbox-group">
-                <label><input type="checkbox"> Informática</label>
-                <label><input type="checkbox"> Televisores</label>
-                <label><input type="checkbox"> Oficina</label>
-            </div>
 
             <label for="image-upload">Elegir imagen</label>
             <input type="file" id="image-upload">
