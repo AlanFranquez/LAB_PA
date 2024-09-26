@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Producto</title>
+    <link href="./RegistrarProducto.css" rel="stylesheet" />
+    <link href="./BarraNav.css" rel="stylesheet" /> <!-- Asegúrate de incluir el CSS de BarraNav -->
+</head>
+<body>
+    <div id="barra-nav"></div> <!-- Contenedor para la barra de navegación -->
+
+    <div class="container" style="margin-top: 80px;"> <!-- Ajusta el margen superior -->
+        <form class="product-form">
+            <h2>Registro de Producto</h2>
+
+            <label for="product-name">Nombre del Producto</label>
+            <input type="text" id="product-name" placeholder="Televisor Samsung 24''" required>
+
+            <label for="reference-number">Número de Referencia</label>
+            <input type="number" id="reference-number" placeholder="235235" required>
+
+            <label for="description">Descripción</label>
+            <textarea id="description" placeholder="Televisor muy bueno, lalala" required></textarea>
+
+            <label for="specifications">Especificaciones</label>
+            <input type="text" id="specifications" placeholder="Pantalla OLED IPS 60Hz" required>
+
+            <label for="price">Precio</label>
+            <input type="number" id="price" placeholder="430" required>
+
+            <label for="categories">Categorías</label>
+            <select id="categories">
+                <option value="" disabled selected>Seleccionar Categoría</option>
+                <option value="informatica">Informática</option>
+                <option value="televisores">Televisores</option>
+                <option value="oficina">Oficina</option>
+            </select>
+
+            <div class="checkbox-group">
+                <label><input type="checkbox"> Informática</label>
+                <label><input type="checkbox"> Televisores</label>
+                <label><input type="checkbox"> Oficina</label>
+            </div>
+
+            <label for="image-upload">Elegir imagen</label>
+            <input type="file" id="image-upload">
+
+            <div class="button-group">
+                <button type="submit" class="btn-submit">Registrar</button>
+                <button type="button" class="btn-cancel">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Cargar el contenido de BarraNav.html usando fetch
+        fetch('BarraNav.html')
+            .then(response => response.text())  // Convertir la respuesta a texto
+            .then(data => {
+                // Insertar el contenido en el div con el id 'barra-nav'
+                document.getElementById('barra-nav').innerHTML = data;
+            })
+            .catch(error => console.error('Error al cargar BarraNav:', error));
+    </script>
+</body>
+</html>
