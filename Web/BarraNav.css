@@ -50,7 +50,7 @@
 }
 
 .navbar-search input {
-    width: 400px; 
+    width: 700px; 
     padding: 8px;
     border-radius: 4px 0 0 4px;
     border: 1px solid #ccc;
@@ -90,7 +90,7 @@
 }
 
 .navbar-icons button:hover {
-    color: #2c2c2c;
+    color: #ffffff;
 }
 
 /* Menú de categorías como botones */
