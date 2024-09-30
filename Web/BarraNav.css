@@ -7,7 +7,7 @@
 }
 
 /* Barra de navegación */
-.navbar {
+.navBar {
     background-color: #000000;
     padding: 10px;
     color: white;
@@ -18,14 +18,14 @@
     z-index: 1000; 
 }
 
-.navbar-container {
+.navBar-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 /* Estilos del logo como botón */
-.navbar-logo {
+.navBar-logo {
     font-size: 24px;
     font-weight: bold;
     color: white;
@@ -36,20 +36,20 @@
     transition: background-color 0.3s, color 0.3s; 
 }
 
-.navbar-logo:hover {
+.navBar-logo:hover {
     background-color: rgb(47, 47, 47);
     color: white; 
 }
 
 /* Barra de búsqueda */
-.navbar-search {
+.navBar-search {
     flex-grow: 1;
     display: flex;
     justify-content: center;
     margin: 0 20px;
 }
 
-.navbar-search input {
+.navBar-search input {
     width: 700px; 
     padding: 8px;
     border-radius: 4px 0 0 4px;
@@ -57,7 +57,7 @@
     box-sizing: border-box; 
 }
 
-.navbar-search button {
+.navBar-search button {
     padding: 9px 16px; 
     background-color: rgb(47, 47, 47); 
     color: white; 
@@ -68,17 +68,17 @@
     height: 100%; 
 }
 
-.navbar-search button:hover {
+.navBar-search button:hover {
     background-color: #2c2c2c;
     color: rgb(0, 0, 0); 
 }
 
 /* Iconos de la barra de navegación */
-.navbar-icons {
+.navBar-icons {
     display: flex; /* Asegúrate de que los íconos estén en línea */
 }
 
-.navbar-icons button {
+.navBar-icons button {
     font-size: 14px;
     background-color: transparent;
     border: none;
@@ -89,22 +89,22 @@
     transition: color 0.3s; 
 }
 
-.navbar-icons button:hover {
+.navBar-icons button:hover {
     color: #ffffff;
 }
 
 /* Menú de categorías como botones */
-.navbar-menu {
+.navBar-menu {
     padding: 10px;
 }
 
-.navbar-menu ul {
+.navBar-menu ul {
     display: flex;
     justify-content: flex-end; /* Alinear a la derecha */
     list-style-type: none;
 }
 
-.navbar-menu li button {
+.navBar-menu li button {
     color: white;
     font-size: 14px;
     padding: 10px 15px;
@@ -114,7 +114,7 @@
     transition: background-color 0.3s; 
 }
 
-.navbar-menu li button:hover {
+.navBar-menu li button:hover {
     background-color: #222222; 
     border-radius: 4px; 
 }
@@ -143,7 +143,7 @@ p {
     text-align: center;
 }
 
-.navbar-icons img {
+.navBar-icons img {
     width: 30px; 
     height: 30px; 
     display: block; 

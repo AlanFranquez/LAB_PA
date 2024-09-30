@@ -10,11 +10,8 @@
 <title>Registrar Usuario</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg" style="background-color: #2C2C2C;">
-  <div class="container">
-    <a class="navbar-brand" href="#" style="color: white">ITS CODIGO</a>
-  </div>
-</nav>
+	
+    <div id="barra-nav"></div>
 
 
 	<!-- 
@@ -67,6 +64,18 @@
 	<p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
 
 </div>
+
+
+<script>
+    // Cargar el contenido de BarraNav.html usando fetch
+    fetch('BarraNav.html')
+        .then(response => response.text())  // Convertir la respuesta a texto
+        .then(data => {
+            // Insertar el contenido en el div con el id 'barra-nav'
+            document.getElementById('barra-nav').innerHTML = data;
+        })
+        .catch(error => console.error('Error al cargar BarraNav:', error));
+</script>
 
 	
 	
