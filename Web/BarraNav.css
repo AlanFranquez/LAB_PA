@@ -3,148 +3,31 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
-/* Barra de navegación */
-.navBar {
-    background-color: #000000;
-    padding: 10px;
-    color: white;
-    position: fixed; 
+/* Barra de navegación personalizada */
+.navbar {
+    position: fixed;
+    width: 100%;
     top: 0;
-    left: 0;
-    width: 100%; 
-    z-index: 1000; 
+    z-index: 1000;
+    
 }
 
-.navBar-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-/* Estilos del logo como botón */
-.navBar-logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    background-color: #000000;
-    border: none; 
-    padding: 10px 20px; 
-    cursor: pointer; 
-    transition: background-color 0.3s, color 0.3s; 
-}
-
-.navBar-logo:hover {
-    background-color: rgb(47, 47, 47);
-    color: white; 
-}
-
-/* Barra de búsqueda */
-.navBar-search {
-    flex-grow: 1;
-    display: flex;
-    justify-content: center;
-    margin: 0 20px;
-}
-
-.navBar-search input {
-    width: 700px; 
-    padding: 8px;
-    border-radius: 4px 0 0 4px;
-    border: 1px solid #ccc;
-    box-sizing: border-box; 
-}
-
-.navBar-search button {
-    padding: 9px 16px; 
-    background-color: rgb(47, 47, 47); 
-    color: white; 
-    border: none;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s; 
-    height: 100%; 
-}
-
-.navBar-search button:hover {
-    background-color: #2c2c2c;
-    color: rgb(0, 0, 0); 
-}
-
-/* Iconos de la barra de navegación */
-.navBar-icons {
-    display: flex; /* Asegúrate de que los íconos estén en línea */
-}
-
-.navBar-icons button {
-    font-size: 14px;
-    background-color: transparent;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 10px; 
-    margin-right: 20px; 
-    transition: color 0.3s; 
-}
-
-.navBar-icons button:hover {
-    color: #ffffff;
-}
-
-/* Menú de categorías como botones */
-.navBar-menu {
-    padding: 10px;
-}
-
-.navBar-menu ul {
-    display: flex;
-    justify-content: flex-end; /* Alinear a la derecha */
-    list-style-type: none;
-}
-
-.navBar-menu li button {
-    color: white;
-    font-size: 14px;
-    padding: 10px 15px;
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s; 
-}
-
-.navBar-menu li button:hover {
-    background-color: #222222; 
-    border-radius: 4px; 
-}
-
-/* Asegurarse de que el contenido no quede cubierto por la barra de navegación */
 body {
-    padding-top: 60px; 
+    padding-top: 120px; /* Asegura que el contenido no quede detrás de la barra de navegación */
 }
 
-/* Restantes estilos del contenedor */
-.container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
-    width: 350px;
-    margin-top: 60px;
+.navbar-brand {
+    font-size: 30px;
+    font-weight: bold;
 }
 
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
+.nav-link svg {
+    fill: white;
+    transition: fill 0.3s;
 }
 
-p {
-    text-align: center;
-}
-
-.navBar-icons img {
-    width: 30px; 
-    height: 30px; 
-    display: block; 
+.nav-link svg:hover {
+    fill: #ddd;
 }

@@ -4,49 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Barra de Navegación</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="./BarraNav.css" rel="stylesheet" />
 </head>
 <body>
     <!-- Barra de navegación -->
-    <nav class="navBar">
-        <div class="navBar-container">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: black;">
+        <div class="container-fluid">
             <!-- Logo como botón -->
-            <button class="navBar-logo">
+            <a href="listarProductos.html" class="navbar-brand">
                 ItsCodigo
-            </button>
+            </a>
 
             <!-- Barra de búsqueda -->
-            <div class="navBar-search">
-                <input type="text" placeholder="Buscar productos...">
-                <button type="submit">Buscar</button>
-            </div>
+            <form class="form-inline mx-auto" style="height: 100px;">
+                <input class="form-control mr-sm-2" style="width: 700px;" type="search" placeholder="Buscar productos..." aria-label="Search">
+                <button class="btn btn-dark my-2 my-sm-10" type="submit">Buscar</button>
+            </form>
 
             <!-- Botones de cuenta y carrito -->
-            <div class="navBar-menu navBar-icons">
-                <ul>
-                    <li>
-                        <a href="IniciarSesion.html">
-                            <button>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="IniciarSesion.html">
+                        <button class="nav-link btn btn-link" >
+                            <nav class="navbar-brand" style="font-size: 18px;">
                                 Iniciar Sesion
-                            </button>
-                        <a>
-                    </li>
-                    <li>
-                        <a href="RegistrarUsuario2.html">
-                            <button>
+                            </nav>
+                        </button>
+                    </a>
+                </li>
+                <li class="nav-item" style="margin-right: 70px;">
+                    <a href="RegistrarUsuario2.html">
+                        <button class="nav-link btn btn-link"  >
+                            <nav class="navbar-brand" style="font-size: 18px;">
                                 Registrarse
-                            </button>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Menú de categorías -->
-            <div class="navBar-menu">
-                <ul>
-                    <li><button>Ayuda</button></li>
-                </ul>
-            </div>
+                            </nav>
+                        </button>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#">
+                        <button class="nav-link btn btn-link" >
+                            <nav class="navbar-brand" style="font-size: 20px;">
+                                Ayuda
+                            </nav>
+                        </button>
+                    </a>
+                </li>
+            </ul>
         </div>
     </nav>
 </body>

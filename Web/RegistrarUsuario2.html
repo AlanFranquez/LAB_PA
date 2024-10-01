@@ -10,13 +10,8 @@
 <title>Registrar Usuario</title>
 </head>
 <body>
-	<nav class="navbar navbar-expand-lg" style="background-color: #2C2C2C;">
-  <div class="container">
-    <a class="navbar-brand" href="#" style="color: white">ITS CODIGO</a>
-   
-  </div>
-</nav>
-
+	
+    <div id="barra-nav"></div>
 
 	<!-- 
 	Parte de registro
@@ -69,13 +64,22 @@
 	parte de abajo
  -->
 
-<div class="part-final d-flex justify-content-center align-items-center">
+<div class="part-final d-flex justify-content-center align-items-center" style="background-color: black;">
 
 	<p class="text-center">Todos los derechos reservados, 2024. <br> Laboratorio PA.</p>
 
 </div>
 
-	
+<script>
+    // Cargar el contenido de BarraNav.html usando fetch
+    fetch('BarraNavSinReg.html')
+        .then(response => response.text())  // Convertir la respuesta a texto
+        .then(data => {
+            // Insertar el contenido en el div con el id 'barra-nav'
+            document.getElementById('barra-nav').innerHTML = data;
+        })
+        .catch(error => console.error('Error al cargar BarraNav:', error));
+</script>
 	
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	<script src="RegistrarUsuario2.js"></script>
