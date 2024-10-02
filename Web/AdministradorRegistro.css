@@ -1,9 +1,10 @@
 @charset "UTF-8";
 
 * {
-	box-sizing: border-box;
-	font-family: Poppins!important;
-		
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
 .nav-item.botonRegistro {

@@ -1,16 +1,13 @@
 @charset "UTF-8";
 
 * {
-	box-sizing: border-box;
-	font-family: Poppins!important;
-		
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
 }
 
-.nav-item.botonRegistro {
-	padding: 16px 8px;
-	background-color: black;
-	border: none;
-}
+
 
 a {
 	font-family: Poppins;
@@ -35,15 +32,7 @@ a {
     max-width: 400px;
 }
 
-.icon-container {
-    margin-bottom: 20px; 
-}
 
-.form-group {
-    text-align: left;
-    width: 100%;
-    margin: 5px 0;
-}
 
 
 .form-group input {
@@ -77,6 +66,10 @@ border-radius: 8px;
 	height: 200px; 
 	margin: 50px 0px 0px 0px;
 	
+}
+
+.container {
+  max-width: 700px;
 }
 
 .part-final p {
