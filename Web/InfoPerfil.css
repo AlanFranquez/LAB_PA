@@ -46,6 +46,10 @@ a.editIcon img {
 h2.comprasTitle{
     margin-left: 20px;
 }
+a{
+	text-decoration: none;
+    color: #fff;
+}
 button.btn-primary{
     --bs-btn-color: #fff;
     --bs-btn-bg: #2C2C2C;
