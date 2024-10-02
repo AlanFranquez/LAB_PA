@@ -20,7 +20,7 @@ body{
 #registrarSection{
     margin-top: 5vh;
 }
-form button.btn-primary{
+form button.btn-submit{
     --bs-btn-color: #fff;
     --bs-btn-bg: #2C2C2C;
     --bs-btn-border-color: #2C2C2C;
@@ -35,6 +35,12 @@ form button.btn-primary{
     --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: #2C2C2C;
     --bs-btn-disabled-border-color: #2C2C2C;
+    background-color: #2C2C2C;
+    border-color: #2C2C2C;
+    color: #fff;
+}
+form button.btn-submit:hover{
+    color: #fff;
 }
 form a{
     color: #2C2C2C;
