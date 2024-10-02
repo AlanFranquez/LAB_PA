@@ -13,7 +13,6 @@
 	color: white;
 	border: none;
 	border-radius: 4px;
-	
 }
 
 a {
@@ -29,7 +28,6 @@ a {
     object-position: center;
 }
 
-
 .part-final {
 	background-color: #2C2C2C;
 	width: 100%;
@@ -41,5 +39,3 @@ a {
 .part-final p {
 	color: white;
 }
-
-
