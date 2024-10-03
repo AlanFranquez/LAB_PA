@@ -51,6 +51,11 @@ public class DTCliente {
     public String getCorreo() {
         return correo;
     }
+    
+    DTCliente mostrarPerfil() {
+		return this;
+    	
+    }
     public DTFecha getNacimiento() {
         return nacimiento;
     }

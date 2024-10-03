@@ -45,6 +45,11 @@ public class Proveedor extends Usuario {
         return listaProductos.size();
     }
     
+    Proveedor mostrarPerfil() {
+		return this;
+    	
+    }
+    
   
     
     public DTProveedor crearDt() {

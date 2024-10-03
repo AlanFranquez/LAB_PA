@@ -92,6 +92,11 @@ public class DTProveedor {
 	public void setNacimiento(DTFecha nacimiento) {
 		this.nacimiento = nacimiento;
 	}
+	
+	DTProveedor mostrarPerfil() {
+		return this;
+    	
+    }
 	public ImageIcon getImagen() {
 		return imagen;
 	}

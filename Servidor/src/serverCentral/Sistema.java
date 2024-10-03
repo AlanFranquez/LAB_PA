@@ -476,4 +476,24 @@ public class Sistema implements ISistema {
     	Producto p = catP.getProducto(num);
     	p.agregarImagen(imagen);
     }
+    
+
+	 // MOSTRAR PERFIL CLIENTE
+	 DTCliente mostrarPerfilCliente(String nick) {
+	 	Cliente cl = (Cliente) this.usuarios.get(nick);
+	 	
+	 	return cl.crearDt();
+	 }
+	 
+	 // MOSTRAR PERFIL PROVEEDOR
+	 DTProveedor mostrarPerfilProveedor(String nick) {
+		 Proveedor pr = (Proveedor) this.usuarios.get(nick);
+		 
+		 return pr.crearDt();
+	 }
 }
+
+
+
+
+

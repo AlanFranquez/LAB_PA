@@ -38,6 +38,12 @@ public class Cliente extends Usuario {
     public int cantCompras() {
         return listaCompras.size();
     }
+    
+    Cliente mostrarPerfil() {
+    	return this;
+    }
+    
+    
    
     // Mas que un set de integers creo que debería de ser un arreglo de dtOrdenCompra
     public Set<Integer> getAllOrdenes() {
