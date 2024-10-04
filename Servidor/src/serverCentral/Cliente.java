@@ -20,6 +20,50 @@ public class Cliente extends Usuario {
     public Map<Integer, OrdenDeCompra> getCompras() {
         return listaCompras;
     }
+    
+    public void agregarRespuesta(int numeroComentario, String nombreProducto, Comentario r) {
+    	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
+    		OrdenDeCompra o = entry.getValue();
+    		
+    		
+    		
+    		for(Map.Entry<Integer, Item> entry2 : o.getItems().entrySet()) {
+        		Item it = entry2.getValue();
+        		
+        		if(it.getProducto().getNombre() == nombreProducto) {
+        			Producto p = it.getProducto();
+        			p.agregarRespuesta(numeroComentario, r);
+        			return;
+        		}
+        	}
+    		
+    	}
+    }
+    
+    
+    
+    public void agregarComentario(Comentario c, String nombreProducto) throws ProductoException {
+    	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
+    		OrdenDeCompra o = entry.getValue();
+    		
+    		
+    		
+    		for(Map.Entry<Integer, Item> entry2 : o.getItems().entrySet()) {
+        		Item it = entry2.getValue();
+        		
+        		if(it.getProducto().getNombre() == nombreProducto) {
+        			Producto p = it.getProducto();
+        			p.agregarComentario(c);
+        			return;
+        		}
+        	}
+    		
+    	}
+    	
+    	throw new ProductoException("El cliente no compró el producto");
+    	
+    	
+    }
 
     public OrdenDeCompra getCompraParticular(int numero) {
         return this.listaCompras.get(numero);

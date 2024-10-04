@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 public class Producto {
 	private Map<String, Cat_Producto> categorias;
-	private Comentario[] comentarios;
+	private List <Comentario> comentarios;
 	private Proveedor proveedor;
 	
 	private String nombre, descripcion;
@@ -28,6 +28,7 @@ public class Producto {
 		this.especificaciones = especificaciones;
 		this.categorias = new HashMap<>();
 		this.proveedor = prov;
+		this.comentarios = new ArrayList<>();
 		this.imagenes = new ArrayList<>();
 	}
 
@@ -40,11 +41,17 @@ public class Producto {
 		return this.imagenes;
 	}
 	
-	public void agregarComentario(Comentario com) {
-		comentarios[comentarios.length] = com;
+	public void agregarComentario(Comentario c) {
+		this.comentarios.add(c);
 	}
-	public Comentario[] getComentarios() {
-		return comentarios;
+	
+	public void agregarRespuesta(int numeroComentario, Comentario r) {
+		Comentario c = this.comentarios.get(numeroComentario);
+		c.agregarRespuesta(r);
+	}
+	
+	public List<Comentario> getComentarios() {
+		return this.comentarios;
 	}
 	
 	
@@ -156,6 +163,6 @@ public class Producto {
             }
 		}
 		catStr = catStr + "</html>";
-		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock());
+		return new DtProducto(this.getNombre(), this.getDescripcion(), this.getPrecio(), this.getNumRef(), this.getEspecificaciones(), this.getProveedor(), catStr, this.getImagenes(), this.getStock(), this.getComentarios());
 	}
 }

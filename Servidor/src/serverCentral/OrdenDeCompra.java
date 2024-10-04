@@ -34,6 +34,7 @@ public class OrdenDeCompra {
     public Map<Integer, Item> getItems() {
         return items;
     }
+    
     private void setPrecioTotal() {
         float total = 0;
         if (items.isEmpty()) {

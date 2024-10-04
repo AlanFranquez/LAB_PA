@@ -82,4 +82,13 @@ public interface ISistema {
 	public abstract void borrarProducto(int numRef, String titulo);
 
 	public abstract Integer obtenerStockProducto(int numRef);
+	
+	 // MOSTRAR PERFIL CLIENTE
+	 public DTCliente mostrarPerfilCliente(String nick);
+	 
+	 // MOSTRAR PERFIL PROVEEDOR
+	 public DTProveedor mostrarPerfilProveedor(String nick);
+	 
+	 // Traer Ordenes de compras de un cliente
+	 public List<DTOrdenDeCompra> getOrdenesCliente(String nick);
 }

@@ -21,10 +21,11 @@ public class DtProducto {
 	private String especs;
 	private String nickProveedor, nomProveedor;
 	private String categorias;
+	List<Comentario> comentarios;
 	List<File> imagenes;
 	
 	// Constructor:
-	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<File> imagenes, Integer stock) {
+	public DtProducto(String nombre, String descripcion, float precio, Integer numRef, String especs, Proveedor prov, String cat, List<File> imagenes, Integer stock, List<Comentario> comentarios) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precio = precio;
@@ -35,11 +36,16 @@ public class DtProducto {
 		this.categorias = cat;
 		this.imagenes = imagenes;
 		this.stock = stock;
+		this.comentarios = comentarios;
 	}
 	
 	// Getters:
 	public String getNombre() {
 		return nombre;
+	}
+	
+	public List<Comentario> getComentarios() {
+		return this.comentarios;
 	}
 	
 	public String getNombreProveedor() {
