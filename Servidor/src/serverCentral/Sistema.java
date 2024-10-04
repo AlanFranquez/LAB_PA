@@ -479,18 +479,26 @@ public class Sistema implements ISistema {
     
 
 	 // MOSTRAR PERFIL CLIENTE
-	 DTCliente mostrarPerfilCliente(String nick) {
+	 public DTCliente mostrarPerfilCliente(String nick) {
 	 	Cliente cl = (Cliente) this.usuarios.get(nick);
 	 	
 	 	return cl.crearDt();
 	 }
 	 
 	 // MOSTRAR PERFIL PROVEEDOR
-	 DTProveedor mostrarPerfilProveedor(String nick) {
+	 public DTProveedor mostrarPerfilProveedor(String nick) {
 		 Proveedor pr = (Proveedor) this.usuarios.get(nick);
 		 
 		 return pr.crearDt();
 	 }
+	 
+	 // Traer Ordenes de compras de un cliente
+	 public List<DTOrdenDeCompra> getOrdenesCliente(String nick) {
+		 Cliente cl = (Cliente) this.usuarios.get(nick);
+		 
+		 return cl.mostrarCompras();
+	 }
+	 
 }
 
 

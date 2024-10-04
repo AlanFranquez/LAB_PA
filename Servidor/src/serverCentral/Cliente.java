@@ -1,6 +1,8 @@
 package serverCentral;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -19,6 +21,27 @@ public class Cliente extends Usuario {
         return listaCompras;
     }
 
+    public OrdenDeCompra getCompraParticular(int numero) {
+        return this.listaCompras.get(numero);
+    }
+    
+    public List<DTOrdenDeCompra> mostrarCompras() {
+    	List<DTOrdenDeCompra> lista = new ArrayList<DTOrdenDeCompra>();
+    	
+    	for(Map.Entry<Integer, OrdenDeCompra> entry : listaCompras.entrySet()) {
+    		OrdenDeCompra o = entry.getValue();
+    		
+    		lista.add(o.crearDT());
+    	}
+    	
+    	return lista;
+    }
+    
+    public DTOrdenDeCompra mostrarCompras(int numero) {
+    	
+    	return this.listaCompras.get(numero).crearDT();
+    }
+    
     public Map<Integer, Comentario> getComentarios() {
         return listaComentarios;
     }
